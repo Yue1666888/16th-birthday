@@ -20,4 +20,65 @@
             version = #{entity.version}, updated_at = #{entity.updatedAt}
         WHERE id = #{entity.id} AND version = #{expectedVersion}
     </update>
+
+    <sql id="emailStatus">
+        CASE WHEN n.id IS NULL OR n.task_status='CANCELLED' THEN 'NOT_SENT'
+             WHEN n.task_status='SUCCEEDED' THEN 'SUCCESS'
+             WHEN n.task_status='FAILED' THEN 'FAILED'
+             WHEN n.task_status='DISABLED' THEN 'DISABLED' ELSE 'PENDING' END
+    </sql>
+    <sql id="latestMailJoin">
+        LEFT JOIN email_notifications n ON n.id=(
+          SELECT e.id FROM email_notifications e
+          WHERE e.invitation_id=i.id AND e.invitation_version=i.version
+          ORDER BY e.send_no DESC LIMIT 1
+        )
+    </sql>
+    <sql id="summaryColumns">
+        i.id,i.name,i.phone,i.email,i.attendance,i.gift_choice,i.mailing_address,
+        i.version,i.created_at,i.updated_at,
+        <include refid="emailStatus"/> AS email_notify_status,
+        CASE WHEN n.task_status='SUCCEEDED' THEN n.sent_at ELSE NULL END AS email_notified_at
+    </sql>
+    <sql id="filters">
+        <if test="filter.attendance != null">AND i.attendance=#{filter.attendance}</if>
+        <if test="filter.giftChoice != null">AND i.gift_choice=#{filter.giftChoice}</if>
+        <if test="filter.keyword != null">
+            AND (i.name LIKE #{filter.keyword} ESCAPE '!'
+                 OR i.phone LIKE #{filter.keyword} ESCAPE '!'
+                 OR i.email LIKE #{filter.keyword} ESCAPE '!')
+        </if>
+    </sql>
+    <select id="findByIdForUpdate" resultType="com.sipc115.birthday.invitation.entity.InvitationEntity">
+        SELECT id,name,phone,email,attendance,gift_choice,mailing_address,version,created_at,updated_at
+        FROM invitations WHERE id=#{id} FOR UPDATE
+    </select>
+    <select id="summary" resultType="com.sipc115.birthday.invitation.mapper.InvitationSummaryRow">
+        SELECT <include refid="summaryColumns"/> FROM invitations i
+        <include refid="latestMailJoin"/> WHERE i.id=#{id}
+    </select>
+    <select id="page" resultType="com.sipc115.birthday.invitation.mapper.InvitationSummaryRow">
+        SELECT <include refid="summaryColumns"/> FROM invitations i
+        <include refid="latestMailJoin"/> WHERE 1=1 <include refid="filters"/>
+        ORDER BY i.updated_at DESC,i.id DESC LIMIT #{limit} OFFSET #{offset}
+    </select>
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM invitations i WHERE 1=1 <include refid="filters"/>
+    </select>
+    <select id="stats" resultType="com.sipc115.birthday.invitation.mapper.InvitationStatsRow">
+        SELECT COUNT(*) AS total,
+          COALESCE(SUM(i.attendance='ATTENDING'),0) AS attending,
+          COALESCE(SUM(i.attendance='NOT_ATTENDING'),0) AS not_attending,
+          COALESCE(SUM(i.gift_choice='NONE'),0) AS none,
+          COALESCE(SUM(i.gift_choice='PICKUP'),0) AS pickup,
+          COALESCE(SUM(i.gift_choice='MAIL'),0) AS mail,
+          COALESCE(SUM((<include refid="emailStatus"/>)='NOT_SENT'),0) AS not_sent,
+          COALESCE(SUM((<include refid="emailStatus"/>)='PENDING'),0) AS pending,
+          COALESCE(SUM((<include refid="emailStatus"/>)='SUCCESS'),0) AS success,
+          COALESCE(SUM((<include refid="emailStatus"/>)='FAILED'),0) AS failed,
+          COALESCE(SUM((<include refid="emailStatus"/>)='DISABLED'),0) AS disabled,
+          COALESCE(SUM(i.gift_choice='MAIL' AND i.mailing_address IS NOT NULL),0) AS mailing_address_count
+        FROM invitations i <include refid="latestMailJoin"/>
+    </select>
+
 </mapper>

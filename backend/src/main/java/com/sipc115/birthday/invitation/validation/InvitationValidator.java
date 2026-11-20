@@ -11,6 +11,9 @@ public class InvitationValidator {
     public void validate(InvitationSubmitRequest request) {
         requireText(request.name(), 50, "name");
         requireText(request.email(), 254, "email");
+        if (!request.email().matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+            throw BusinessException.field("email", "请输入有效邮箱");
+        }
         if (request.phone() == null || !request.phone().matches("^1[3-9][0-9]{9}$")) {
             throw BusinessException.field("phone", "请输入11位大陆手机号");
         }

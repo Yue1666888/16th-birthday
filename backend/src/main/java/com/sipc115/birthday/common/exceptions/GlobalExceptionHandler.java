@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<CommonResponse<Void>> business(BusinessException ex) {
-        var response = ResponseEntity.status(ex.errorCode().status());
+        var response = ResponseEntity.status(ex.errorCode().status()).contentType(org.springframework.http.MediaType.APPLICATION_JSON);
         if (ex.retryAfterSeconds() > 0) {
             response.header("Retry-After", Integer.toString(ex.retryAfterSeconds()));
         }
@@ -92,6 +92,12 @@ public class GlobalExceptionHandler {
         return reply(ErrorCode.SERVICE_UNAVAILABLE, "数据库暂不可用", Map.of());
     }
 
+    @ExceptionHandler({org.springframework.web.bind.MissingServletRequestParameterException.class,
+            org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class})
+    public ResponseEntity<CommonResponse<Void>> parameters(Exception ex) {
+        return reply(ErrorCode.BAD_REQUEST, "请求参数缺失或格式不正确", Map.of());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CommonResponse<Void>> unexpected(Exception ex) {
         log.error("Unhandled request failure", ex);
@@ -99,6 +105,6 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<CommonResponse<Void>> reply(ErrorCode code, String message, Map<String, String> fields) {
-        return ResponseEntity.status(code.status()).body(CommonResponse.failure(code, message, fields));
+        return ResponseEntity.status(code.status()).contentType(org.springframework.http.MediaType.APPLICATION_JSON).body(CommonResponse.failure(code, message, fields));
     }
 }
