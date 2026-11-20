@@ -3,6 +3,7 @@ package com.sipc115.birthday.memory.service;
 import com.sipc115.birthday.common.api.*;
 import com.sipc115.birthday.common.exceptions.BusinessException;
 import com.sipc115.birthday.common.utils.*;
+import com.sipc115.birthday.common.utils.ApiTime;
 import com.sipc115.birthday.media.model.UploadOwner;
 import com.sipc115.birthday.media.response.ImageResponse;
 import com.sipc115.birthday.media.service.MediaService;
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -83,7 +83,7 @@ public class MemoryService {
                                 entry.setDisplayName(name);
                                 entry.setTitle(title);
                                 entry.setContent(content);
-                                entry.setPublishedAt(LocalDateTime.now(clock));
+                                entry.setPublishedAt(ApiTime.now(clock));
                                 mapper.insert(entry);
                                 if (!ids.isEmpty()) {
                                     List<MemoryImageEntity> rows = new ArrayList<>();

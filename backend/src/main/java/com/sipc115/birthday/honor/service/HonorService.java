@@ -5,6 +5,7 @@ import com.sipc115.birthday.audit.service.AuditLogService;
 import com.sipc115.birthday.common.api.*;
 import com.sipc115.birthday.common.exceptions.BusinessException;
 import com.sipc115.birthday.common.utils.*;
+import com.sipc115.birthday.common.utils.ApiTime;
 import com.sipc115.birthday.honor.entity.*;
 import com.sipc115.birthday.honor.mapper.*;
 import com.sipc115.birthday.honor.request.*;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -68,7 +68,7 @@ public class HonorService {
                     entity.setVersion(1L);
                     entity.setCreatedBySub(users.required().sub());
                     entity.setUpdatedBySub(users.required().sub());
-                    entity.setCreatedAt(LocalDateTime.now(clock));
+                    entity.setCreatedAt(ApiTime.now(clock));
                     entity.setUpdatedAt(entity.getCreatedAt());
                     mapper.insert(entity);
                     saveImages(entity.getId(), ids);
@@ -130,7 +130,7 @@ public class HonorService {
                         entity.setPeople(people);
                         entity.setVersion(expected + 1);
                         entity.setUpdatedBySub(users.required().sub());
-                        entity.setUpdatedAt(LocalDateTime.now(clock));
+                        entity.setUpdatedAt(ApiTime.now(clock));
                         if (mapper.updateByVersion(entity, expected) != 1) {
                             throw new BusinessException(ErrorCode.VERSION_CONFLICT);
                         }
@@ -160,7 +160,7 @@ public class HonorService {
                     var entity = requireLocked(id, expected);
                     entity.setVersion(expected + 1);
                     entity.setUpdatedBySub(users.required().sub());
-                    entity.setDeletedAt(LocalDateTime.now(clock));
+                    entity.setDeletedAt(ApiTime.now(clock));
                     entity.setUpdatedAt(entity.getDeletedAt());
                     if (mapper.deleteByVersion(entity, expected) != 1) {
                         throw new BusinessException(ErrorCode.VERSION_CONFLICT);

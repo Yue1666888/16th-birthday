@@ -2,6 +2,7 @@ package com.sipc115.birthday.media.service;
 
 import com.sipc115.birthday.common.api.ErrorCode;
 import com.sipc115.birthday.common.exceptions.BusinessException;
+import com.sipc115.birthday.common.utils.ApiTime;
 import com.sipc115.birthday.common.utils.RequestValues;
 import com.sipc115.birthday.media.assembler.MediaAssembler;
 import com.sipc115.birthday.media.client.FileApiClient;
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Clock;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -53,7 +53,7 @@ public class MediaService {
         entity.setHeight(result.height());
         entity.setUploaderSub(owner.sub());
         entity.setUploadOwnerHash(owner.sessionHash());
-        entity.setCreatedAt(LocalDateTime.now(clock));
+        entity.setCreatedAt(ApiTime.now(clock));
         mapper.insert(entity);
         return MediaAssembler.uploaded(entity);
     }
