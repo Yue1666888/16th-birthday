@@ -1,0 +1,3 @@
+logging:
+  level:
+    com.sipc115.birthday: debug
