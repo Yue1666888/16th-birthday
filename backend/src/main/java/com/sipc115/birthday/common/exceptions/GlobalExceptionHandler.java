@@ -25,7 +25,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<CommonResponse<Void>> business(BusinessException ex) {
-        return reply(ex.errorCode(), ex.getMessage(), ex.fieldErrors());
+        var response = ResponseEntity.status(ex.errorCode().status());
+        if (ex.retryAfterSeconds() > 0) {
+            response.header("Retry-After", Integer.toString(ex.retryAfterSeconds()));
+        }
+        return response.body(CommonResponse.failure(ex.errorCode(), ex.getMessage(), ex.fieldErrors()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -43,9 +47,23 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<CommonResponse<Void>> json(HttpMessageNotReadableException ex) {
-        ErrorCode code = ex.getCause() instanceof MismatchedInputException
-                ? ErrorCode.VALIDATION_ERROR : ErrorCode.BAD_REQUEST;
-        return reply(code, "请求 JSON 格式或字段类型不正确", Map.of());
+        if (ex.getCause() instanceof MismatchedInputException binding) {
+            StringBuilder path = new StringBuilder();
+            for (var reference : binding.getPath()) {
+                if (reference.getPropertyName() != null) {
+                    if (!path.isEmpty()) {
+                        path.append('.');
+                    }
+                    path.append(reference.getPropertyName());
+                } else if (reference.getIndex() >= 0) {
+                    path.append('[').append(reference.getIndex()).append(']');
+                }
+            }
+            String field = path.isEmpty() ? "$" : path.toString();
+            return reply(ErrorCode.VALIDATION_ERROR, "请求字段类型或名称不正确",
+                    Map.of(field, "请检查字段名称和类型"));
+        }
+        return reply(ErrorCode.BAD_REQUEST, "请求 JSON 格式不正确", Map.of());
     }
 
     @ExceptionHandler(NoResourceFoundException.class)

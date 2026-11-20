@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sipc115.birthday.invitation.mapper.InvitationMapper">
+    <select id="findByPhoneForUpdate" resultType="com.sipc115.birthday.invitation.entity.InvitationEntity">
+        SELECT id, name, phone, email, attendance, gift_choice, mailing_address,
+               version, created_at, updated_at
+        FROM invitations WHERE phone = #{phone} FOR UPDATE
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO invitations
+            (name, phone, email, attendance, gift_choice, mailing_address, version, created_at, updated_at)
+        VALUES
+            (#{name}, #{phone}, #{email}, #{attendance}, #{giftChoice}, #{mailingAddress},
+             #{version}, #{createdAt}, #{updatedAt})
+    </insert>
+    <update id="updateByVersion">
+        UPDATE invitations
+        SET name = #{entity.name}, email = #{entity.email}, attendance = #{entity.attendance},
+            gift_choice = #{entity.giftChoice}, mailing_address = #{entity.mailingAddress},
+            version = #{entity.version}, updated_at = #{entity.updatedAt}
+        WHERE id = #{entity.id} AND version = #{expectedVersion}
+    </update>
+</mapper>

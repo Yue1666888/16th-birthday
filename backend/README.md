@@ -22,3 +22,17 @@ docker build -t birthday16-api .
 产物为 target/app.jar。Dockerfile 复制已经构建的 JAR 到 Java 21 镜像，容器默认端口 16620。
 
 接口、数据库和后端结构说明位于上一级工作区。当前阶段实现工程基础与报名链路。
+
+## 已实现
+
+- 健康检查与固定五字段响应。
+- Keycloak JWT 管理入口认证。
+- 公开回执创建、同手机号更新、内容相同保持版本、跨字段校验和每分钟限流。
+
+## 验证
+
+普通单元测试使用 Maven test。本机 MySQL 集成测试使用独立 birthday16_test 库。
+
+```powershell
+.\mvnw.cmd test "-Dtest=CommonResponseTest,InvitationValidatorTest,InvitationServiceIT"
+```
