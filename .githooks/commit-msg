@@ -1,0 +1,6 @@
+#!/bin/sh
+subject=$(head -n 1 "$1")
+if ! printf '%s\n' "$subject" | grep -Eq '^(feat|fix|docs|refactor|test|chore|build|ci|perf|style|revert)(\([a-zA-Z0-9_-]+\))?(!)?: .+'; then
+  printf '%s\n' 'Commit subject must use Conventional Commits, e.g. feat(invitation): add receipt submission'
+  exit 1
+fi

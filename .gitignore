@@ -1,0 +1,19 @@
+# Imported reference repositories
+/react-template/
+/rule-database/
+/sipc-org/
+
+# Local connection and credential files
+/*.txt
+**/.env
+**/.env.*
+!**/.env.example
+**/application-local.yml
+**/application-local.yaml
+
+# Build and editor output
+**/target/
+**/.idea/
+**/*.iml
+**/*.log
+.DS_Store
