@@ -74,6 +74,9 @@ public class FileApiClient {
                     .body(body)
                     .exchange(
                             (request, response) -> {
+                                if (response.getStatusCode().value() == 413) {
+                                    throw new BusinessException(ErrorCode.IMAGE_FILE_TOO_LARGE);
+                                }
                                 byte[] bytes = response.getBody().readNBytes(1048577);
                                 if (bytes.length > 1048576) {
                                     throw new BusinessException(ErrorCode.IMAGE_SERVICE_ERROR);
@@ -82,6 +85,9 @@ public class FileApiClient {
                                 try {
                                     reply = json.readValue(bytes, Reply.class);
                                 } catch (RuntimeException ex) {
+                                    throw new BusinessException(ErrorCode.IMAGE_SERVICE_ERROR);
+                                }
+                                if (reply == null) {
                                     throw new BusinessException(ErrorCode.IMAGE_SERVICE_ERROR);
                                 }
                                 if (response.getStatusCode().isError()
