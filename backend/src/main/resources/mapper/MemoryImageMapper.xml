@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sipc115.birthday.memory.mapper.MemoryImageMapper">
+  <insert id="insertBatch">
+    INSERT INTO memory_images (memory_id,image_id,position) VALUES
+    <foreach collection="rows" item="row" separator=",">
+      (#{row.memoryId},#{row.imageId},#{row.position})
+    </foreach>
+  </insert>
+  <select id="forParents" resultType="com.sipc115.birthday.memory.entity.MemoryImageEntity">
+    SELECT memory_id,image_id,position FROM memory_images
+    WHERE memory_id IN
+    <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+    ORDER BY memory_id,position
+  </select>
+  <delete id="deleteForParent">DELETE FROM memory_images WHERE memory_id=#{id}</delete>
+  <select id="claimed" resultType="long">
+    SELECT COUNT(*) FROM memory_images WHERE image_id IN
+    <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+  </select>
+</mapper>

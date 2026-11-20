@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sipc115.birthday.honor.mapper.HonorEntryMapper">
+  <sql id="columns">id,title,people,version,created_by_sub,updated_by_sub,created_at,updated_at,deleted_at</sql>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO honor_entries(title,people,version,created_by_sub,updated_by_sub,created_at,updated_at)
+    VALUES(#{title},#{people},#{version},#{createdBySub},#{updatedBySub},#{createdAt},#{updatedAt})
+  </insert>
+  <select id="find" resultType="com.sipc115.birthday.honor.entity.HonorEntryEntity">
+    SELECT <include refid="columns"/> FROM honor_entries WHERE id=#{id} AND deleted_at IS NULL
+  </select>
+  <select id="lock" resultType="com.sipc115.birthday.honor.entity.HonorEntryEntity">
+    SELECT <include refid="columns"/> FROM honor_entries WHERE id=#{id} AND deleted_at IS NULL FOR UPDATE
+  </select>
+  <update id="updateByVersion">
+    UPDATE honor_entries SET title=#{entity.title},people=#{entity.people},version=#{entity.version},
+      updated_by_sub=#{entity.updatedBySub},updated_at=#{entity.updatedAt}
+    WHERE id=#{entity.id} AND version=#{expected} AND deleted_at IS NULL
+  </update>
+  <update id="deleteByVersion">
+    UPDATE honor_entries SET deleted_at=#{entity.deletedAt},version=#{entity.version},
+      updated_by_sub=#{entity.updatedBySub},updated_at=#{entity.updatedAt}
+    WHERE id=#{entity.id} AND version=#{expected} AND deleted_at IS NULL
+  </update>
+  <select id="count" resultType="long">SELECT COUNT(*) FROM honor_entries WHERE deleted_at IS NULL</select>
+  <select id="publicPage" resultType="com.sipc115.birthday.honor.entity.HonorEntryEntity">
+    SELECT <include refid="columns"/> FROM honor_entries WHERE deleted_at IS NULL
+    ORDER BY created_at DESC,id DESC LIMIT #{limit} OFFSET #{offset}
+  </select>
+  <select id="adminPage" resultType="com.sipc115.birthday.honor.entity.HonorEntryEntity">
+    SELECT <include refid="columns"/> FROM honor_entries WHERE deleted_at IS NULL
+    ORDER BY updated_at DESC,id DESC LIMIT #{limit} OFFSET #{offset}
+  </select>
+</mapper>

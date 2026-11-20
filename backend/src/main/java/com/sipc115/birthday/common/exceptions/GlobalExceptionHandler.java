@@ -2,9 +2,9 @@ package com.sipc115.birthday.common.exceptions;
 
 import com.sipc115.birthday.common.api.CommonResponse;
 import com.sipc115.birthday.common.api.ErrorCode;
+
 import jakarta.validation.ConstraintViolationException;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -17,7 +17,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+
 import tools.jackson.databind.exc.MismatchedInputException;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -25,18 +29,22 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<CommonResponse<Void>> business(BusinessException ex) {
-        var response = ResponseEntity.status(ex.errorCode().status()).contentType(org.springframework.http.MediaType.APPLICATION_JSON);
+        var response =
+                ResponseEntity.status(ex.errorCode().status())
+                        .contentType(org.springframework.http.MediaType.APPLICATION_JSON);
         if (ex.retryAfterSeconds() > 0) {
             response.header("Retry-After", Integer.toString(ex.retryAfterSeconds()));
         }
-        return response.body(CommonResponse.failure(ex.errorCode(), ex.getMessage(), ex.fieldErrors()));
+        return response.body(
+                CommonResponse.failure(ex.errorCode(), ex.getMessage(), ex.fieldErrors()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<CommonResponse<Void>> validation(MethodArgumentNotValidException ex) {
         Map<String, String> fields = new LinkedHashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(
-                error -> fields.putIfAbsent(error.getField(), error.getDefaultMessage()));
+        ex.getBindingResult()
+                .getFieldErrors()
+                .forEach(error -> fields.putIfAbsent(error.getField(), error.getDefaultMessage()));
         return reply(ErrorCode.VALIDATION_ERROR, "请检查填写内容", fields);
     }
 
@@ -47,6 +55,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<CommonResponse<Void>> json(HttpMessageNotReadableException ex) {
+        Throwable cause = ex;
+        while (cause != null) {
+            if (cause instanceof BusinessException business) {
+                return business(business);
+            }
+            cause = cause.getCause();
+        }
         if (ex.getCause() instanceof MismatchedInputException binding) {
             StringBuilder path = new StringBuilder();
             for (var reference : binding.getPath()) {
@@ -60,8 +75,7 @@ public class GlobalExceptionHandler {
                 }
             }
             String field = path.isEmpty() ? "$" : path.toString();
-            return reply(ErrorCode.VALIDATION_ERROR, "请求字段类型或名称不正确",
-                    Map.of(field, "请检查字段名称和类型"));
+            return reply(ErrorCode.VALIDATION_ERROR, "请求字段类型或名称不正确", Map.of(field, "请检查字段名称和类型"));
         }
         return reply(ErrorCode.BAD_REQUEST, "请求 JSON 格式不正确", Map.of());
     }
@@ -92,10 +106,24 @@ public class GlobalExceptionHandler {
         return reply(ErrorCode.SERVICE_UNAVAILABLE, "数据库暂不可用", Map.of());
     }
 
-    @ExceptionHandler({org.springframework.web.bind.MissingServletRequestParameterException.class,
-            org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class})
+    @ExceptionHandler({
+        org.springframework.web.bind.MissingServletRequestParameterException.class,
+        org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class
+    })
     public ResponseEntity<CommonResponse<Void>> parameters(Exception ex) {
         return reply(ErrorCode.BAD_REQUEST, "请求参数缺失或格式不正确", Map.of());
+    }
+
+    @ExceptionHandler(
+            org.springframework.web.multipart.support.MissingServletRequestPartException.class)
+    public ResponseEntity<CommonResponse<Void>> missingFile(
+            org.springframework.web.multipart.support.MissingServletRequestPartException ex) {
+        return reply(ErrorCode.VALIDATION_ERROR, "请上传图片", Map.of(ex.getRequestPartName(), "该文件必填"));
+    }
+
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    public ResponseEntity<CommonResponse<Void>> tooLarge(Exception ex) {
+        return reply(ErrorCode.IMAGE_FILE_TOO_LARGE, "图片超过大小上限", Map.of());
     }
 
     @ExceptionHandler(Exception.class)
@@ -104,7 +132,10 @@ public class GlobalExceptionHandler {
         return reply(ErrorCode.INTERNAL_ERROR, "服务内部错误", Map.of());
     }
 
-    private ResponseEntity<CommonResponse<Void>> reply(ErrorCode code, String message, Map<String, String> fields) {
-        return ResponseEntity.status(code.status()).contentType(org.springframework.http.MediaType.APPLICATION_JSON).body(CommonResponse.failure(code, message, fields));
+    private ResponseEntity<CommonResponse<Void>> reply(
+            ErrorCode code, String message, Map<String, String> fields) {
+        return ResponseEntity.status(code.status())
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .body(CommonResponse.failure(code, message, fields));
     }
 }
