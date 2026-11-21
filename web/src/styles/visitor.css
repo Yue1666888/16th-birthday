@@ -78,21 +78,14 @@ body:has([data-visitor-modal]) .visitor-particles {
 }
 .visitor-brand {
   display: flex;
-  align-items: center;
-  gap: 13px;
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: 3px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
 }
-.brand-symbol {
-  font-size: 37px;
-  line-height: 1;
-  letter-spacing: -9px;
-  width: 45px;
-  transform: skew(-8deg);
-}
-.brand-symbol > span {
-  color: var(--v-accent);
+.brand-logo {
+  display: block;
+  width: 148px;
+  height: auto;
 }
 .brand-caption {
   display: block;
@@ -883,13 +876,10 @@ body:has([data-visitor-modal]) .visitor-particles {
     gap: 20px;
   }
   .visitor-brand {
-    gap: 8px;
-    font-size: 16px;
-    letter-spacing: 2px;
+    gap: 4px;
   }
-  .brand-symbol {
-    font-size: 29px;
-    width: 33px;
+  .brand-logo {
+    width: 112px;
   }
   .brand-caption {
     font-size: 6px;

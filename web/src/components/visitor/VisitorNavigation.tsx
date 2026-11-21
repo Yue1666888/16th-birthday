@@ -7,12 +7,14 @@ export function VisitorNavigation() {
   return (
     <header className="visitor-nav">
       <Link className="visitor-brand" to="/" aria-label="SIPC 十六周年邀请函">
-        <span className="brand-symbol" aria-hidden="true">
-          S<span>/</span>
-        </span>
-        <span>
-          SIPC<span className="brand-caption">16TH ANNIVERSARY</span>
-        </span>
+        <img
+          className="brand-logo"
+          src="/brand/sipc-logo.png"
+          alt="SIPC"
+          width="2085"
+          height="608"
+        />
+        <span className="brand-caption">16TH ANNIVERSARY</span>
       </Link>
       <nav aria-label="公开访客导航">
         <NavLink to={'/memories' + suffix}>
