@@ -1,4 +1,5 @@
 import axios from 'axios'
+import type { AxiosRequestConfig } from 'axios'
 import type { ApiResponse } from '@/domain/api.types'
 import { AppApiError, toApiError } from '@/lib/api-error'
 // Public browsing must never import the administrator's SSO adapter.
@@ -7,15 +8,11 @@ const http = axios.create({
   timeout: 20000,
   withCredentials: true,
 })
-export async function publicGet<T>(
-  url: string,
-  signal: AbortSignal,
-  params?: Record<string, number>,
-) {
+async function publicRequest<T>(config: AxiosRequestConfig, codes: string[]) {
   try {
-    const response = await http.get<ApiResponse<T>>(url, { signal, params })
+    const response = await http.request<ApiResponse<T>>(config)
     const body = response.data
-    if (!body || body.code !== 'OK')
+    if (!body || !codes.includes(body.code))
       throw new AppApiError(
         body?.message || '服务响应异常',
         body?.code || 'RESPONSE_INVALID',
@@ -27,4 +24,19 @@ export async function publicGet<T>(
   } catch (error) {
     throw await toApiError(error)
   }
+}
+export function publicGet<T>(
+  url: string,
+  signal: AbortSignal,
+  params?: Record<string, number>,
+) {
+  return publicRequest<T>({ method: 'GET', url, signal, params }, ['OK'])
+}
+export function publicPost<T>(url: string, data: unknown, signal: AbortSignal) {
+  return publicRequest<T>({ method: 'POST', url, data, signal }, [
+    'INVITATION_CREATED',
+    'INVITATION_UPDATED',
+    'MEMORY_CREATED',
+    'IMAGE_UPLOADED',
+  ])
 }

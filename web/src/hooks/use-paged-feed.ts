@@ -7,6 +7,9 @@ interface Feed<T> {
   pages: number
 }
 const savedFeeds = new Map<string, Feed<unknown>>()
+export function invalidatePublicMemories() {
+  savedFeeds.delete('memories:false')
+}
 export function usePagedFeed<T extends { id: string }>(
   key: string,
   load: (page: number, signal: AbortSignal) => Promise<PageResponse<T>>,
