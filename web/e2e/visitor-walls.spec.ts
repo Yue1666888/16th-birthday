@@ -194,6 +194,16 @@ test('public errors show trace ID, retry real requests and never silently show s
   page,
 }) => {
   let failed = true
+  await page.route('**/api/v1/memories/names', (route) =>
+    route.fulfill({
+      json: {
+        code: 'OK',
+        data: { totalSubmissions: 0, namedSubmissions: 0, names: [] },
+        fieldErrors: {},
+        traceId: '',
+      },
+    }),
+  )
   await page.route('**/api/v1/memories*', (route) =>
     route.fulfill({
       status: failed ? 503 : 200,

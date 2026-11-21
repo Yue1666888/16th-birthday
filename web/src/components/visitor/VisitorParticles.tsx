@@ -239,7 +239,7 @@ export function VisitorParticles(props: Settings) {
         background.homes,
         backgroundCount,
         time,
-        settings.current.mobile ? 11 : 16,
+        settings.current.mobile ? 22 : 32,
       )
       if (wordVisible)
         driftParticleTargets(
@@ -247,7 +247,7 @@ export function VisitorParticles(props: Settings) {
           words.homes,
           wordCount,
           time,
-          settings.current.mobile ? 0.65 : 0.95,
+          settings.current.mobile ? 1.25 : 1.8,
         )
       advanceParticles(
         background.field,

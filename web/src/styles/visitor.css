@@ -1137,3 +1137,103 @@ body:has([data-visitor-modal]) .visitor-particles {
     display: none;
   }
 }
+
+.memory-names {
+  padding: 28px 0 30px;
+  border-top: 1px solid var(--v-line);
+}
+.memory-names-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 12px;
+}
+.memory-names-heading > div > span {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--v-accent);
+}
+.memory-names-heading h2 {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  margin: 4px 0 0;
+}
+.memory-names-heading > p {
+  color: var(--v-muted);
+  font-size: 10px;
+  margin: 0 0 2px;
+  letter-spacing: 1px;
+}
+.memory-names-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 38px;
+  min-height: 100px;
+  padding: 5px 0 16px;
+}
+.memory-name {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1.3;
+  letter-spacing: 2px;
+}
+.memory-name-tone-0 {
+  color: #e9f1f4;
+}
+.memory-name-tone-1 {
+  color: #75d9e8;
+}
+.memory-name-tone-2 {
+  color: #c5d1da;
+}
+.memory-name-tone-3 {
+  color: #a3b7c4;
+}
+.memory-names-error,
+.memory-names-stale {
+  color: var(--v-muted);
+  font-size: 11px;
+  padding: 12px 0;
+}
+.memory-names-stale button {
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  color: var(--v-accent);
+  margin-left: 10px;
+}
+@media (max-width: 1023px) {
+  .memory-names {
+    padding: 22px 0;
+  }
+  .memory-names-heading {
+    gap: 12px;
+    align-items: center;
+  }
+  .memory-names-heading > div > span {
+    font-size: 6px;
+    letter-spacing: 1px;
+  }
+  .memory-names-heading h2 {
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+  .memory-names-heading > p {
+    font-size: 8px;
+    letter-spacing: 0;
+    max-width: 130px;
+    text-align: right;
+  }
+  .memory-names-cloud {
+    gap: 6px 22px;
+    min-height: 85px;
+    padding-top: 10px;
+  }
+  .memory-name {
+    letter-spacing: 1px;
+  }
+}

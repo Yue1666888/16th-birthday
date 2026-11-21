@@ -1,9 +1,12 @@
+import type { ReactNode } from 'react'
 export function WallHeading({
   kind,
   total,
+  children,
 }: {
   kind: 'memories' | 'honors'
   total: number
+  children?: ReactNode
 }) {
   const memories = kind === 'memories'
   return (
@@ -35,6 +38,7 @@ export function WallHeading({
           {memories ? 'MEMORIES' : 'HONORS'}
         </span>
       </div>
+      {children}
       <div className="wall-heading-rule">
         <span>
           {memories

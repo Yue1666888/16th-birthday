@@ -3,6 +3,7 @@ import type {
   MemoryDetail,
   MemorySummary,
   PublicHonor,
+  MemoryNameWallResponse,
 } from '@/types/public/walls.types'
 // Explicit development preview only. Never an API error fallback or a database seed.
 function artwork(index: number, certificate = false): ImageItem {
@@ -35,7 +36,27 @@ export const previewMemories: MemoryDetail[] = Array.from(
   { length: 25 },
   (_, index) => ({
     id: 'preview-memory-' + index,
-    displayName: names[index % 5],
+    displayName:
+      index < 5
+        ? names[index]
+        : index < 10
+          ? '林同学'
+          : index < 13
+            ? '陈同学'
+            : index < 15
+              ? '周同学'
+              : [
+                  '许同学',
+                  '李同学',
+                  '王同学',
+                  '沈同学',
+                  '赵同学',
+                  '宋同学',
+                  '何同学',
+                  '陆同学',
+                  '林同学',
+                  '陈同学',
+                ][index - 15],
     title: titles[index % 5],
     content:
       index === 4
@@ -93,3 +114,29 @@ export const getPreviewMemories = (page: number) =>
     page,
   )
 export const getPreviewHonors = (page: number) => paginate(previewHonors, page)
+export function getPreviewMemoryNames(): MemoryNameWallResponse {
+  const counts = new Map<string, number>()
+  for (const memory of previewMemories) {
+    const name = memory.displayName?.trim()
+    if (name) counts.set(name, (counts.get(name) || 0) + 1)
+  }
+  const names = [...counts]
+    .map(([name, submissionCount]) => ({
+      name,
+      submissionCount,
+      weight: submissionCount / previewMemories.length,
+    }))
+    .sort(
+      (a, b) =>
+        b.submissionCount - a.submissionCount ||
+        (a.name < b.name ? -1 : a.name > b.name ? 1 : 0),
+    )
+  return {
+    totalSubmissions: previewMemories.length,
+    namedSubmissions: names.reduce(
+      (sum, entry) => sum + entry.submissionCount,
+      0,
+    ),
+    names,
+  }
+}

@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { AppApiError } from '@/lib/api-error'
-export function useResource<T>(load: (signal: AbortSignal) => Promise<T>) {
-  const [data, setData] = useState<T | null>(null),
+export function useResource<T>(
+  load: (signal: AbortSignal) => Promise<T>,
+  initialData: T | null = null,
+) {
+  const [data, setData] = useState<T | null>(initialData),
     [error, setError] = useState<unknown>(null),
     [loading, setLoading] = useState(true),
     [version, setVersion] = useState(0)

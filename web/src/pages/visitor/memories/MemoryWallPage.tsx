@@ -13,6 +13,7 @@ import { MemoryWallMobileView } from './views/mobile/MemoryWallMobileView'
 import { MemoryWallDesktopView } from './views/desktop/MemoryWallDesktopView'
 import { MemoryDetailCard } from './components/MemoryDetailCard'
 import { useMemoryPreview } from './hooks/use-memory-preview'
+import { MemoryNameWall } from './components/MemoryNameWall'
 export function MemoryWallPage() {
   const { view, canHover } = useVisitorContext()
   const [params] = useSearchParams()
@@ -39,7 +40,9 @@ export function MemoryWallPage() {
   }
   return (
     <div className="wall-page" key={preview ? 'preview' : 'live'}>
-      <WallHeading kind="memories" total={feed.total} />
+      <WallHeading kind="memories" total={feed.total}>
+        <MemoryNameWall preview={preview} />
+      </WallHeading>
       {view === 'desktop' ? (
         <MemoryWallDesktopView {...props} canHover={canHover} />
       ) : (

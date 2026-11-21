@@ -3,6 +3,7 @@ import {
   getPreviewMemories,
   getPreviewHonors,
   previewMemories,
+  getPreviewMemoryNames,
 } from '../src/dev/wall-preview'
 export async function mockVisitorApi(page: Page) {
   const requests: { path: string; authorization?: string }[] = []
@@ -16,6 +17,8 @@ export async function mockVisitorApi(page: Page) {
     let data: unknown
     if (url.pathname === '/api/v1/memories')
       data = getPreviewMemories(Number(url.searchParams.get('page') || '1'))
+    else if (url.pathname === '/api/v1/memories/names')
+      data = getPreviewMemoryNames()
     else if (url.pathname.startsWith('/api/v1/memories/'))
       data = previewMemories.find(
         (row) =>

@@ -22,3 +22,8 @@ export interface PublicHonor {
   people: string
   images: ImageItem[]
 }
+export interface MemoryNameWallResponse {
+  totalSubmissions: number
+  namedSubmissions: number
+  names: { name: string; submissionCount: number; weight: number }[]
+}
