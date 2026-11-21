@@ -1,18 +1,21 @@
 # SIPC 十六周年前端
 
-同一个 Vite + React Router 项目，开场 / 目前保留占位，填写首页 /invitation 已实现粒子展示、回执与投稿；公开回忆墙 /memories、荣誉墙 /honors、115编年史 /chronicle 已实现电脑与手机视图；管理员入口 /admin，登录后进入 /admin/invitations。
+同一个 Vite + React Router 项目，开场 / 已实现11幕交互、逐字对白和背景音乐，可通过 /?replay=1 重播；填写首页 /invitation 已实现粒子展示、回执与投稿；公开回忆墙 /memories、荣誉墙 /honors、115编年史 /chronicle 已实现电脑与手机视图；管理员入口 /admin，登录后进入 /admin/invitations。
 
 ## 仓库与启动
 
 Git 根为上一级16thbirthday，统一使用已有.githooks/commit-msg。web没有自己的.git、Husky、commitlint、prepare或.gitignore；ESLint/Prettier仅用于代码质量。
 
 在web目录执行：
+复制.env.example为.env.local（可选，默认值一致）
 pnpm install --frozen-lockfile
 pnpm dev
 
 开发地址 http://127.0.0.1:5173，后端代理 http://127.0.0.1:16621。SSO默认member realm / birthday-web，回调需要覆盖实际/admin URL。无需把后端mail client Secret提供给浏览器。
 
-Vite同时监听局域网，手机连接同一Wi-Fi后使用启动输出的Network地址。当前WLAN为10.111.74.18，可访问 http://10.111.74.18:5173/memories 和 /honors。只在开发环境显式追加 ?preview=1 可看标明的示例内容，真实接口失败不会自动切到示例；生产构建剔除示例模块。详见[公开双墙开发与手机验收](../公开双墙开发与手机验收.md)。
+Vite同时监听局域网，手机连接同一Wi-Fi后使用启动输出的Network地址；不要照搬其他开发者的IP。手机提交表单时，后端APP_CORS_ALLOWED_ORIGINS需要包含实际局域网origin；手机登录后台还需要核对Keycloak回跳白名单。只在开发环境显式追加 ?preview=1 可看标明的示例内容，真实接口失败不会自动切到示例；生产构建剔除示例模块。详见[公开双墙开发与手机验收](../公开双墙开发与手机验收.md)。
+
+普通开发连接社团已存在的云上16th_birthday库，不要求本机安装MySQL或Docker。实际连接密码和邮件Secret由维护者私发，本地放入backend/.env；.local-private/中的交接文档不进入仓库。前端仅使用公开的VITE配置，不能存放这些Secret。后端需从backend目录启动，以便读取该目录的.env。
 
 ## 已实现
 
@@ -43,4 +46,4 @@ Vite同时监听局域网，手机连接同一Wi-Fi后使用启动输出的Netwo
 
 ## 首页与公开填写
 
-导航首页指向/invitation，开场动画仍暂不实现。正常模式读取真实投稿姓名，?preview=1仅演示姓名，表单仍真实提交并明确提示。表单与图片队列不依赖SSO，成功保存回执不自动发邮件。草稿保存在当前标签页；未知投稿结果沿用原UUID和body重试。详见[首页粒子与表单实现](../首页粒子与表单实现.md)。
+导航首页指向/invitation，顶部提供重播开场入口。正常模式读取真实投稿姓名，?preview=1仅演示姓名，表单仍真实提交并明确提示。表单与图片队列不依赖SSO，成功保存回执不自动发邮件。草稿保存在当前标签页；未知投稿结果沿用原UUID和body重试。详见[首页粒子与表单实现](../首页粒子与表单实现.md)及[开场动画实现与验收](../开场动画实现与验收.md)。

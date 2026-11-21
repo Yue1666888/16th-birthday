@@ -4,7 +4,7 @@
 
 ## 本机启动
 
-先将 JAVA_HOME 指向 JDK 21；本机已安装的目录为 C:/Users/zhangyue/.jdks/jdk-21.0.13.1+2。所有命令在 backend 目录执行。
+先将 JAVA_HOME 指向 JDK 21；本机已安装的目录为 C:/Users/zhangyue/.jdks/jdk-21.0.13.1+2，新电脑请换成自己的安装目录。所有命令在 backend 目录执行，IDE工作目录也应设为backend，以读取该目录的.env。
 
 ```powershell
 $env:JAVA_HOME='C:\Users\zhangyue\.jdks\jdk-21.0.13.1+2'
@@ -14,6 +14,8 @@ $env:JAVA_HOME='C:\Users\zhangyue\.jdks\jdk-21.0.13.1+2'
 本机 .env 已切换为直连社团云上 MySQL 的独立 16th_birthday 数据库，应用账号仅有项目库读写权限并强制使用 TLS。原本机 birthday16_dev 保留，但开发服务不再连接它。密码、邮件客户端 Secret 均在 Git 忽略范围内。新机器先按 .env.example 创建 .env，使用有建表权限的数据库账号执行 sql/schema/00_birthday_schema.sql，再给运行账号授予项目库的 SELECT、INSERT、UPDATE、DELETE 权限。应用不会自动创建或修改数据库表。
 
 开发服务地址为 http://127.0.0.1:16621，健康检查 GET /api/v1/health。后端没有首页，直接打开根路径会返回 JSON 404。前端位于同仓库 web，开发地址 http://127.0.0.1:5173/admin。
+
+普通启动不要求本机MySQL或Docker。实际项目库账号与邮件Secret由维护者私发，不能提交到仓库；.local-private/已统一忽略。社友收到私发配置后保存为backend/.env即可连接现有项目库，无需再次建表。多人使用共享开发库时，建议普通本地实例设置EMAIL_ENABLED=false、APP_TASKS_ENABLED=false；邮件联调由指定实例启用发送和扫描。
 
 ## 已实现的功能
 
