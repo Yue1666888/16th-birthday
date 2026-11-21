@@ -1,0 +1,30 @@
+export const openingAssets = {
+  M01: '/opening/M01.webp',
+  M02: '/opening/M02.webp',
+  M03: '/opening/M03.webp',
+  D01: '/opening/D01.webp',
+  D02: '/opening/D02.webp',
+  D03: '/opening/D03.webp',
+  D04: '/opening/D04.webp',
+  D05: '/opening/D05.webp',
+  D06: '/opening/D06.webp',
+  M04: '/opening/M04.webp',
+  M06: '/opening/M06.webp',
+  M05: '/opening/M05.webp',
+  S01: '/opening/S01.webp',
+  S02: '/opening/S02.webp',
+  S03: '/opening/S03.webp',
+  S04: '/opening/S04.webp',
+  S05: '/opening/S05.webp',
+  B01: '/opening/B01.webp',
+  B02: '/opening/B02.webp',
+  P01: '/opening/P01.webp',
+  P02: '/opening/P02.webp',
+  P03: '/opening/P03.webp',
+  P09: '/opening/P09.webp',
+  P11: '/opening/P11.webp',
+  P18: '/opening/P18.webp',
+} as const
+
+export type OpeningAssetId = keyof typeof openingAssets
+export const openingMusic = '/opening/return-to-115.m4a'

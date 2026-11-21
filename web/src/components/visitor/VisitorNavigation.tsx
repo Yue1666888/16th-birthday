@@ -34,8 +34,8 @@ export function VisitorNavigation() {
           <span aria-hidden="true">03</span>115编年史
         </NavLink>
       </nav>
-      <Link className="invitation-link" to="/invitation">
-        回到首页 <ArrowUpRight size={15} />
+      <Link className="invitation-link" to="/?replay=1">
+        重播开场 <ArrowUpRight size={15} />
       </Link>
     </header>
   )
