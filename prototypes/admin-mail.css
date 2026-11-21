@@ -6,3 +6,5 @@
 @media(min-width:1600px){.mail-workspace{grid-template-columns:340px minmax(0,1fr)}.compose-body textarea{height:315px}.recipient-list{height:530px}}
 @media(max-width:1150px){.mail-workspace{grid-template-columns:260px minmax(0,1fr);gap:15px}.mail-context{padding:15px 18px}.compose-body{padding:19px}.compose-foot{padding:15px 18px}.variable-chip code{display:none}.mail-mode-hint{display:none}}
 @media(max-width:900px){.mail-workspace{grid-template-columns:1fr}.recipient-list{height:220px}.mail-mode{padding:9px 17px}.compose-foot{flex-wrap:wrap}.preview-picker{flex-wrap:wrap}.preview-picker select{min-width:0;flex:1}}
+
+.recipient-status-filter{grid-column:1 / -1}

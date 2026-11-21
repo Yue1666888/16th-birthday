@@ -27,7 +27,7 @@
 <div class="mail-workspace">
 <section class="mail-side" aria-label="选择收件人"><div class="mail-panel-title"><span>选择报名者</span><span class="count" id="recipient-count">24</span></div>
 <div class="recipient-filters"><div class="input-wrap"><svg><use href="#search"/></svg><input id="recipient-search" placeholder="搜索姓名、手机号或邮箱" aria-label="搜索收件人"></div>
-<div class="recipient-filter-row"><select id="recipient-attendance" aria-label="到场状态筛选"><option value="">全部到场状态</option><option value="ATTENDING">到场</option><option value="NOT_ATTENDING">不到场</option></select><select id="recipient-gift" aria-label="领取方式筛选"><option value="">全部领取方式</option><option value="PICKUP">到场领取</option><option value="MAIL">邮寄</option><option value="NONE">不领取</option></select></div></div>
+<div class="recipient-filter-row"><select id="recipient-attendance" aria-label="到场状态筛选"><option value="">全部到场状态</option><option value="ATTENDING">到场</option><option value="NOT_ATTENDING">不到场</option></select><select id="recipient-gift" aria-label="领取方式筛选"><option value="">全部领取方式</option><option value="PICKUP">到场领取</option><option value="MAIL">邮寄</option><option value="NONE">不领取</option></select><select id="recipient-status" class="recipient-status-filter" aria-label="邮件状态筛选"><option value="">全部邮件状态</option><option value="NOT_SENT">未发送</option><option value="PENDING">处理中</option><option value="SUCCESS">发送成功</option><option value="FAILED">发送失败</option><option value="DISABLED">已禁用</option></select></div></div>
 <div class="recipient-tools" id="selection-tools" hidden><label><input type="checkbox" id="select-filtered">选择筛选结果</label><button id="clear-selection">清空已选</button></div>
 <div class="recipient-list" id="recipient-list"></div>
 </section>

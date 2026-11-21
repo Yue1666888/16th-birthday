@@ -29,8 +29,8 @@ counts();
 }
 function counts(){$('subject-count').textContent=$('compose-subject').value.length+' / 200';$('body-count').textContent=$('compose-body').value.length+' 字'}
 function filtered(){
-const q=$('recipient-search').value.trim().toLowerCase(),attendance=$('recipient-attendance').value,gift=$('recipient-gift').value;
-return Demo.receipts().filter(r=>(!q||[r.name,r.email,r.phone].some(v=>v.toLowerCase().includes(q)))&&(!attendance||r.attendance===attendance)&&(!gift||r.gift===gift));
+const q=$('recipient-search').value.trim().toLowerCase(),attendance=$('recipient-attendance').value,gift=$('recipient-gift').value,status=$('recipient-status').value;
+return Demo.receipts().filter(r=>(!q||[r.name,r.email,r.phone].some(v=>v.toLowerCase().includes(q)))&&(!attendance||r.attendance===attendance)&&(!gift||r.gift===gift)&&(!status||r.status===status));
 }
 function renderRecipients(){
 const rows=filtered(),top=$('recipient-list').scrollTop;$('recipient-count').textContent=rows.length;
@@ -139,7 +139,7 @@ record.querySelector('#back-records').onclick=()=>records(filter);record.querySe
 render();
 }
 $('single-mode').onclick=()=>switchMode('single');$('bulk-mode').onclick=()=>switchMode('bulk');
-$('recipient-search').oninput=renderRecipients;$('recipient-attendance').onchange=renderRecipients;$('recipient-gift').onchange=renderRecipients;
+$('recipient-search').oninput=renderRecipients;$('recipient-attendance').onchange=renderRecipients;$('recipient-gift').onchange=renderRecipients;$('recipient-status').onchange=renderRecipients;
 $('recipient-list').onclick=e=>{const b=e.target.closest('[data-single]');if(b){saveDraft();singleId=b.dataset.single;loadFields();renderRecipients()}};
 $('recipient-list').onchange=e=>{const id=e.target.dataset.recipient;if(!id)return;if(e.target.checked)selected.add(id);else selected.delete(id);renderRecipients()};
 $('select-filtered').onchange=e=>{for(const r of filtered()){if(e.target.checked)selected.add(r.id);else selected.delete(r.id)}renderRecipients()};
