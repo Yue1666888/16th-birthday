@@ -1,0 +1,225 @@
+.chronicle-spiral {
+  padding: 26px 0 35px;
+}
+.chronicle-spiral-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.chronicle-spiral-tools > div > span {
+  color: var(--v-accent);
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+.chronicle-spiral-tools p {
+  font-size: 11px;
+  color: var(--v-muted);
+  margin: 7px 0 0;
+  letter-spacing: 0.6px;
+}
+.chronicle-spiral-stage {
+  position: relative;
+  width: 100%;
+  height: min(90dvh, 1000px);
+  min-height: 620px;
+  overflow: hidden;
+  margin-top: 10px;
+  border-bottom: 1px solid var(--v-line);
+  background: radial-gradient(ellipse at center, #11232b33, transparent 60%);
+}
+.chronicle-spiral-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y pinch-zoom;
+  cursor: default;
+  user-select: none;
+}
+.chronicle-orbit {
+  stroke: #91c7d287;
+  stroke-width: 1.6;
+}
+.chronicle-orbit-progress {
+  stroke: #5ad9ed;
+  stroke-width: 2;
+}
+.chronicle-orbit-future {
+  stroke-width: 2;
+  stroke-dasharray: 3 11;
+  stroke-linecap: round;
+  animation: chronicle-continuation 6s linear infinite;
+}
+.chronicle-future-label {
+  fill: #a3bdc780;
+  font-size: 12px;
+  letter-spacing: 6px;
+  pointer-events: none;
+}
+.chronicle-node-hit {
+  fill: transparent;
+}
+.chronicle-node-halo {
+  fill: #101419e8;
+  stroke: transparent;
+}
+.chronicle-node-dot {
+  fill: #6fbbc9;
+}
+.chronicle-node-year {
+  fill: #d9e8ec;
+  font-size: 33px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+.chronicle-node-origin {
+  font-size: 38px;
+  fill: #77e7f5;
+}
+.chronicle-spiral-node {
+  cursor: pointer;
+  outline: 0;
+}
+.chronicle-spiral-node:hover .chronicle-node-year,
+.chronicle-spiral-node.is-selected .chronicle-node-year {
+  fill: #79e9f7;
+}
+.chronicle-spiral-node.is-selected .chronicle-node-halo,
+.chronicle-spiral-node:focus-visible .chronicle-node-halo {
+  fill: #18303b;
+  stroke: #5ad9ed88;
+  stroke-width: 1;
+}
+.chronicle-spiral-node:focus-visible .chronicle-node-halo {
+  stroke-width: 2;
+}
+.chronicle-node-detail {
+  position: fixed;
+  z-index: 55;
+  width: min(360px, calc(100vw - 32px));
+  max-height: min(420px, calc(100dvh - 110px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px 22px 23px;
+  border: 1px solid #5ad9ed77;
+  background: #19232bfa;
+  box-shadow: 0 20px 70px #0008;
+  animation: visitor-appear 0.15s both;
+}
+.chronicle-detail-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  color: var(--v-accent);
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+.chronicle-detail-top i {
+  color: #8da7b6;
+  font-size: 8px;
+  letter-spacing: 1px;
+  font-style: normal;
+  margin-left: 10px;
+}
+.chronicle-node-detail h2 {
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 500;
+  margin: 17px 0 12px;
+}
+.chronicle-node-detail > ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.chronicle-node-detail > ul > li {
+  font-size: 12px;
+  line-height: 1.9;
+  color: #bfced8;
+  overflow-wrap: anywhere;
+}
+.chronicle-node-detail > ul > li + li {
+  margin-top: 7px;
+}
+.chronicle-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 15px;
+  gap: 7px;
+}
+.chronicle-highlights > span {
+  padding: 3px 8px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  border: 1px solid #5ad9ed44;
+  color: #8fd7e4;
+}
+.chronicle-source {
+  text-align: center;
+  color: #8fa4b3;
+  font-size: 10px;
+  margin: 0 0 40px;
+  letter-spacing: 0.4px;
+}
+@keyframes chronicle-continuation {
+  to {
+    stroke-dashoffset: -56;
+  }
+}
+@media (max-width: 1023px) {
+  .chronicle-spiral {
+    padding-top: 20px;
+  }
+  .chronicle-spiral-tools {
+    gap: 12px;
+    align-items: start;
+  }
+  .chronicle-spiral-tools > div > span {
+    font-size: 8px;
+    letter-spacing: 2px;
+  }
+  .chronicle-spiral-tools p {
+    font-size: 9px;
+    letter-spacing: 0;
+    max-width: 220px;
+    line-height: 1.8;
+  }
+  .chronicle-spiral-stage {
+    height: 108vw;
+    min-height: 0;
+    max-height: 500px;
+    margin-top: 10px;
+  }
+  .chronicle-node-year {
+    font-size: 40px;
+  }
+  .chronicle-node-origin {
+    font-size: 46px;
+  }
+  .chronicle-orbit {
+    stroke-width: 2.5;
+  }
+  .chronicle-orbit-progress {
+    stroke-width: 3;
+  }
+  .chronicle-orbit-future {
+    stroke-width: 3;
+    stroke-dasharray: 5 14;
+  }
+  .chronicle-future-label {
+    font-size: 16px;
+    letter-spacing: 3px;
+  }
+  .chronicle-source {
+    font-size: 9px;
+    margin-bottom: 30px;
+  }
+  .chronicle-node-detail {
+    padding: 15px 18px 20px;
+  }
+  .chronicle-node-detail h2 {
+    font-size: 16px;
+  }
+}

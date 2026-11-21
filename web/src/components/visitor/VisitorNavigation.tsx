@@ -23,6 +23,9 @@ export function VisitorNavigation() {
         <NavLink to={'/honors' + suffix}>
           <span aria-hidden="true">02</span>荣誉墙
         </NavLink>
+        <NavLink to={'/chronicle' + suffix}>
+          <span aria-hidden="true">03</span>115编年史
+        </NavLink>
       </nav>
       <Link className="invitation-link" to="/">
         返回邀请函 <ArrowUpRight size={15} />

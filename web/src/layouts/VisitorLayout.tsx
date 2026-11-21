@@ -13,7 +13,10 @@ export function VisitorLayout() {
   const location = useLocation()
   const [params] = useSearchParams()
   const scrollPositions = useRef(new Map<string, number>())
-  const preview = import.meta.env.DEV && params.get('preview') === '1'
+  const preview =
+    import.meta.env.DEV &&
+    params.get('preview') === '1' &&
+    location.pathname !== '/chronicle'
   useLayoutEffect(() => {
     const old = history.scrollRestoration
     history.scrollRestoration = 'manual'
@@ -45,7 +48,13 @@ export function VisitorLayout() {
       </a>
       <Suspense fallback={null}>
         <VisitorParticles
-          scene={location.pathname.includes('honors') ? 'honors' : 'memories'}
+          scene={
+            location.pathname.includes('honors')
+              ? 'honors'
+              : location.pathname === '/chronicle'
+                ? 'chronicle'
+                : 'memories'
+          }
           mobile={mode.view === 'mobile'}
         />
       </Suspense>

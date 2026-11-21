@@ -108,6 +108,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   font-size: 14px;
   letter-spacing: 2px;
   transition: color 0.18s;
+  white-space: nowrap;
 }
 .visitor-nav nav a > span {
   font-size: 10px;
@@ -873,7 +874,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   .visitor-nav {
     height: 76px;
     padding: env(safe-area-inset-top) 18px 0;
-    gap: 20px;
+    gap: 16px;
   }
   .visitor-brand {
     gap: 4px;
@@ -887,11 +888,11 @@ body:has([data-visitor-modal]) .visitor-particles {
   }
   .visitor-nav nav {
     margin-left: auto;
-    gap: 24px;
+    gap: 14px;
   }
   .visitor-nav nav a {
     font-size: 12px;
-    letter-spacing: 1px;
+    letter-spacing: 0;
     gap: 0;
   }
   .visitor-nav nav a > span,
@@ -1109,6 +1110,12 @@ body:has([data-visitor-modal]) .visitor-particles {
   }
 }
 @media (max-width: 359px) {
+  .brand-logo {
+    width: 100px;
+  }
+  .visitor-nav nav a {
+    font-size: 11px;
+  }
   .memory-grid-mobile {
     grid-template-columns: minmax(0, 1fr);
   }

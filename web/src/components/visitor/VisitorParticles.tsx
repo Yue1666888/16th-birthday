@@ -8,7 +8,7 @@ import {
 import type { ParticlePointer } from '@/features/visitor/particles/particle-field'
 import { sampleWordPoints } from '@/features/visitor/particles/word-points'
 interface Settings {
-  scene: 'memories' | 'honors'
+  scene: 'memories' | 'honors' | 'chronicle'
   mobile: boolean
 }
 export function VisitorParticles(props: Settings) {

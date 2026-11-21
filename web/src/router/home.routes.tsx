@@ -12,6 +12,13 @@ export const homeRoutes: RouteObject[] = [
     }),
     children: [
       {
+        path: '/chronicle',
+        lazy: async () => ({
+          Component: (await import('@/pages/visitor/chronicle/ChroniclePage'))
+            .ChroniclePage,
+        }),
+      },
+      {
         path: '/memories',
         lazy: async () => ({
           Component: (await import('@/pages/visitor/memories/MemoryWallPage'))
