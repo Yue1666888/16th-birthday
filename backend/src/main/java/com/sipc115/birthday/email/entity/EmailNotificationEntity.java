@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Setter
 public class EmailNotificationEntity {
     private Long id;
+    private Long batchId;
+    private String composeMode = "LEGACY";
     private Long invitationId;
     private Long invitationVersion;
     private Integer sendNo;

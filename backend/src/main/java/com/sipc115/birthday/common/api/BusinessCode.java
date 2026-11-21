@@ -1,6 +1,9 @@
 package com.sipc115.birthday.common.api;
 
 public enum BusinessCode {
+    MAIL_BATCH_CONFIRMED(202, "邮件批次已登记"),
+    MAIL_BATCH_REUSED(200, "已复用相同预览的发送批次"),
+    MAIL_BATCH_DISABLED(200, "已登记批次，本环境禁用实际发送"),
     OK(200, "读取成功或健康检查成功"),
     INVITATION_CREATED(201, "首次保存报名回执"),
     INVITATION_UPDATED(200, "同手机号更新或管理员更正成功"),
@@ -20,6 +23,11 @@ public enum BusinessCode {
         this.message = message;
     }
 
-    public int status() { return status; }
-    public String message() { return message; }
+    public int status() {
+        return status;
+    }
+
+    public String message() {
+        return message;
+    }
 }

@@ -75,9 +75,11 @@ public class IdempotencyService {
         Map<?, ?> fields = json.convertValue(result.data(), Map.class);
         stored.setResourceId(fields.get("id").toString());
         stored.setResourceType(
-                operation == AdminOperationCode.EMAIL_CONFIRM
-                        ? "EMAIL_NOTIFICATION"
-                        : operation.name().startsWith("HONOR") ? "HONOR" : "INVITATION");
+                operation == AdminOperationCode.MAIL_BATCH_CONFIRM
+                        ? "MAIL_BATCH"
+                        : operation == AdminOperationCode.EMAIL_CONFIRM
+                                ? "EMAIL_NOTIFICATION"
+                                : operation.name().startsWith("HONOR") ? "HONOR" : "INVITATION");
         stored.setResponseStatus(result.code().status());
         stored.setResponseBodyJson(
                 json.writeValueAsString(new SavedResult(result.code().name(), result.data())));

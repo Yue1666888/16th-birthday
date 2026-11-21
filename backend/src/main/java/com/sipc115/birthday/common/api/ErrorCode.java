@@ -1,6 +1,14 @@
 package com.sipc115.birthday.common.api;
 
 public enum ErrorCode {
+    MAIL_SELECTION_NOT_FOUND(404, "收件人选择不存在或不属于当前用户"),
+    MAIL_SELECTION_EXPIRED(409, "收件人选择已过期，请重新筛选"),
+    MAIL_PREVIEW_NOT_FOUND(404, "邮件预览不存在或不属于当前用户"),
+    MAIL_PREVIEW_EXPIRED(409, "邮件预览已过期，请重新预览"),
+    MAIL_BATCH_NOT_FOUND(404, "邮件发送批次不存在"),
+    MAIL_SEND_NOT_FOUND(404, "邮件发送记录不存在"),
+    MAIL_RECIPIENT_LIMIT(400, "一次最多选择500位报名者，请分批发送"),
+    LOG_UNAVAILABLE(503, "当前应用日志暂不可读取"),
     BAD_REQUEST(400, "JSON 无法解析、路径或查询格式非法、重复查询参数"),
     VALIDATION_ERROR(400, "缺失必填、类型或枚举错误、长度、未知字段、跨字段校验、空 PATCH"),
     MEMORY_CONTENT_REQUIRED(400, "正文和图片都为空，姓名或标题不能代替正文"),
@@ -42,6 +50,11 @@ public enum ErrorCode {
         this.message = message;
     }
 
-    public int status() { return status; }
-    public String message() { return message; }
+    public int status() {
+        return status;
+    }
+
+    public String message() {
+        return message;
+    }
 }

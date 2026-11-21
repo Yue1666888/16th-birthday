@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sipc115.birthday.mail.mapper.MailManagementMapper">
+<sql id="snapshot">id,actor_sub,preview_hash,payload AS payload_json,expires_at,created_at</sql>
+<insert id="insertSelection">INSERT INTO mail_recipient_selections(id,actor_sub,payload,expires_at,created_at)
+VALUES(#{id},#{actorSub},#{payloadJson},#{expiresAt},#{createdAt})</insert>
+<insert id="insertPreview">INSERT INTO mail_previews(id,actor_sub,preview_hash,payload,expires_at,created_at)
+VALUES(#{id},#{actorSub},#{previewHash},#{payloadJson},#{expiresAt},#{createdAt})</insert>
+<select id="selection" resultType="com.sipc115.birthday.mail.entity.MailSnapshotEntity">
+SELECT id,actor_sub,payload AS payload_json,expires_at,created_at FROM mail_recipient_selections WHERE id=#{id}</select>
+<select id="preview" resultType="com.sipc115.birthday.mail.entity.MailSnapshotEntity">
+SELECT <include refid="snapshot"/> FROM mail_previews WHERE id=#{id}</select>
+<select id="lockPreview" resultType="com.sipc115.birthday.mail.entity.MailSnapshotEntity">
+SELECT <include refid="snapshot"/> FROM mail_previews WHERE id=#{id} FOR UPDATE</select>
+<insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
+INSERT INTO mail_batches(preview_id,actor_sub,request_id,mode,recipient_count,confirmed_at)
+VALUES(#{previewId},#{actorSub},#{requestId},#{mode},#{recipientCount},#{confirmedAt})</insert>
+<select id="batch" resultType="com.sipc115.birthday.mail.entity.MailBatchEntity">SELECT * FROM mail_batches WHERE id=#{id}</select>
+<select id="batchByPreview" resultType="com.sipc115.birthday.mail.entity.MailBatchEntity">SELECT * FROM mail_batches WHERE preview_id=#{id}</select>
+<select id="batchCounts" resultType="map">SELECT task_status AS status,COUNT(*) AS total FROM email_notifications WHERE batch_id=#{id} GROUP BY task_status</select>
+<sql id="status">CASE WHEN task_status='SUCCEEDED' THEN 'SUCCESS' WHEN task_status='FAILED' THEN 'FAILED'
+WHEN task_status='DISABLED' THEN 'DISABLED' WHEN task_status='CANCELLED' THEN 'NOT_SENT' ELSE 'PENDING' END</sql>
+<sql id="filter">1=1
+<if test="filter.invitationId != null">AND invitation_id=#{filter.invitationId}</if>
+<if test="filter.batchId != null">AND batch_id=#{filter.batchId}</if>
+<if test="filter.emailNotifyStatus != null">AND (<include refid="status"/>)=#{filter.emailNotifyStatus}</if>
+<if test="filter.keyword != null">AND (recipient_email LIKE #{filter.keyword} ESCAPE '!'
+ OR subject LIKE #{filter.keyword} ESCAPE '!' OR JSON_UNQUOTE(JSON_EXTRACT(invitation_snapshot,'$.name')) LIKE #{filter.keyword} ESCAPE '!')</if>
+</sql>
+<sql id="historyColumns">*,invitation_snapshot AS invitation_snapshot_json,JSON_UNQUOTE(JSON_EXTRACT(invitation_snapshot,'$.name')) AS recipient_name</sql>
+<select id="history" resultType="com.sipc115.birthday.mail.mapper.MailHistoryRow">
+SELECT <include refid="historyColumns"/> FROM email_notifications WHERE <include refid="filter"/>
+ORDER BY confirmed_at DESC,id DESC LIMIT #{limit} OFFSET #{offset}</select>
+<select id="historyCount" resultType="long">SELECT COUNT(*) FROM email_notifications WHERE <include refid="filter"/></select>
+<select id="send" resultType="com.sipc115.birthday.mail.mapper.MailHistoryRow">
+SELECT <include refid="historyColumns"/> FROM email_notifications WHERE id=#{id}</select>
+</mapper>
