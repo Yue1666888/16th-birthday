@@ -26,18 +26,15 @@ function zoom(src,caption){const d=document.createElement('dialog');d.className=
 function changed(){document.dispatchEvent(new Event('demo:changed'))}
 function item(label,value,full=false){return '<div class="info-item '+(full?'full':'')+'"><label>'+label+'</label>'+value+'</div>'}
 function receipt(id){const r=Demo.receipts().find(r=>r.id===String(id));if(!r){toast('没有找到该回执');return null}return r}
-function historyHTML(r){
-if(!r.history.length)return '<div class="history-empty">'+icon('mail')+'<strong>还没有发送记录</strong><p>核对回执后，预览并确认发送第一封邮件。</p></div>';
-return '<div class="note" style="margin-bottom:18px">记录包含确认时的回执内容。修改回执不会自动补发邮件，旧记录会保留。</div><div class="history-list">'+[...r.history].reverse().map(h=>'<article class="history-card"><div class="history-top"><strong>第 '+h.sendNo+' 次发送 <span class="honor-small">· 回执 v'+h.version+(h.version!==r.version?' · 历史版本':' · 当前版本')+'</span></strong>'+badge(h.status)+'</div><div class="history-meta">收件邮箱：'+esc(h.recipient)+'<br>确认人员：'+esc(h.operator)+'<br>确认时间：'+esc(h.confirmed)+(h.sentAt?'<br>发送成功：'+esc(h.sentAt):'')+'</div>'+(h.status==='FAILED'?'<div class="note error">邮件服务 SMTP 最终发送超时。请先联系服务维护人员排查，再手动确认重发。</div>':h.status==='PENDING'?'<div class="note">任务已登记，等待邮件服务处理。当前演示不会发送真实邮件。</div>':'')+'</article>').join('')+'</div>';
-}
 function detail(id,tab='info'){
+if(tab==='history'){location.href='admin-mail.html?view=history&id='+encodeURIComponent(id);return}
 const r=receipt(id);if(!r)return;
 const d=show({title:'报名详情',subtitle:'回执 #'+r.id+' · 查看回执与邮件记录',drawer:true,body:
 '<div class="summary-box"><div class="person-icon">'+esc(r.name[0])+'</div><div><strong>'+esc(r.name)+'</strong><small>回执 v'+r.version+' · '+esc(r.updated)+' 更新</small></div>'+badge(r.status)+'</div>'+
 '<div class="tabs"><button class="tab '+(tab==='info'?'active':'')+'" data-tab="info">回执信息</button><button class="tab '+(tab==='history'?'active':'')+'" data-tab="history">邮件记录 <span class="count">'+r.history.length+'</span></button></div>'+
-(tab==='history'?historyHTML(r):'<div class="section-label">基本信息</div><div class="info-grid">'+item('姓名',esc(r.name))+item('手机号',esc(r.phone))+item('邮箱',esc(r.email),true)+item('是否到场','<span class="pill '+(r.attendance==='ATTENDING'?'attend':'')+'">'+(r.attendance==='ATTENDING'?'到场':'不到场')+'</span>')+item('礼物领取方式',gifts[r.gift])+(r.gift==='MAIL'?item('邮寄地址',esc(r.address),true):'')+'</div><div class="section-label">邮件通知</div><div class="note">报名回执保存后不会自动发信。请先预览收件邮箱和正文，再确认发送。</div><div class="detail-meta"><span>回执编号 #'+r.id+'</span><span>最近更新 '+esc(r.updated)+'</span></div>'),
-footer:'<button class="btn" data-close>关闭</button><button class="btn" data-edit>修改回执</button><button class="btn primary" data-mail>预览邮件</button>'});
-d.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>detail(id,b.dataset.tab));d.querySelector('[data-edit]').onclick=()=>edit(id);d.querySelector('[data-mail]').onclick=()=>mail(id);
+('<div class="section-label">基本信息</div><div class="info-grid">'+item('姓名',esc(r.name))+item('手机号',esc(r.phone))+item('邮箱',esc(r.email),true)+item('是否到场','<span class="pill '+(r.attendance==='ATTENDING'?'attend':'')+'">'+(r.attendance==='ATTENDING'?'到场':'不到场')+'</span>')+item('礼物领取方式',gifts[r.gift])+(r.gift==='MAIL'?item('邮寄地址',esc(r.address),true):'')+'</div><div class="section-label">邮件通知</div><div class="note">报名回执保存后不会自动发信。可前往邮件管理，为此人编辑专属邮件并确认发送。</div><div class="detail-meta"><span>回执编号 #'+r.id+'</span><span>最近更新 '+esc(r.updated)+'</span></div>'),
+footer:'<button class="btn" data-close>关闭</button><button class="btn" data-edit>修改回执</button><button class="btn primary" data-mail>前往邮件管理</button>'});
+d.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{if(b.dataset.tab==='history')location.href='admin-mail.html?view=history&id='+encodeURIComponent(id);else detail(id,'info')});d.querySelector('[data-edit]').onclick=()=>edit(id);d.querySelector('[data-mail]').onclick=()=>mail(id);
 }
 function edit(id){
 const r=receipt(id);if(!r)return;
@@ -67,19 +64,7 @@ Demo.saveReceipt(r);d.dataset.dirty='false';d.close();changed();toast(hasChanged
 }
 function clearErrors(form){form.querySelectorAll('.invalid').forEach(x=>x.classList.remove('invalid'));form.querySelectorAll('.field-error').forEach(x=>x.textContent='')}
 function error(input,text){const p=input.closest('.form-field');p.classList.add('invalid');p.querySelector('.field-error').textContent=text}
-function mail(id){
-const r=receipt(id);if(!r)return;
-const text=r.name+'，你好！\n\n已收到你的回执。\n到场选择：'+(r.attendance==='ATTENDING'?'到场':'不到场')+'\n礼物选择：'+gifts[r.gift]+'\n回执编号：'+r.id+'\n\n期待与你再次相聚。\nSIPC 十六周年';
-const d=show({title:'预览确认邮件',subtitle:'核对收件人及回执内容，再确认发送',
-body:'<div class="mail-meta"><div><label>收件人</label><strong>'+esc(r.email)+'</strong></div><div><label>主题</label>社团十六周年邀请函回执确认</div><div><label>回执版本</label>v'+r.version+'</div></div><div class="mail-paper">'+esc(text)+'</div><div class="note" style="margin-top:18px">确认后登记发送任务。邮件是否发送成功，以发送记录中的最终结果为准。本原型不会发送真实邮件。</div><label class="confirm-check"><input id="mail-checked" type="checkbox">我已核对收件邮箱及邮件正文</label>',
-footer:'<button class="btn" data-close>取消</button><button class="btn primary" id="confirm-mail" disabled>确认发送</button>'});
-const button=d.querySelector('#confirm-mail');d.querySelector('#mail-checked').onchange=e=>button.disabled=!e.target.checked;
-button.onclick=()=>{
-const current=receipt(id);if(current.version!==r.version){toast('回执已更新，请重新预览邮件');mail(id);return}
-const active=current.history.find(h=>h.version===r.version&&h.status==='PENDING');
-if(!active){const sendNo=current.history.filter(h=>h.version===r.version).length+1;current.history.push({id:crypto.randomUUID?.()||String(Date.now()),version:r.version,sendNo,status:'PENDING',recipient:r.email,confirmed:Demo.now(),operator:'管理员',sentAt:null});current.status='PENDING';Demo.saveReceipt(current);changed()}
-d.close();const result=show({title:active?'已有发送任务处理中':'发送任务已登记',subtitle:'请在发送记录中关注后续状态',body:'<div class="history-empty" style="padding:25px 10px">'+icon('check')+'<strong>'+esc(r.email)+'</strong><p>'+(active?'已复用同一版本的处理中任务，避免重复发送。':'邮件已进入待处理状态。这并不表示收件人已经收到邮件。')+'</p></div><div class="note">当前是交互原型，任务保留为“处理中”，不会调用邮件服务。</div>',footer:'<button class="btn" data-close>完成</button><button class="btn primary" data-history>查看发送记录</button>'});result.querySelector('[data-history]').onclick=()=>detail(id,'history');
-};
-}
+function mail(id){location.href='admin-mail.html?mode=single&id='+encodeURIComponent(id)}
+
 return{esc,icon,toast,show,ask,zoom,changed,badge,gifts,clearErrors,error,detail,edit,mail};
 })();

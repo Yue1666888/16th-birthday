@@ -18,5 +18,16 @@ let state;
 try{const saved=localStorage.getItem(key);state=saved?JSON.parse(saved):seed();if(!Array.isArray(state.receipts)||!Array.isArray(state.honors))state=seed()}catch(e){state=seed()}
 const clone=v=>JSON.parse(JSON.stringify(v));
 const persist=()=>{try{localStorage.setItem(key,JSON.stringify(state))}catch(e){throw new Error('本地原型存储空间不足，请减少图片大小后重试。')}};
-return{now,receipts:()=>clone(state.receipts),honors:()=>clone(state.honors),saveReceipt(r){const old=clone(state);state.receipts=state.receipts.map(x=>x.id===r.id?clone(r):x);try{persist()}catch(e){state=old;throw e}},saveHonor(h){const old=clone(state);const at=state.honors.findIndex(x=>x.id===h.id);if(at<0)state.honors.unshift(clone(h));else state.honors[at]=clone(h);try{persist()}catch(e){state=old;throw e}},deleteHonor(id){state.honors=state.honors.filter(h=>h.id!==id);persist()},reset(){state=seed();persist()}};
+return{now,saveMailBatch(messages){
+const old=clone(state);
+try{
+ for(const message of messages){
+  const receipt=state.receipts.find(r=>r.id===message.invitationId);
+  if(!receipt||receipt.version!==message.version||receipt.email!==message.recipient)throw new Error('报名资料已更新，请重新预览后确认。');
+  receipt.history.push({...clone(message),sendNo:receipt.history.filter(h=>h.version===message.version).length+1,confirmed:now(),operator:'管理员',sentAt:null,status:'PENDING'});
+  receipt.status='PENDING';
+ }
+ persist();
+}catch(e){state=old;throw e}
+},receipts:()=>clone(state.receipts),honors:()=>clone(state.honors),saveReceipt(r){const old=clone(state);state.receipts=state.receipts.map(x=>x.id===r.id?clone(r):x);try{persist()}catch(e){state=old;throw e}},saveHonor(h){const old=clone(state);const at=state.honors.findIndex(x=>x.id===h.id);if(at<0)state.honors.unshift(clone(h));else state.honors[at]=clone(h);try{persist()}catch(e){state=old;throw e}},deleteHonor(id){state.honors=state.honors.filter(h=>h.id!==id);persist()},reset(){state=seed();persist()}};
 })();
