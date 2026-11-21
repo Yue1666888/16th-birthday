@@ -69,12 +69,13 @@
 .chronicle-node-year {
   fill: #d9e8ec;
   font-size: 33px;
-  font-weight: 400;
+  font-weight: 650;
   letter-spacing: 1px;
   pointer-events: none;
 }
 .chronicle-node-origin {
-  font-size: 38px;
+  font-size: 56px;
+  font-weight: 850;
   fill: #77e7f5;
 }
 .chronicle-spiral-node {
@@ -196,7 +197,7 @@
     font-size: 40px;
   }
   .chronicle-node-origin {
-    font-size: 46px;
+    font-size: 64px;
   }
   .chronicle-orbit {
     stroke-width: 2.5;
