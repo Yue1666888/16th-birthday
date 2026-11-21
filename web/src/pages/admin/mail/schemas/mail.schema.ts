@@ -16,6 +16,13 @@ export function createMailSchema(bulk: boolean) {
         .string()
         .trim()
         .min(1, '请填写邮件主题')
+        .refine(
+          (v) =>
+            ![...v].some(
+              (c) => c.charCodeAt(0) < 32 || c.charCodeAt(0) === 127,
+            ),
+          '邮件主题不能包含换行或控制字符',
+        )
         .refine((v) => [...v].length <= 200, '主题不能超过200字'),
       textBody: z
         .string()

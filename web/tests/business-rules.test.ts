@@ -72,6 +72,15 @@ describe('mail schema', () => {
     ).toBe(false)
   })
 })
+it('rejects mail subject header controls', () => {
+  expect(
+    createMailSchema(false).safeParse({
+      subject:
+        'Hello' + String.fromCharCode(13, 10) + 'Bcc: invalid@example.com',
+      textBody: 'body',
+    }).success,
+  ).toBe(false)
+})
 describe('log ring buffer', () => {
   it('deduplicates stable cursor entries and bounds count', () => {
     const a = { id: '1', level: 'INFO', text: '中文' }

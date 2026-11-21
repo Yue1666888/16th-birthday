@@ -246,7 +246,7 @@ class MailManagementIT {
                 200);
         jdbc.update(
                 "UPDATE mail_recipient_selections SET expires_at=UTC_TIMESTAMP()-INTERVAL 1 SECOND"
-                    + " WHERE id=?",
+                        + " WHERE id=?",
                 id);
         mvc.perform(
                         post("/api/v1/admin/mail/previews")
@@ -319,5 +319,48 @@ class MailManagementIT {
                                 .with(jwt())
                                 .param("emailNotifyStatus", "INVALID"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void renderedSubjectsRejectHeaderControlCharacters() throws Exception {
+        postData(
+                "/previews",
+                Map.of(
+                        "mode",
+                        "SINGLE",
+                        "subject",
+                        "Hi" + (char) 13 + (char) 10 + "Bcc: invalid@example.com",
+                        "textBody",
+                        "body",
+                        "recipientIds",
+                        List.of(first)),
+                400);
+        invitations.submit(
+                new InvitationSubmitRequest(
+                        "甲" + (char) 13 + (char) 10 + "Bcc: invalid@example.com",
+                        "13800138000",
+                        "one@example.com",
+                        "ATTENDING",
+                        "PICKUP",
+                        null));
+        mvc.perform(
+                        post("/api/v1/admin/mail/previews")
+                                .with(jwt())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(
+                                        json.writeValueAsString(
+                                                Map.of(
+                                                        "mode",
+                                                        "BULK",
+                                                        "subject",
+                                                        "给{{name}}",
+                                                        "textBody",
+                                                        "body",
+                                                        "recipientIds",
+                                                        List.of(first)))))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.fieldErrors.subject").exists());
+        assertEquals(
+                0, jdbc.queryForObject("SELECT COUNT(*) FROM email_notifications", Integer.class));
     }
 }

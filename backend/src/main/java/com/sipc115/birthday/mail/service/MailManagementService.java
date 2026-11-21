@@ -171,6 +171,8 @@ public class MailManagementService {
                             ? templates.render(body, target, "textBody")
                             : body;
             RequestValues.text(s, 200, "subject", true);
+            if (s.chars().anyMatch(c -> c < 32 || c == 127))
+                throw BusinessException.field("subject", "邮件主题不能包含换行或控制字符");
             RequestValues.text(b, 10000, "textBody", true);
             messages.add(new Message(target, s, b));
         }
