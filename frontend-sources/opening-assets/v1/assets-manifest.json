@@ -1,0 +1,402 @@
+[
+  {
+    "id": "M01",
+    "file": "mobile/M01-departure.png",
+    "kind": "AI-recomposed",
+    "reference": "design-04.png",
+    "width": 941,
+    "height": 1672,
+    "bytes": 1493821,
+    "alpha": null,
+    "prompt": "Use case: precise-object-edit. Edit the supplied empty forest-path campus illustration into a PORTRAIT mobile-web background, target aspect 9:16, target 1152x2048. Preserve its warm flat 2D cartoon/picture-book style, clean polygonal shading, pale blue sky, sage-green trees, sandy path and distant blue mountains. Recompose rather than crop: the path starts broad at the bottom center and leads to a vanishing point at horizontal center around 62 percent of image height; trees form slim borders on both sides and the upper 45 percent remains an open softly clouded sky. Reserve the center path area for a separately animated balloon, and reserve the bottom 18 percent for web subtitles. Maintain an ordinary eye-level first-person walking perspective. NO balloon, people, close birds, text, signs, logos, watermark, interface or framing. Keep the supplied scene's two-dimensional illustration language; do not turn it into a 3D render or a photograph.",
+    "generatedBasename": "exec-6364a968-3519-4f67-9a7b-21a2ee2c290a.png",
+    "sha256": "0ebdfd6cac0b8ec801477ecb8a7f909030e1f22cbc24c5947b7d2bdee54a0acf",
+    "status": "selected"
+  },
+  {
+    "id": "M02",
+    "file": "mobile/M02-boarding.png",
+    "kind": "AI-recomposed",
+    "reference": "design-06.jpg",
+    "width": 941,
+    "height": 1672,
+    "bytes": 1469431,
+    "alpha": null,
+    "prompt": "Use case: precise-object-edit. Recompose this hot-air-balloon boarding illustration for a PORTRAIT mobile screen, 9:16 aspect ratio, target1152x2048. Keep the same two fictional chibi student guides, same short black-haired student on the left holding a gray tablet and straight black-haired smiling student on the right raising a welcoming hand, same black shirts, friendly faces, wicker basket with its small open gate, warm orange/cream striped balloon and the same forest-path setting. This is a fictional illustration, not a portrait of actual students. Show the entire basket gate and both guides in the middle-to-lower part with readable large figures; the balloon may extend beyond the very top, leave the lower 18 percent as calm path for subtitles and a boarding button. Redraw extra sky and forest above/beside them to achieve portrait framing without stretching or clipping the figures. Match the original flat 2D cartoon shading and colors exactly. No new writing, labels, readable shirt lettering, watermarks, UI, dialog bubbles or baked buttons.",
+    "generatedBasename": "exec-e5f05a69-b306-4328-a0b1-784a96af32d7.png",
+    "sha256": "5f1fc1b16c25b6b0e59421a07d6e053ec269371688b6e224598d2f4d5ef52345",
+    "status": "selected"
+  },
+  {
+    "id": "M03",
+    "file": "mobile/M03-flight.png",
+    "kind": "AI-recomposed",
+    "reference": "design-08.jpg",
+    "width": 941,
+    "height": 1672,
+    "bytes": 1180331,
+    "alpha": null,
+    "prompt": "Use case: precise-object-edit. Recompose the supplied clean flying-landscape illustration into a PORTRAIT 9:16 mobile-web flight background, target1152x2048. Preserve the flat warm 2D picture-book style, pastel cyan sky, layered blue mountains, rolling sage-green foothills, winding pale path and small stylized conifer trees. Keep the mountains in the lower half and leave the upper 55 percent mostly calm open sky for separate drifting cloud cards; reserve a clear region left of center for a separately composited small balloon. Do not include any balloon or people. Keep distant birds sparse and tiny; no large close bird. No text, UI, signs, logo, border or watermark. Portrait composition must be newly arranged, not stretched from landscape.",
+    "generatedBasename": "exec-116f1ee2-0a51-451d-b805-5a40fc51dff4.png",
+    "sha256": "e639d1c77f5a50796dedf3612d48ad1b61e8e7f52396dacde7e7bcb08f4d79b7",
+    "status": "selected"
+  },
+  {
+    "id": "D01",
+    "file": "desktop/D01-departure.png",
+    "kind": "provided-art",
+    "reference": "design-04.png",
+    "width": 1376,
+    "height": 768,
+    "bytes": 785680,
+    "sha256": "450f02311523b5480e6061bb638b25ed0802c64b2013ad8340e18e24b254764e",
+    "status": "selected"
+  },
+  {
+    "id": "D02",
+    "file": "desktop/D02-boarding.jpg",
+    "kind": "provided-art",
+    "reference": "design-06.jpg",
+    "width": 1376,
+    "height": 768,
+    "bytes": 72579,
+    "sha256": "215be0df231dd0a722d19adb1e23176ae35b1ed33a39e751decb34a539665f06",
+    "status": "selected"
+  },
+  {
+    "id": "D03",
+    "file": "desktop/D03-flight.jpg",
+    "kind": "provided-art",
+    "reference": "design-08.jpg",
+    "width": 1344,
+    "height": 750,
+    "bytes": 35203,
+    "sha256": "76152772d6711e13788f2167dcbf5d9b065b4c7250c0c4e8514eeb47542f247e",
+    "status": "selected"
+  },
+  {
+    "id": "D04",
+    "file": "desktop/D04-door-closed.png",
+    "kind": "provided-art",
+    "reference": "design-11.png",
+    "width": 1376,
+    "height": 768,
+    "bytes": 901108,
+    "sha256": "f7807643896236cdad60be095bb58d84d2bde847abd82091fcba2ab4d52d4f93",
+    "status": "selected"
+  },
+  {
+    "id": "D05",
+    "file": "desktop/D05-door-open.png",
+    "kind": "provided-art",
+    "reference": "design-12.png",
+    "width": 1376,
+    "height": 768,
+    "bytes": 685450,
+    "sha256": "3507070f55b18bf85308ed1fecbcf380bda2c474d9461ab935a903f809fb7dcf",
+    "status": "selected"
+  },
+  {
+    "id": "D06",
+    "file": "desktop/D06-celebration.png",
+    "kind": "provided-art",
+    "reference": "design-13.png",
+    "width": 1318,
+    "height": 736,
+    "bytes": 1044660,
+    "sha256": "17dbde4762cd14bf317da080a4557de2abdc36c57fe2dbfdf91bb86144577738",
+    "status": "selected",
+    "alphaBox": [
+      0,
+      0,
+      1318,
+      736
+    ]
+  },
+  {
+    "id": "M04",
+    "file": "mobile/M04-door-closed.png",
+    "kind": "AI-recomposed",
+    "reference": "design-11.png",
+    "width": 887,
+    "height": 1774,
+    "bytes": 1487515,
+    "alpha": null,
+    "prompt": "Use case: precise-object-edit. Recompose the supplied illustrated 115 doorway scene into a PORTRAIT mobile-web background, 9:16 aspect ratio, target1152x2048. Preserve the same flat warm 2D picture-book style, cream wall on the left and pale cyan wall on the right, ivory door closed and centered, metal handle at the lower-left of the door, potted green plant, framed awards and small chibi-student picture on the left, hanging festive banner and colored triangular pennant strings on the right. Fit the entire door frame within the portrait composition and keep its center at 50 percent of width. Leave a clear quiet bottom 18 percent for web subtitles and a button. IMPORTANT: the rectangular door number plate must be BLANK and the long festive banner must be BLANK; exact 115 and birthday lettering will be DOM overlays. Do not add or invent dates, addresses or any other text. Do not crop the door handle or top plate. Match the existing drawing and palette, no 3D render, no photorealism, no watermark or UI.",
+    "generatedBasename": "exec-16af3ebb-244b-4b73-a321-4f9ca60b5592.png",
+    "sha256": "e2d283b970322f482aa736c167412f5d8df72615f46d98cace8c1a909572c92e",
+    "status": "selected"
+  },
+  {
+    "id": "M06",
+    "file": "mobile/M06-celebration.png",
+    "kind": "AI-recomposed",
+    "reference": "design-13.png",
+    "width": 941,
+    "height": 1672,
+    "bytes": 1883240,
+    "alpha": null,
+    "prompt": "Use case: precise-object-edit. Recompose this illustrated sixteenth-birthday celebration into a PORTRAIT mobile background, 9:16 aspect ratio, target1152x2048. Retain its existing warm flat 2D chibi illustration style, pastel cream room, wooden desks and trophy/book shelves, laptop, birthday cake and colorful pennant bunting. Keep all nine fictional illustrated partygoers visible as a welcoming crowd, arranged in depth rather than cropping their heads: the blue-haired smiling guide near center, silver-haired guide waving left, black-haired and brown-haired students beside the cake, two dark-haired students behind, small gray-haired figure left, black-haired figure near the front and curly-haired smiling figure right. They are fictional characters, not actual member portraits. Keep the cake and celebrating gestures readable, with a calm uncluttered bottom 18 percent for subtitles and an invitation card to arrive. Keep the main cream hanging banner at the top but REMOVE ALL WRITING from it; no names, numbers, dates, logos or UI. Preserve the color and drawing language; do not turn it into a 3D render or a real photograph.",
+    "generatedBasename": "exec-8d932912-9a63-486a-acc4-51024fe59ad6.png",
+    "sha256": "57712783495de5a3839da03676d21ab543e81f608a6f97d75702bb45528fbfcf",
+    "status": "selected"
+  },
+  {
+    "id": "M05",
+    "file": "mobile/M05-door-open.png",
+    "prompt": "Use case: precise-object-edit. Edit ONLY the door state in this portrait illustration. Keep the EXACT same portrait canvas aspect 1:2, same framing and camera, walls, plant, frames, bunting, blank red banner and their positions. The ivory door is now swung open toward the right on its right-side hinges, revealing a dark navy room inside, with a single horizontal fluorescent tube fixture hanging near the upper part of the doorway. The open door panel and handle remain visible to the right; keep the entrance threshold and doorway readable. The interior is unlit except for the soft white tube, NOT a bright party room yet. Match the existing flat warm 2D picture-book drawing, colors, shadows and scale; do not redesign the surroundings. No people added, no text, numbers, signs, UI or watermark. This must work as the open-door counterpart of the supplied closed-door image without a camera jump.",
+    "reference": "M04-door-closed.png",
+    "kind": "AI-recomposed",
+    "status": "selected",
+    "width": 887,
+    "height": 1774,
+    "bytes": 1496753,
+    "sha256": "ae2e6ba896bc0c9b1718c1c5331db486bcb4ea7f0f17aa8fd6499392b38942d2",
+    "generatedBasename": "exec-5a0614a2-d50c-4277-9411-cfd35cb52d6a.png",
+    "alpha": null
+  },
+  {
+    "id": "S01",
+    "file": "sprites/S01-balloon-foreground-v2.png",
+    "prompt": "Use case: background-extraction. Clean the alpha edge of this supplied balloon-and-three-chibi-passengers sprite. Preserve the balloon, ropes, all three fictional guides, their faces, clothes and basket exactly as they are. Change only the surrounding pixels: REMOVE ALL atmospheric glow, haze, bloom, cast shadows and colored wash outside the physical silhouette. The outside must be completely clear alpha=0. The actual balloon, ropes, people and basket interiors should be opaque, with only a narrow 1-2 pixel antialiased edge. Keep the full subject and 5 percent transparent margin on a portrait canvas. No black/white/checkerboard backdrop, no new rim light, no extra text, no crop. Output a truly transparent PNG with clean cutout edges suitable for compositing on pale cyan sky.",
+    "reference": "S01-balloon-crew-v1.png",
+    "kind": "AI-recomposed",
+    "status": "selected",
+    "width": 1024,
+    "height": 1536,
+    "bytes": 1419605,
+    "sha256": "744345b0b8010178591ce4421f6bf89871bea5b1725804901d00c11294571b22",
+    "generatedBasename": "exec-c729bd88-7d24-4466-869f-491c7b1bde3d.png",
+    "alpha": [
+      0,
+      254
+    ],
+    "notes": "主体周围仍有柔光，仅作快速掠镜的前景备选；主飞行使用原始B01。",
+    "alphaBox": [
+      0,
+      32,
+      1004,
+      1505
+    ]
+  },
+  {
+    "id": "S02",
+    "file": "sprites/S02-bird-banner.png",
+    "prompt": "Use case: style-transfer. Transform the supplied blue-and-yellow bird into a clean flat 2D cartoon sprite for a warm illustrated hot-air-balloon story. Keep its recognisable pale blue upper body and wings, yellow breast, black beak and black round eye, same right-facing flying direction and spread-wing pose. Simplify the modelling to flat pastel fills with very subtle polygonal shading, matching a gentle picture-book scene rather than a 3D rendering. The bird carries a short EMPTY cream cloth banner by two fine cords beneath it, with a wide blank central rectangle for DOM text. Keep the whole bird, wing tips, cords and banner visible, with clear transparent padding. No writing, numbers, logos, backdrop or watermark. Real alpha transparency; not a white, black or checkerboard background.",
+    "reference": "鸟.jpg",
+    "kind": "AI-recomposed",
+    "status": "selected",
+    "width": 1254,
+    "height": 1254,
+    "bytes": 736461,
+    "sha256": "198e312257806cdf5769e0f84c7a67ecc5bb895f6cc25428596f337423f172ee",
+    "generatedBasename": "exec-d8fbd17b-64fe-4f62-9d57-c155442287ba.png",
+    "alpha": [
+      0,
+      255
+    ],
+    "notes": "透明精灵边缘存在少量半透明像素，浅色天空上使用；不在深色加载页放大。",
+    "alphaBox": [
+      0,
+      0,
+      1230,
+      1254
+    ]
+  },
+  {
+    "id": "S03",
+    "file": "sprites/S03-cloud.png",
+    "prompt": "Use case: background-extraction and style-transfer. Turn the supplied rounded white cloud into a clean TRANSPARENT PNG sprite for a warm flat 2D cartoon balloon journey. Preserve its broad low silhouette with several rounded lobes and a large uncluttered white center, flatten the current modelling into simple pale blue underside shading with a restrained thin blue-gray edge. A soft picture-book illustration, not a 3D render. No ground, sky, photo, writing, numbers, border, glow, cast shadow or watermark. The whole cloud must fit with 8 percent clear transparent padding on a wide landscape sprite, target1536x768. Truly transparent outside the cloud; the cloud body opaque white and pale blue. No white, black or checkerboard backdrop. Its central white area is intended to support a separately overlaid memory card.",
+    "reference": "云朵.jpg",
+    "kind": "AI-recomposed",
+    "status": "selected",
+    "width": 1774,
+    "height": 887,
+    "bytes": 765900,
+    "sha256": "ea1790a7058192c766efb0581cc8eabe3d787cb9fc573d3e6fade4d317a80ac4",
+    "generatedBasename": "exec-34aa491a-04c0-4b50-a514-015e61cf333b.png",
+    "alpha": [
+      0,
+      255
+    ],
+    "notes": "透明精灵边缘存在少量半透明像素，浅色天空上使用；不在深色加载页放大。",
+    "alphaBox": [
+      0,
+      58,
+      1746,
+      887
+    ]
+  },
+  {
+    "id": "S04",
+    "file": "sprites/S04-invitation-paper.png",
+    "prompt": "Use case: precise-object-edit. Create a clean reusable invitation-card BACKGROUND from this supplied portrait card, keeping its pale pink/ivory paper texture and delicate blue/cyan circuit-style decorations at the outer edges. REMOVE ALL WORDS, LETTERS, NUMBERS, DATE, ADDRESS, LOGOS, SLOGANS and central graphics, including the large SIPC,16th and Chinese invitation copy. Leave the center completely blank for live HTML typography. Keep only the subtle original technology-themed border, small abstract circuit squares and fine lines near the corners. Make a full-bleed portrait paper design around3:4 aspect ratio, target1200x1600, gently flat-lit. No people, envelope, hands, perspective rotation, mockup, UI or watermark. Opaque pastel paper background, no transparency required.",
+    "reference": "design-14.png",
+    "kind": "AI-recomposed",
+    "status": "selected",
+    "width": 1086,
+    "height": 1448,
+    "bytes": 1818136,
+    "sha256": "5913adaf6c847c470bf9a05d367182bdba1ad2bf7dbd01d6bccbcfcbabb3134f",
+    "generatedBasename": "exec-c4f2d619-f746-4ea6-8960-ac517cfb7c1b.png",
+    "alpha": null
+  },
+  {
+    "id": "S05",
+    "file": "sprites/S05-distant-balloons-atlas.png",
+    "prompt": "Use case: illustration-story. A production sprite atlas on a truly TRANSPARENT background containing SIX different small empty hot-air balloons, arranged neatly in THREE EQUAL COLUMNS and TWO EQUAL ROWS. One complete upright balloon with its ropes and tiny wicker basket in each cell, evenly centered with ample clear padding, no overlap or cropping. Use a warm flat 2D picture-book cartoon style, clean simple polygonal shading and pastel colors: balloon1 coral/cream vertical stripes, balloon2 pastel blue/cream vertical stripes, balloon3 muted yellow/cream panels, balloon4 sage/cream bands, balloon5 dusty rose/cream diamond panels, balloon6 pale teal/cream broad panels. NO people, passengers, text, numbers, labels, logos, outlines around cells, white/black/checkerboard background, cast shadows or glow. The whole atlas should be landscape3:2, target1536x1024, designed so CSS can select each one-third-width by one-half-height cell. All six balloons should have comparable apparent height and consistent basket scale. This is for a distant crowd of returning balloons.",
+    "reference": null,
+    "kind": "AI-generated",
+    "status": "selected",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 1475345,
+    "sha256": "cee75a38911e657cb38bcd6b18c78701b1be9d33aa53d66128ca700ba55a9117",
+    "generatedBasename": "exec-fab54256-9fc5-4282-8801-2c8a387f2d61.png",
+    "alpha": [
+      0,
+      254
+    ],
+    "notes": "透明精灵边缘存在少量半透明像素，浅色天空上使用；不在深色加载页放大。",
+    "alphaBox": [
+      0,
+      0,
+      1522,
+      1024
+    ],
+    "atlas": {
+      "columns": 3,
+      "rows": 2,
+      "cellWidth": 512,
+      "cellHeight": 512,
+      "order": [
+        "coral",
+        "blue",
+        "yellow",
+        "sage",
+        "rose",
+        "teal"
+      ]
+    }
+  },
+  {
+    "id": "B01",
+    "file": "sprites/B01-main-balloon-original.png",
+    "kind": "provided-art",
+    "status": "selected",
+    "reference": "design-09.png",
+    "width": 1280,
+    "height": 714,
+    "bytes": 133397,
+    "sha256": "290772c48a149006ae07a82757af33cdd61f68cc91d916e1c0e77c0d12ea1f41",
+    "alpha": [
+      0,
+      255
+    ],
+    "subjectBoxAlpha128": [
+      197,
+      30,
+      495,
+      519
+    ],
+    "alphaBox": [
+      193,
+      27,
+      498,
+      520
+    ]
+  },
+  {
+    "id": "B02",
+    "file": "sprites/B02-empty-balloon-original.png",
+    "kind": "provided-art",
+    "status": "selected",
+    "reference": "design-05.png",
+    "width": 1280,
+    "height": 714,
+    "bytes": 104244,
+    "sha256": "7ce2f1fdee3c5cfdac51056e38dcd15759e0e5423611e280fc3cc38d5924b2ef",
+    "alpha": [
+      0,
+      255
+    ],
+    "subjectBoxAlpha128": [
+      510,
+      95,
+      768,
+      475
+    ],
+    "alphaBox": [
+      506,
+      93,
+      770,
+      478
+    ]
+  },
+  {
+    "id": "P01",
+    "file": "photos/P01-group-a.png",
+    "kind": "provided-photo",
+    "status": "selected",
+    "reference": "photo-01.png",
+    "width": 400,
+    "height": 211,
+    "bytes": 177985,
+    "sha256": "24dde3480e976743347da22204c9202568024beb080520cffaff8373bee54c55"
+  },
+  {
+    "id": "P02",
+    "file": "photos/P02-group-b.png",
+    "kind": "provided-photo",
+    "status": "selected",
+    "reference": "photo-02.png",
+    "width": 400,
+    "height": 300,
+    "bytes": 258167,
+    "sha256": "78900ab93745b972e388f4b2f192498a419dc236a161c38414ff755c6b6e0c69"
+  },
+  {
+    "id": "P03",
+    "file": "photos/P03-meeting.jpg",
+    "kind": "provided-photo",
+    "status": "selected",
+    "reference": "photo-03.jpg",
+    "width": 1033,
+    "height": 1033,
+    "bytes": 179895,
+    "sha256": "24fd3c353bc46fd33e358097dae57198bc9bff08ca8ac634c514a618398d8554"
+  },
+  {
+    "id": "P09",
+    "file": "photos/P09-training.jpg",
+    "kind": "provided-photo",
+    "status": "selected",
+    "reference": "photo-09.jpg",
+    "width": 1440,
+    "height": 1080,
+    "bytes": 442122,
+    "sha256": "30f175c66738ca17a7e23a81f90de3daa764844bfe07c98dbfaf354a8ca57cf5"
+  },
+  {
+    "id": "P11",
+    "file": "photos/P11-gathering.jpg",
+    "kind": "provided-photo",
+    "status": "selected",
+    "reference": "photo-11.jpg",
+    "width": 1440,
+    "height": 1080,
+    "bytes": 180754,
+    "sha256": "58816b498e670caa4fc9df1fd14bd4083398e6bc32c0a9d8245f4b60bd7307e8"
+  },
+  {
+    "id": "P18",
+    "file": "photos/P18-open-day.jpg",
+    "kind": "provided-photo",
+    "status": "selected",
+    "reference": "photo-18.jpg",
+    "width": 4096,
+    "height": 3072,
+    "bytes": 2991210,
+    "sha256": "437fd443b94782048b1cb9149eb56e45ce1b2e2af54077bf512eda63dff716e5"
+  }
+]
