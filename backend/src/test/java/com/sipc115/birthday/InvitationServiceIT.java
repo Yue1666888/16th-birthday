@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.sipc115.birthday.common.api.BusinessCode;
 import com.sipc115.birthday.invitation.request.InvitationSubmitRequest;
 import com.sipc115.birthday.invitation.service.InvitationService;
+import com.sipc115.birthday.testsupport.LocalTestDatabase;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,12 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
@@ -31,17 +27,7 @@ class InvitationServiceIT {
 
     @DynamicPropertySource
     static void localTestDatabase(DynamicPropertyRegistry registry) throws Exception {
-        registry.add("app.tasks.enabled", () -> "false");
-        Properties local = new Properties();
-        try (Reader reader = Files.newBufferedReader(Path.of(".env"), StandardCharsets.UTF_8)) {
-            local.load(reader);
-        }
-        registry.add(
-                "spring.datasource.url",
-                () ->
-                        "jdbc:mysql://127.0.0.1:3306/birthday16_test?connectionTimeZone=UTC&forceConnectionTimeZoneToSession=true");
-        registry.add("spring.datasource.username", () -> local.getProperty("DB_USER"));
-        registry.add("spring.datasource.password", () -> local.getProperty("DB_PASSWORD"));
+        LocalTestDatabase.configure(registry);
     }
 
     @BeforeEach

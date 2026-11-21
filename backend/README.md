@@ -11,7 +11,7 @@ $env:JAVA_HOME='C:\Users\zhangyue\.jdks\jdk-21.0.13.1+2'
 .\mvnw.cmd spring-boot:run
 ```
 
-本机 .env 已配置独立 birthday16_dev 数据库和仅有项目库读写权限的账号。密码、邮件客户端 Secret 均在 Git 忽略范围内。新机器先按 .env.example 创建 .env，使用有建表权限的数据库账号执行 sql/schema/00_birthday_schema.sql，再给运行账号授予项目库的 SELECT、INSERT、UPDATE、DELETE 权限。应用不会自动创建或修改数据库表。
+本机 .env 已切换为直连社团云上 MySQL 的独立 16th_birthday 数据库，应用账号仅有项目库读写权限并强制使用 TLS。原本机 birthday16_dev 保留，但开发服务不再连接它。密码、邮件客户端 Secret 均在 Git 忽略范围内。新机器先按 .env.example 创建 .env，使用有建表权限的数据库账号执行 sql/schema/00_birthday_schema.sql，再给运行账号授予项目库的 SELECT、INSERT、UPDATE、DELETE 权限。应用不会自动创建或修改数据库表。
 
 开发服务地址为 http://127.0.0.1:16621，健康检查 GET /api/v1/health。后端没有首页，直接打开根路径会返回 JSON 404。前端位于同仓库 web，开发地址 http://127.0.0.1:5173/admin。
 
@@ -35,8 +35,10 @@ $env:JAVA_HOME='C:\Users\zhangyue\.jdks\jdk-21.0.13.1+2'
 | --- | --- |
 | SPRING_PROFILES_ACTIVE | dev；生产设置 prod |
 | SERVER_ADDRESS / SERVER_PORT | 监听地址与端口；本机 .env 为 127.0.0.1:16621，镜像通常为 0.0.0.0:16620 |
-| DB_HOST / DB_PORT / DB_NAME | MySQL 连接；dev 缺省本机 3306/birthday16_dev，prod 要求显式指定主机和库名，端口缺省 3308 |
-| DB_USER / DB_PASSWORD | 运行账号；不使用 root 作为应用账号 |
+| DB_HOST / DB_PORT / DB_NAME | 开发直连云上 MySQL；主机必须配置，端口缺省 3308、库名缺省 16th_birthday；prod 显式指定主机与库名 |
+| DB_USER / DB_PASSWORD | 云库运行账号；不使用 root 作为应用账号 |
+| DB_SSL_MODE | 默认 REQUIRED，开发连接使用 TLS；云库运行账号也要求 SSL |
+| TEST_DB_USER / TEST_DB_PASSWORD | 本机集成测试专用凭据；不会用云库账号登录本机测试库 |
 | KEYCLOAK_URL / KEYCLOAK_REALM | https://sso.sipc115.com / member |
 | ADMIN_API_AUDIENCE | account；应与生日 Web 客户端签发的 access token 保持一致 |
 | APP_CORS_ALLOWED_ORIGINS | 默认允许 http://127.0.0.1:5173 和 http://localhost:5173；生产填写实际前端 origin |
@@ -75,7 +77,7 @@ $env:JAVA_HOME='C:\Users\zhangyue\.jdks\jdk-21.0.13.1+2'
 .\mvnw.cmd -Plocal-it verify
 ```
 
-此配置运行全部 *Test 与 *IT。集成测试从本机 .env 读取项目账号，连接固定 127.0.0.1:3306/birthday16_test，并在清理数据前核对当前库名。不要把测试库用作业务存储。测试关闭邮件扫描器，并使用模拟邮件/图片服务，不发送真实邮件或上传真实图片。
+此配置运行全部 *Test 与 *IT。集成测试从本机 .env 读取 TEST_DB_USER/TEST_DB_PASSWORD，连接固定 127.0.0.1:3306/birthday16_test，并在清理数据前核对当前库名。旧配置没有 TEST_DB_* 时兼容 DB_USER/DB_PASSWORD，但连接地址和库名仍固定为本机测试库。不要把测试库用作业务存储。测试关闭邮件扫描器，并使用模拟邮件/图片服务，不发送真实邮件或上传真实图片。
 
 本次验证：50 项测试全部通过；实际 JAR 的 9 项本机 HTTP 检查通过；29 条路由与 API 文档对齐；JAR 字节码版本为 Java 21 的 65。启动检查创建的临时回执已删除，未生成邮件任务。
 
@@ -114,7 +116,7 @@ docker run -d --name birthday16-api --restart unless-stopped --env-file .env.pro
 
 新增完整回执详情、收件人邮件状态筛选、选择/预览快照、自定义单发与模板群发批次、集中历史、真实服务日志读取下载。原固定邮件接口兼容保留；不同自定义批次可共存，同一预览及requestId重复确认会复用。
 
-已有九表数据库只执行sql/migrations/01_mail_management.sql一次，本机birthday16_dev/test已完成。新数据库执行当前完整sql/schema/00_birthday_schema.sql，不再重复01。新结构12表、120字段、6外键；生产共享库未改。
+已有九表数据库只执行sql/migrations/01_mail_management.sql一次，本机birthday16_dev/test已完成。云上16th_birthday作为新库已执行当前完整sql/schema/00_birthday_schema.sql，不再重复01。新结构12表、120字段、6外键；共享实例内其他数据库未改。
 
 应用日志默认logs/application.log，APP_LOG_FILE可修改。按10MB滚动，保存7天/总100MB；API读取/下载对常见凭据、邮箱、手机号脱敏，不允许任意路径。日志下载上限12MiB，增量读取cursor绑定文件，单个SSO用户每分钟60次。
 

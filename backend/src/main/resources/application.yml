@@ -10,7 +10,7 @@ spring:
       mode: never
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_NAME:birthday16_dev}?characterEncoding=UTF-8&connectionTimeZone=UTC&forceConnectionTimeZoneToSession=true
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT:3308}/${DB_NAME:16th_birthday}?characterEncoding=UTF-8&connectionTimeZone=UTC&forceConnectionTimeZoneToSession=true&sslMode=${DB_SSL_MODE:REQUIRED}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
   servlet:

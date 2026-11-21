@@ -20,8 +20,12 @@ public final class LocalTestDatabase {
                 "spring.datasource.url",
                 () ->
                         "jdbc:mysql://127.0.0.1:3306/birthday16_test?connectionTimeZone=UTC&forceConnectionTimeZoneToSession=true");
-        registry.add("spring.datasource.username", () -> properties.getProperty("DB_USER"));
-        registry.add("spring.datasource.password", () -> properties.getProperty("DB_PASSWORD"));
+        registry.add(
+                "spring.datasource.username",
+                () -> properties.getProperty("TEST_DB_USER", properties.getProperty("DB_USER")));
+        registry.add(
+                "spring.datasource.password",
+                () -> properties.getProperty("TEST_DB_PASSWORD", properties.getProperty("DB_PASSWORD")));
         registry.add("app.limits.invitation-per-minute", () -> "1000");
         registry.add("app.limits.memory-per-minute", () -> "1000");
         registry.add("app.limits.anonymous-upload-per-minute", () -> "1000");
