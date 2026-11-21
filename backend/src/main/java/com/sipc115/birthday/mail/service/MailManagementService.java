@@ -214,6 +214,8 @@ public class MailManagementService {
                         return new CommandResult<>(
                                 BusinessCode.MAIL_BATCH_REUSED, batchResponse(prior), false);
                     var data = json.readValue(preview.getPayloadJson(), PreviewResponse.class);
+                    if (data.emailEnabled() != enabled)
+                        throw new BusinessException(ErrorCode.EMAIL_PREVIEW_CHANGED);
                     var messages = new ArrayList<>(data.messages());
                     messages.sort(
                             Comparator.comparing(m -> Long.valueOf(m.recipient().invitationId())));
