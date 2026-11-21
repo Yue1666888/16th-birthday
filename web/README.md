@@ -1,6 +1,6 @@
 # SIPC 十六周年前端
 
-同一个 Vite + React Router 项目，公开邀请函首页 / 目前只保留占位；管理员入口 /admin，登录后进入 /admin/invitations。
+同一个 Vite + React Router 项目，公开邀请函首页 / 目前只保留占位；公开回忆墙 /memories、荣誉墙 /honors 已实现电脑与手机视图；管理员入口 /admin，登录后进入 /admin/invitations。
 
 ## 仓库与启动
 
@@ -11,6 +11,8 @@ pnpm install --frozen-lockfile
 pnpm dev
 
 开发地址 http://127.0.0.1:5173，后端代理 http://127.0.0.1:16621。SSO默认member realm / birthday-web，回调需要覆盖实际/admin URL。无需把后端mail client Secret提供给浏览器。
+
+Vite同时监听局域网，手机连接同一Wi-Fi后使用启动输出的Network地址。当前WLAN为10.111.74.18，可访问 http://10.111.74.18:5173/memories 和 /honors。只在开发环境显式追加 ?preview=1 可看标明的示例内容，真实接口失败不会自动切到示例；生产构建剔除示例模块。详见[公开双墙开发与手机验收](../公开双墙开发与手机验收.md)。
 
 ## 已实现
 

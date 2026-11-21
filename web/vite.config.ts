@@ -9,8 +9,23 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
     },
+    build: {
+      rolldownOptions: {
+        output: {
+          codeSplitting: {
+            groups: [
+              {
+                name: 'visitor-three-core',
+                test: /three[/\\]build[/\\]three\.core\.js$/,
+                priority: 20,
+              },
+            ],
+          },
+        },
+      },
+    },
     server: {
-      host: '127.0.0.1',
+      host: '0.0.0.0',
       port: 5173,
       strictPort: true,
       proxy: {

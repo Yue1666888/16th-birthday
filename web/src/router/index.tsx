@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router'
 import { adminRoutes } from './admin.routes'
+import { homeRoutes } from './home.routes'
 import { RouteError } from '@/components/common/RouteError'
 export const router = createBrowserRouter([
   {
@@ -13,12 +14,7 @@ export const router = createBrowserRouter([
     ),
     errorElement: <RouteError />,
     children: [
-      {
-        path: '/',
-        lazy: async () => ({
-          Component: (await import('@/pages/home/HomePage')).HomePage,
-        }),
-      },
+      ...homeRoutes,
       ...adminRoutes,
       {
         path: '*',
