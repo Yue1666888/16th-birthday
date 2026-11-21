@@ -11,6 +11,9 @@
 **/application-local.yml
 **/application-local.yaml
 
+# Private developer handoff documents and service credentials
+/.local-private/
+
 # Build and editor output
 **/target/
 **/.idea/
