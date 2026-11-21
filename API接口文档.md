@@ -1877,3 +1877,8 @@ API Markdown 是当前契约，开发时据此同步正式 OpenAPI、后端 DTO 
 ```
 
 无投稿返回`totalSubmissions=0,namedSubmissions=0,names=[]`；仅匿名投稿返回真实总数、namedSubmissions=0、names=[]，均为正常成功，前端隐藏姓名墙。读取失败仍使用原统一错误包装和通用错误码，不伪装成空数据；额外query参数按现有严格参数规则返回400。没有新增业务码或数据库字段。
+
+
+## 14. 首页公开表单消费说明（2026-11-22）
+
+/invitation使用现有GET /memories/names、POST /invitations、POST /media/images、POST /memories，不增加后端路径或业务码。回执同手机号更新、邮件由管理员确认；匿名图片首张完成后再进行后续有限并发。投稿UUID及完整body在未知结果时冻结并原样重试，成功后不复用已领取的图片ID。浏览器getRandomValues生成v4 UUID以兼容HTTP局域网。payload字段仍按本文既有契约，公开POST没有管理员Bearer。

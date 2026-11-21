@@ -49,11 +49,13 @@ export function VisitorLayout() {
       <Suspense fallback={null}>
         <VisitorParticles
           scene={
-            location.pathname.includes('honors')
-              ? 'honors'
-              : location.pathname === '/chronicle'
-                ? 'chronicle'
-                : 'memories'
+            location.pathname === '/invitation'
+              ? 'invitation'
+              : location.pathname.includes('honors')
+                ? 'honors'
+                : location.pathname === '/chronicle'
+                  ? 'chronicle'
+                  : 'memories'
           }
           mobile={mode.view === 'mobile'}
         />
@@ -61,7 +63,9 @@ export function VisitorLayout() {
       <VisitorNavigation />
       {preview && (
         <div className="visitor-preview-banner">
-          示例预览 · 以下为排版示例，不是真实投稿或荣誉。
+          {location.pathname === '/invitation'
+            ? '示例预览 · 姓名使用演示内容，表单提交会真实保存。'
+            : '示例预览 · 以下为排版示例，不是真实投稿或荣誉。'}
           <a href={location.pathname}>查看真实内容 ↗</a>
         </div>
       )}

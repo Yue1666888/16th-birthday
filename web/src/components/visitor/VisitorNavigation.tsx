@@ -6,7 +6,11 @@ export function VisitorNavigation() {
   const suffix = preview ? '?preview=1' : ''
   return (
     <header className="visitor-nav">
-      <Link className="visitor-brand" to="/" aria-label="SIPC 十六周年邀请函">
+      <Link
+        className="visitor-brand"
+        to="/invitation"
+        aria-label="SIPC 十六周年邀请函"
+      >
         <img
           className="brand-logo"
           src="/brand/sipc-logo.png"
@@ -17,6 +21,9 @@ export function VisitorNavigation() {
         <span className="brand-caption">16TH ANNIVERSARY</span>
       </Link>
       <nav aria-label="公开访客导航">
+        <NavLink to={'/invitation' + suffix}>
+          <span aria-hidden="true">00</span>首页
+        </NavLink>
         <NavLink to={'/memories' + suffix}>
           <span aria-hidden="true">01</span>回忆墙
         </NavLink>
@@ -27,8 +34,8 @@ export function VisitorNavigation() {
           <span aria-hidden="true">03</span>115编年史
         </NavLink>
       </nav>
-      <Link className="invitation-link" to="/">
-        返回邀请函 <ArrowUpRight size={15} />
+      <Link className="invitation-link" to="/invitation">
+        回到首页 <ArrowUpRight size={15} />
       </Link>
     </header>
   )

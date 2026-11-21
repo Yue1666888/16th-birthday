@@ -888,7 +888,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   }
   .visitor-nav nav {
     margin-left: auto;
-    gap: 14px;
+    gap: 12px;
   }
   .visitor-nav nav a {
     font-size: 12px;
@@ -1111,7 +1111,7 @@ body:has([data-visitor-modal]) .visitor-particles {
 }
 @media (max-width: 359px) {
   .brand-logo {
-    width: 100px;
+    width: 84px;
   }
   .visitor-nav nav a {
     font-size: 11px;
@@ -1126,7 +1126,7 @@ body:has([data-visitor-modal]) .visitor-particles {
     font-size: 24px;
   }
   .visitor-nav nav {
-    gap: 16px;
+    gap: 8px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
