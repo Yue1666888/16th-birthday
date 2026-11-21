@@ -38,6 +38,12 @@ export const adminRoutes: RouteObject[] = [
                 .HonorsPage,
             }),
           },
+          {
+            path: 'mail',
+            lazy: async () => ({
+              Component: (await import('@/pages/admin/mail/MailPage')).MailPage,
+            }),
+          },
         ],
       },
     ],
