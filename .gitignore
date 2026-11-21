@@ -17,3 +17,12 @@
 **/*.iml
 **/*.log
 .DS_Store
+
+# Frontend build/cache output (single repository)
+**/node_modules/
+**/dist/
+**/*.tsbuildinfo
+**/coverage/
+**/playwright-report/
+**/test-results/
+/backend/logs/
