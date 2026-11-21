@@ -31,6 +31,13 @@ export const adminRoutes: RouteObject[] = [
               ).InvitationsPage,
             }),
           },
+          {
+            path: 'honors',
+            lazy: async () => ({
+              Component: (await import('@/pages/admin/honors/HonorsPage'))
+                .HonorsPage,
+            }),
+          },
         ],
       },
     ],
