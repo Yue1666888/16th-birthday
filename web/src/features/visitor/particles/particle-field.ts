@@ -61,6 +61,30 @@ export function advanceParticles(
     }
   }
 }
+/** Independent low-frequency paths move the home targets smoothly, without per-frame randomness. */
+export function driftParticleTargets(
+  targets: Float32Array,
+  homes: Float32Array,
+  count: number,
+  time: number,
+  amplitude: number,
+) {
+  for (let i = 0; i < count; i++) {
+    const phase = i * 2.39996,
+      speed = 0.22 + (i % 11) * 0.014
+    const extent = amplitude * (0.7 + 0.3 * ((i * 0.61803398875) % 1))
+    targets[i * 2] =
+      homes[i * 2] +
+      extent *
+        (0.7 * Math.sin(time * speed + phase) +
+          0.3 * Math.sin(time * speed * 1.93 + phase * 0.73))
+    targets[i * 2 + 1] =
+      homes[i * 2 + 1] +
+      extent *
+        (0.7 * Math.sin(time * speed * 0.83 + phase * 1.37) +
+          0.3 * Math.cos(time * speed * 1.61 + phase * 0.41))
+  }
+}
 export function evenlySelectPoints(points: number[], budget: number) {
   const available = points.length / 2,
     count = Math.min(available, budget)

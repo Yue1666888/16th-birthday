@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import {
   advanceParticles,
   createParticleField,
+  driftParticleTargets,
 } from '@/features/visitor/particles/particle-field'
 import type { ParticlePointer } from '@/features/visitor/particles/particle-field'
 import { sampleWordPoints } from '@/features/visitor/particles/word-points'
@@ -62,7 +63,14 @@ export function VisitorParticles(props: Settings) {
       points.frustumCulled = false
       geometry.setDrawRange(0, 0)
       scene.add(points)
-      return { field, geometry, material, sizes, alphas }
+      return {
+        field,
+        geometry,
+        material,
+        sizes,
+        alphas,
+        homes: new Float32Array(capacity * 2),
+      }
     }
     const background = makeLayer(1800, 0.62),
       words = makeLayer(3200, 0.92)
@@ -99,8 +107,8 @@ export function VisitorParticles(props: Settings) {
           t = i * 2
         const x = ((i * 0.61803398875 + seeds[p] * 0.025) % 1) * width
         const y = ((i * 0.75487766624 + seeds[p + 1] * 0.025) % 1) * height
-        background.field.targets[t] = x
-        background.field.targets[t + 1] = y
+        background.homes[t] = x
+        background.homes[t + 1] = y
         background.field.positions[p] = x
         background.field.positions[p + 1] = y
         background.field.velocities[t] = 0
@@ -178,8 +186,8 @@ export function VisitorParticles(props: Settings) {
             t = i * 2,
             x = rect.left + sampled[t],
             y = height - rect.top - sampled[t + 1]
-          words.field.targets[t] = x
-          words.field.targets[t + 1] = y
+          words.homes[t] = x
+          words.homes[t + 1] = y
           if (i >= previousCount) {
             words.field.positions[p] = x + Math.cos(i * 2.39996) * 65
             words.field.positions[p + 1] = y + Math.sin(i * 2.39996) * 65
@@ -197,9 +205,8 @@ export function VisitorParticles(props: Settings) {
         for (let i = 0; i < wordCount; i++) {
           words.field.positions[i * 3] += dx
           words.field.positions[i * 3 + 1] += dy
-          words.field.targets[i * 2] = rect.left + sampled[i * 2]
-          words.field.targets[i * 2 + 1] =
-            height - rect.top - sampled[i * 2 + 1]
+          words.homes[i * 2] = rect.left + sampled[i * 2]
+          words.homes[i * 2 + 1] = height - rect.top - sampled[i * 2 + 1]
         }
       }
       anchorLeft = rect.left
@@ -227,6 +234,21 @@ export function VisitorParticles(props: Settings) {
         sampleKey = ''
         dirty = true
       }
+      driftParticleTargets(
+        background.field.targets,
+        background.homes,
+        backgroundCount,
+        time,
+        settings.current.mobile ? 11 : 16,
+      )
+      if (wordVisible)
+        driftParticleTargets(
+          words.field.targets,
+          words.homes,
+          wordCount,
+          time,
+          settings.current.mobile ? 0.65 : 0.95,
+        )
       advanceParticles(
         background.field,
         backgroundCount,

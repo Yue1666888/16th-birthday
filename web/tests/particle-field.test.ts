@@ -2,9 +2,59 @@ import { describe, expect, test } from 'vitest'
 import {
   advanceParticles,
   createParticleField,
+  driftParticleTargets,
   evenlySelectPoints,
 } from '@/features/visitor/particles/particle-field'
 describe('particle repulsion and spring recovery', () => {
+  test('idle paths vary in both directions, stay bounded and do not jump between frames', () => {
+    const homes = new Float32Array([100, 200, 300, 400])
+    const previous = new Float32Array(4),
+      next = new Float32Array(4)
+    driftParticleTargets(previous, homes, 2, 0, 12)
+    driftParticleTargets(next, homes, 2, 4, 12)
+    expect(Array.from(next)).not.toEqual(Array.from(previous))
+    for (let frame = 0; frame < 600; frame++) {
+      driftParticleTargets(previous, homes, 2, frame / 60, 12)
+      driftParticleTargets(next, homes, 2, (frame + 1) / 60, 12)
+      for (let coordinate = 0; coordinate < 4; coordinate++) {
+        expect(
+          Math.abs(next[coordinate] - homes[coordinate]),
+        ).toBeLessThanOrEqual(12.001)
+        expect(Math.abs(next[coordinate] - previous[coordinate])).toBeLessThan(
+          0.2,
+        )
+      }
+    }
+  })
+  test('after repulsion ends, particles recover to the moving idle path', () => {
+    const reference = createParticleField(1),
+      disturbed = createParticleField(1)
+    const homes = new Float32Array([100, 100])
+    reference.positions.set([100, 100, 0])
+    disturbed.positions.set([100, 100, 0])
+    for (let frame = 0; frame < 300; frame++) {
+      for (const field of [reference, disturbed]) {
+        driftParticleTargets(field.targets, homes, 1, frame / 60, 16)
+        advanceParticles(
+          field,
+          1,
+          1 / 60,
+          { x: 100, y: 100, active: field === disturbed && frame < 60 },
+          72,
+          18000,
+        )
+      }
+    }
+    expect(
+      Math.hypot(
+        disturbed.positions[0] - reference.positions[0],
+        disturbed.positions[1] - reference.positions[1],
+      ),
+    ).toBeLessThan(0.1)
+    expect(
+      Math.hypot(reference.positions[0] - 100, reference.positions[1] - 100),
+    ).toBeGreaterThan(2)
+  })
   test('a centered pointer scatters a particle without NaN, then it returns to its home', () => {
     const field = createParticleField(1)
     field.targets.set([100, 100])
