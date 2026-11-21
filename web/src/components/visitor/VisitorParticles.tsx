@@ -7,8 +7,9 @@ import {
 } from '@/features/visitor/particles/particle-field'
 import type { ParticlePointer } from '@/features/visitor/particles/particle-field'
 import { sampleWordPoints } from '@/features/visitor/particles/word-points'
+import { createInvitationScene } from '@/features/visitor/invitation/invitation-particles'
 interface Settings {
-  scene: 'memories' | 'honors' | 'chronicle'
+  scene: 'memories' | 'honors' | 'chronicle' | 'invitation'
   mobile: boolean
 }
 export function VisitorParticles(props: Settings) {
@@ -74,6 +75,7 @@ export function VisitorParticles(props: Settings) {
     }
     const background = makeLayer(1800, 0.62),
       words = makeLayer(3200, 0.92)
+    let invitationScene: ReturnType<typeof createInvitationScene> | null = null
     const seeds = Float32Array.from({ length: 1800 * 3 }, () => Math.random())
     let width = 1,
       height = 1,
@@ -144,15 +146,17 @@ export function VisitorParticles(props: Settings) {
         populateBackground()
       }
       dirty = true
+      invitationScene?.invalidate()
     }
     const observer = new ResizeObserver(resize)
     observer.observe(canvas)
     resize()
     const measureWord = () => {
       dirty = false
-      const element = document.querySelector<HTMLElement>(
-        '[data-particle-word]',
-      )
+      const element =
+        settings.current.scene === 'invitation'
+          ? null
+          : document.querySelector<HTMLElement>('[data-particle-word]')
       if (element !== anchor) {
         if (anchor) observer.unobserve(anchor)
         anchor = element
@@ -267,6 +271,23 @@ export function VisitorParticles(props: Settings) {
       background.geometry.attributes.aAlpha.needsUpdate = true
       words.geometry.attributes.position.needsUpdate = true
       words.geometry.setDrawRange(0, wordVisible ? wordCount : 0)
+      if (settings.current.scene === 'invitation') {
+        if (!invitationScene) invitationScene = createInvitationScene(scene)
+        canvas.dataset.invitationReady = invitationScene.update({
+          time,
+          elapsed,
+          viewport: height,
+          mobile: settings.current.mobile,
+          pointer,
+          ratio: renderer.getPixelRatio(),
+          quality,
+        })
+          ? 'true'
+          : 'false'
+      } else {
+        invitationScene?.hide()
+        delete canvas.dataset.invitationReady
+      }
       renderer.render(scene, camera)
       canvas.dataset.wordReady = wordCount && wordVisible ? 'true' : 'false'
       frame = requestAnimationFrame(render)
@@ -279,6 +300,7 @@ export function VisitorParticles(props: Settings) {
     }
     const invalidate = () => {
       dirty = true
+      invitationScene?.invalidate()
       resume()
     }
     refresh.current = () => {
@@ -326,7 +348,12 @@ export function VisitorParticles(props: Settings) {
       invalidate()
     }
     const mutations = new MutationObserver(invalidate)
-    mutations.observe(document.body, { childList: true, subtree: true })
+    mutations.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-invitation-pattern'],
+    })
     window.addEventListener('pointermove', move, { passive: true })
     window.addEventListener('pointerout', leave, { passive: true })
     window.addEventListener('touchstart', touch, { passive: true })
@@ -349,6 +376,8 @@ export function VisitorParticles(props: Settings) {
       refresh.current = null
       cancelAnimationFrame(frame)
       delete canvas.dataset.wordReady
+      delete canvas.dataset.invitationReady
+      invitationScene?.dispose()
       observer.disconnect()
       mutations.disconnect()
       window.removeEventListener('pointermove', move)
