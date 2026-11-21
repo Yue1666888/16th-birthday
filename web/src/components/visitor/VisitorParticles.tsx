@@ -1,22 +1,29 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
+import {
+  advanceParticles,
+  createParticleField,
+} from '@/features/visitor/particles/particle-field'
+import type { ParticlePointer } from '@/features/visitor/particles/particle-field'
+import { sampleWordPoints } from '@/features/visitor/particles/word-points'
 interface Settings {
   scene: 'memories' | 'honors'
   mobile: boolean
 }
 export function VisitorParticles(props: Settings) {
-  const host = useRef<HTMLCanvasElement>(null)
-  const settings = useRef(props)
+  const host = useRef<HTMLCanvasElement>(null),
+    settings = useRef(props)
+  const refresh = useRef<(() => void) | null>(null)
   useEffect(() => {
     settings.current = props
+    refresh.current?.()
   }, [props])
   useEffect(() => {
     const canvas = host.current
     if (!canvas) return
     const reduced = matchMedia('(prefers-reduced-motion: reduce)')
-    let renderer: THREE.WebGLRenderer
-    // No WebGL is a supported static fallback, not a content loading failure.
     if (!canvas.getContext('webgl2', { alpha: true, antialias: false })) return
+    let renderer: THREE.WebGLRenderer
     try {
       renderer = new THREE.WebGLRenderer({
         canvas,
@@ -27,173 +34,315 @@ export function VisitorParticles(props: Settings) {
       console.warn('背景粒子不可用，保留静态背景。', error)
       return
     }
-    const scene = new THREE.Scene()
-    const camera = new THREE.OrthographicCamera(0, 1, 1, 0, -1, 1)
-    const count = 900
-    const positions = new Float32Array(count * 3)
-    const seeds = Float32Array.from({ length: count * 4 }, () => Math.random())
-    const geometry = new THREE.BufferGeometry()
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    const material = new THREE.ShaderMaterial({
-      transparent: true,
-      depthTest: false,
-      uniforms: { opacity: { value: 0.5 }, ratio: { value: 1 } },
-      vertexShader:
-        'uniform float ratio; void main(){gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); gl_PointSize=2.2*ratio;}',
-      fragmentShader:
-        'uniform float opacity; void main(){float d=length(gl_PointCoord-vec2(.5)); float a=1.0-smoothstep(.05,.5,d);gl_FragColor=vec4(.28,.76,.84,a*opacity);}',
-    })
-    const points = new THREE.Points(geometry, material)
-    points.frustumCulled = false
-    scene.add(points)
-    const fireflyPositions = new Float32Array(32 * 3)
-    const fireflyAlphas = new Float32Array(32)
-    const fireflyGeometry = new THREE.BufferGeometry()
-    fireflyGeometry.setAttribute(
-      'position',
-      new THREE.BufferAttribute(fireflyPositions, 3),
-    )
-    fireflyGeometry.setAttribute(
-      'alpha',
-      new THREE.BufferAttribute(fireflyAlphas, 1),
-    )
-    const fireflyMaterial = new THREE.ShaderMaterial({
-      transparent: true,
-      depthTest: false,
-      uniforms: { opacity: { value: 0.35 }, ratio: { value: 1 } },
-      vertexShader:
-        'attribute float alpha; varying float vAlpha; uniform float ratio; void main(){vAlpha=alpha;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);gl_PointSize=3.8*ratio;}',
-      fragmentShader:
-        'varying float vAlpha; uniform float opacity; void main(){float d=length(gl_PointCoord-vec2(.5)); float a=1.0-smoothstep(.05,.5,d);gl_FragColor=vec4(.28,.76,.84,a*opacity*vAlpha);}',
-    })
-    const fireflies = new THREE.Points(fireflyGeometry, fireflyMaterial)
-    fireflies.frustumCulled = false
-    scene.add(fireflies)
+    const scene = new THREE.Scene(),
+      camera = new THREE.OrthographicCamera(0, 1, 1, 0, -1, 1)
+    function makeLayer(capacity: number, opacity: number) {
+      const field = createParticleField(capacity),
+        geometry = new THREE.BufferGeometry()
+      const sizes = new Float32Array(capacity),
+        alphas = new Float32Array(capacity)
+      geometry.setAttribute(
+        'position',
+        new THREE.BufferAttribute(field.positions, 3).setUsage(
+          THREE.DynamicDrawUsage,
+        ),
+      )
+      geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1))
+      geometry.setAttribute('aAlpha', new THREE.BufferAttribute(alphas, 1))
+      const material = new THREE.ShaderMaterial({
+        transparent: true,
+        depthTest: false,
+        uniforms: { opacity: { value: opacity }, pixelRatio: { value: 1 } },
+        vertexShader:
+          'attribute float aSize;attribute float aAlpha;varying float vAlpha;uniform float pixelRatio;void main(){vAlpha=aAlpha;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);gl_PointSize=aSize*pixelRatio;}',
+        fragmentShader:
+          'varying float vAlpha;uniform float opacity;void main(){float d=length(gl_PointCoord-vec2(.5));float core=1.0-smoothstep(.06,.4,d);float glow=(1.0-smoothstep(.12,.5,d))*.2;gl_FragColor=vec4(.38,.85,.94,(core+glow)*vAlpha*opacity);}',
+      })
+      const points = new THREE.Points(geometry, material)
+      points.frustumCulled = false
+      geometry.setDrawRange(0, 0)
+      scene.add(points)
+      return { field, geometry, material, sizes, alphas }
+    }
+    const background = makeLayer(1800, 0.62),
+      words = makeLayer(3200, 0.92)
+    const seeds = Float32Array.from({ length: 1800 * 3 }, () => Math.random())
     let width = 1,
       height = 1,
       frame = 0,
       last = 0,
       time = 0,
       slow = 0,
-      sceneAge = 0
-    let currentScene = settings.current.scene
-    let mouseX = 0,
-      mouseY = 0
+      quality = 1
+    let backgroundCount = 0,
+      wordCount = 0,
+      disposed = false,
+      dirty = true
+    let anchor: HTMLElement | null = null,
+      anchorLeft = 0,
+      anchorTop = 0,
+      anchorHeight = 1
+    let sampleKey = ''
+    let sampled: Float32Array = new Float32Array()
+    let wordVisible = false
+    let pointerExpires = 0
+    let touchHeld = false
+    const pointer: ParticlePointer = { x: 0, y: 0, active: false }
+    const populateBackground = () => {
+      const mobile = settings.current.mobile
+      backgroundCount = Math.floor(
+        Math.min(1800, mobile ? 440 : Math.max(850, (width * height) / 950)) *
+          quality,
+      )
+      for (let i = 0; i < backgroundCount; i++) {
+        const p = i * 3,
+          t = i * 2
+        const x = ((i * 0.61803398875 + seeds[p] * 0.025) % 1) * width
+        const y = ((i * 0.75487766624 + seeds[p + 1] * 0.025) % 1) * height
+        background.field.targets[t] = x
+        background.field.targets[t + 1] = y
+        background.field.positions[p] = x
+        background.field.positions[p + 1] = y
+        background.field.velocities[t] = 0
+        background.field.velocities[t + 1] = 0
+        background.sizes[i] = (mobile ? 3 : 3.8) + seeds[p + 2] * 2.5
+        background.alphas[i] = 0.35 + seeds[p + 1] * 0.55
+      }
+      background.geometry.setDrawRange(0, backgroundCount)
+      background.geometry.attributes.aSize.needsUpdate = true
+      background.geometry.attributes.aAlpha.needsUpdate = true
+    }
     const resize = () => {
-      width = Math.max(1, canvas.clientWidth)
-      height = Math.max(1, canvas.clientHeight)
+      const nextWidth = Math.max(1, canvas.clientWidth),
+        nextHeight = Math.max(1, canvas.clientHeight)
       const ratio = Math.min(
         devicePixelRatio || 1,
         settings.current.mobile ? 1.25 : 1.5,
       )
-      renderer.setPixelRatio(ratio)
-      renderer.setSize(width, height, false)
-      material.uniforms.ratio.value = ratio
-      fireflyMaterial.uniforms.ratio.value = ratio
-      camera.right = width
-      camera.top = height
-      camera.updateProjectionMatrix()
+      if (
+        width !== nextWidth ||
+        height !== nextHeight ||
+        renderer.getPixelRatio() !== ratio
+      ) {
+        width = nextWidth
+        height = nextHeight
+        renderer.setPixelRatio(ratio)
+        renderer.setSize(width, height, false)
+        camera.right = width
+        camera.top = height
+        camera.updateProjectionMatrix()
+        background.material.uniforms.pixelRatio.value = ratio
+        words.material.uniforms.pixelRatio.value = ratio
+        populateBackground()
+      }
+      dirty = true
     }
     const observer = new ResizeObserver(resize)
     observer.observe(canvas)
     resize()
-    const pointer = (event: PointerEvent) => {
-      if (event.pointerType === 'mouse' && event.clientY < 350) {
-        mouseX = (event.clientX / width - 0.5) * 16
-        mouseY = (event.clientY / height - 0.5) * 10
+    const measureWord = () => {
+      dirty = false
+      const element = document.querySelector<HTMLElement>(
+        '[data-particle-word]',
+      )
+      if (element !== anchor) {
+        if (anchor) observer.unobserve(anchor)
+        anchor = element
+        if (anchor) observer.observe(anchor)
       }
+      if (!anchor) {
+        wordVisible = false
+        return
+      }
+      const rect = anchor.getBoundingClientRect()
+      wordVisible = rect.bottom > 0 && rect.top < height && rect.width > 0
+      const key = [
+        anchor.dataset.particleWord,
+        Math.round(rect.width),
+        Math.round(rect.height),
+        settings.current.mobile,
+        quality,
+      ].join(':')
+      if (key !== sampleKey) {
+        const points = sampleWordPoints(
+          anchor,
+          settings.current.mobile,
+          Math.floor((settings.current.mobile ? 1400 : 3200) * quality),
+        )
+        const previousCount = wordCount
+        sampled = points
+        sampleKey = key
+        wordCount = sampled.length / 2
+        for (let i = 0; i < wordCount; i++) {
+          const p = i * 3,
+            t = i * 2,
+            x = rect.left + sampled[t],
+            y = height - rect.top - sampled[t + 1]
+          words.field.targets[t] = x
+          words.field.targets[t + 1] = y
+          if (i >= previousCount) {
+            words.field.positions[p] = x + Math.cos(i * 2.39996) * 65
+            words.field.positions[p + 1] = y + Math.sin(i * 2.39996) * 65
+            words.field.velocities[t] = 0
+            words.field.velocities[t + 1] = 0
+          }
+          words.sizes[i] = settings.current.mobile ? 4 : 4.8
+          words.alphas[i] = 0.75 + (i % 7) / 28
+        }
+        words.geometry.attributes.aSize.needsUpdate = true
+        words.geometry.attributes.aAlpha.needsUpdate = true
+      } else {
+        const dx = rect.left - anchorLeft,
+          dy = height - anchorHeight + anchorTop - rect.top
+        for (let i = 0; i < wordCount; i++) {
+          words.field.positions[i * 3] += dx
+          words.field.positions[i * 3 + 1] += dy
+          words.field.targets[i * 2] = rect.left + sampled[i * 2]
+          words.field.targets[i * 2 + 1] =
+            height - rect.top - sampled[i * 2 + 1]
+        }
+      }
+      anchorLeft = rect.left
+      anchorTop = rect.top
+      anchorHeight = height
     }
-    window.addEventListener('pointermove', pointer, { passive: true })
     const render = (now: number) => {
       frame = 0
-      if (document.hidden || document.querySelector('[data-visitor-modal]'))
+      if (
+        disposed ||
+        document.hidden ||
+        reduced.matches ||
+        document.querySelector('[data-visitor-modal]')
+      )
         return
-      const dt = Math.min((now - (last || now)) / 1000, 0.06)
+      const elapsed = last ? Math.min((now - last) / 1000, 0.1) : 1 / 60
       last = now
-      time += dt
-      sceneAge += dt
-      if (currentScene !== settings.current.scene) {
-        currentScene = settings.current.scene
-        sceneAge = 0
+      time += elapsed
+      if (pointer.active && now > pointerExpires) pointer.active = false
+      if (dirty) measureWord()
+      slow = elapsed > 0.045 ? slow + 1 : Math.max(0, slow - 1)
+      if (slow > 120 && quality === 1) {
+        quality = 0.7
+        populateBackground()
+        sampleKey = ''
+        dirty = true
       }
-      const mobile = settings.current.mobile
-      if (dt > 0.045) slow = Math.min(slow + 1, 120)
-      const visible = slow > 70 ? (mobile ? 180 : 400) : mobile ? 300 : count
-      geometry.setDrawRange(0, visible)
-      const smooth = reduced.matches ? 1 : 1 - Math.exp(-dt * 4)
-      for (let i = 0; i < visible; i++) {
-        const seed = i * 4
-        const angle = seeds[seed] * Math.PI * 2
-        const radius = 65 + seeds[seed + 1] * 80
-        const ring = currentScene === 'honors'
-        const scatter = reduced.matches ? 0 : Math.max(0, 1 - sceneAge / 0.8)
-        const targetX =
-          width * (mobile ? 0.82 : 0.8) +
-          (ring ? Math.cos(angle) * radius : (seeds[seed] - 0.5) * 290) +
-          (seeds[seed + 2] - 0.5) * scatter * 200 +
-          (reduced.matches ? 0 : mouseX)
-        const targetY =
-          height -
-          (mobile ? 170 : 225) +
-          (ring
-            ? Math.sin(angle) * radius * 0.65
-            : (seeds[seed + 1] - 0.5) * 115) +
-          (reduced.matches ? 0 : Math.sin(time * 0.25 + angle) * 4 + mouseY)
-        const x = i * 3
-        if (!positions[x]) {
-          positions[x] = targetX + (seeds[seed + 3] - 0.5) * 200
-          positions[x + 1] = targetY
-        }
-        positions[x] += (targetX - positions[x]) * smooth
-        positions[x + 1] += (targetY - positions[x + 1]) * smooth
-      }
-      geometry.attributes.position.needsUpdate = true
-      material.uniforms.opacity.value = mobile ? 0.33 : 0.48
-      const flyCount = mobile ? 12 : 32
-      fireflyGeometry.setDrawRange(0, flyCount)
-      for (let i = 0; i < flyCount; i++) {
-        const seed = i * 4
-        const life =
-          (seeds[seed + 1] + time * (0.008 + seeds[seed + 2] * 0.012)) % 1
-        fireflyPositions[i * 3] =
-          seeds[seed] * width + Math.sin(time * 0.15 + i) * 12
-        fireflyPositions[i * 3 + 1] = life * height
-        fireflyAlphas[i] = Math.sin(life * Math.PI)
-      }
-      fireflyGeometry.attributes.position.needsUpdate = true
-      fireflyGeometry.attributes.alpha.needsUpdate = true
-      fireflyMaterial.uniforms.opacity.value = mobile ? 0.2 : 0.32
+      advanceParticles(
+        background.field,
+        backgroundCount,
+        elapsed,
+        pointer,
+        72,
+        18000,
+      )
+      if (wordVisible)
+        advanceParticles(words.field, wordCount, elapsed, pointer, 65, 23000)
+      for (let i = 0; i < backgroundCount; i++)
+        background.alphas[i] =
+          (0.35 + seeds[i * 3 + 1] * 0.55) *
+          (0.86 + Math.sin(time * 0.55 + i) * 0.14)
+      background.geometry.attributes.position.needsUpdate = true
+      background.geometry.attributes.aAlpha.needsUpdate = true
+      words.geometry.attributes.position.needsUpdate = true
+      words.geometry.setDrawRange(0, wordVisible ? wordCount : 0)
       renderer.render(scene, camera)
-      if (!reduced.matches) frame = requestAnimationFrame(render)
+      canvas.dataset.wordReady = wordCount && wordVisible ? 'true' : 'false'
+      frame = requestAnimationFrame(render)
     }
     const resume = () => {
-      if (!frame) {
+      if (!disposed && !frame && !document.hidden && !reduced.matches) {
         last = 0
         frame = requestAnimationFrame(render)
       }
     }
+    const invalidate = () => {
+      dirty = true
+      resume()
+    }
+    refresh.current = () => {
+      resize()
+      invalidate()
+    }
+    const move = (event: PointerEvent) => {
+      if (event.pointerType === 'mouse') {
+        pointer.x = event.clientX
+        pointer.y = height - event.clientY
+        pointer.active = true
+        pointerExpires = Infinity
+      }
+    }
+    const leave = (event: PointerEvent) => {
+      if (event.pointerType === 'mouse' && !event.relatedTarget)
+        pointer.active = false
+    }
+    // Passive touch events continue during native scrolling after pointercancel.
+    const touch = (event: TouchEvent) => {
+      const finger = event.touches[0]
+      if (!finger) return
+      pointer.x = finger.clientX
+      pointer.y = height - finger.clientY
+      pointer.active = true
+      touchHeld = true
+      pointerExpires = Infinity
+    }
+    const endTouch = () => {
+      if (touchHeld) pointerExpires = performance.now() + 180
+      touchHeld = false
+    }
+    const blur = () => {
+      pointer.active = false
+      touchHeld = false
+    }
     const visibility = () => {
       cancelAnimationFrame(frame)
       frame = 0
-      if (!document.hidden) resume()
+      pointer.active = false
+      if (reduced.matches) {
+        delete canvas.dataset.wordReady
+        renderer.clear()
+      }
+      invalidate()
     }
-    // Modal open/close pauses the canvas without coupling the frame loop to React renders.
-    const modals = new MutationObserver(resume)
-    modals.observe(document.body, { childList: true, subtree: true })
+    const mutations = new MutationObserver(invalidate)
+    mutations.observe(document.body, { childList: true, subtree: true })
+    window.addEventListener('pointermove', move, { passive: true })
+    window.addEventListener('pointerout', leave, { passive: true })
+    window.addEventListener('touchstart', touch, { passive: true })
+    window.addEventListener('touchmove', touch, { passive: true })
+    window.addEventListener('touchend', endTouch, { passive: true })
+    window.addEventListener('touchcancel', endTouch, { passive: true })
+    window.addEventListener('blur', blur)
+    window.addEventListener('scroll', invalidate, { passive: true })
     document.addEventListener('visibilitychange', visibility)
     reduced.addEventListener('change', visibility)
+    void document.fonts.ready.then(() => {
+      if (!disposed) {
+        sampleKey = ''
+        invalidate()
+      }
+    })
     resume()
     return () => {
+      disposed = true
+      refresh.current = null
       cancelAnimationFrame(frame)
+      delete canvas.dataset.wordReady
       observer.disconnect()
-      modals.disconnect()
-      window.removeEventListener('pointermove', pointer)
+      mutations.disconnect()
+      window.removeEventListener('pointermove', move)
+      window.removeEventListener('pointerout', leave)
+      window.removeEventListener('touchstart', touch)
+      window.removeEventListener('touchmove', touch)
+      window.removeEventListener('touchend', endTouch)
+      window.removeEventListener('touchcancel', endTouch)
+      window.removeEventListener('blur', blur)
+      window.removeEventListener('scroll', invalidate)
       document.removeEventListener('visibilitychange', visibility)
       reduced.removeEventListener('change', visibility)
-      geometry.dispose()
-      material.dispose()
-      fireflyGeometry.dispose()
-      fireflyMaterial.dispose()
+      for (const layer of [background, words]) {
+        layer.geometry.dispose()
+        layer.material.dispose()
+      }
       renderer.dispose()
     }
   }, [])

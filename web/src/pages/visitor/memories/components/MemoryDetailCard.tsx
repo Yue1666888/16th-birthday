@@ -228,7 +228,6 @@ export function MemoryDetailCard({
       onFocus={enter}
       onBlur={leave}
       data-pinned={selection.pinned}
-      data-visitor-modal
     >
       {contents}
       {!selection.pinned && (

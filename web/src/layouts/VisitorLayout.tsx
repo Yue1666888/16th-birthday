@@ -19,13 +19,19 @@ export function VisitorLayout() {
     history.scrollRestoration = 'manual'
     const positions = scrollPositions.current
     const key = location.pathname + location.search
+    const target = positions.get(key) || 0
+    let restored = false
     // Capture while the old page is still present, before route replacement
     // can shrink the document and clamp scrollY to the new page's height.
-    const remember = () => positions.set(key, window.scrollY)
+    const remember = () => {
+      if (restored) positions.set(key, window.scrollY)
+    }
     window.addEventListener('scroll', remember, { passive: true })
-    const frame = requestAnimationFrame(() =>
-      window.scrollTo(0, positions.get(key) || 0),
-    )
+    const frame = requestAnimationFrame(() => {
+      window.scrollTo(0, target)
+      positions.set(key, window.scrollY)
+      restored = true
+    })
     return () => {
       cancelAnimationFrame(frame)
       window.removeEventListener('scroll', remember)

@@ -27,7 +27,11 @@ export function WallHeading({
               : '从一个想法，到一次抵达。记录属于我们的闪光时刻。'}
           </p>
         </div>
-        <span className="wall-wordmark" aria-hidden="true">
+        <span
+          className="wall-wordmark"
+          data-particle-word={memories ? 'MEMORIES' : 'HONORS'}
+          aria-hidden="true"
+        >
           {memories ? 'MEMORIES' : 'HONORS'}
         </span>
       </div>
