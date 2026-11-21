@@ -43,6 +43,7 @@
     <sql id="filters">
         <if test="filter.attendance != null">AND i.attendance=#{filter.attendance}</if>
         <if test="filter.giftChoice != null">AND i.gift_choice=#{filter.giftChoice}</if>
+        <if test="filter.emailNotifyStatus != null">AND (<include refid="emailStatus"/>)=#{filter.emailNotifyStatus}</if>
         <if test="filter.keyword != null">
             AND (i.name LIKE #{filter.keyword} ESCAPE '!'
                  OR i.phone LIKE #{filter.keyword} ESCAPE '!'
@@ -63,8 +64,12 @@
         ORDER BY i.updated_at DESC,i.id DESC LIMIT #{limit} OFFSET #{offset}
     </select>
     <select id="count" resultType="long">
-        SELECT COUNT(*) FROM invitations i WHERE 1=1 <include refid="filters"/>
+        SELECT COUNT(*) FROM invitations i <include refid="latestMailJoin"/> WHERE 1=1 <include refid="filters"/>
     </select>
+    <select id="recipients" resultType="com.sipc115.birthday.invitation.mapper.InvitationSummaryRow">
+ SELECT <include refid="summaryColumns"/> FROM invitations i <include refid="latestMailJoin"/>
+ WHERE 1=1 <include refid="filters"/> ORDER BY i.id ASC LIMIT #{limit}
+ </select>
     <select id="stats" resultType="com.sipc115.birthday.invitation.mapper.InvitationStatsRow">
         SELECT COUNT(*) AS total,
           COALESCE(SUM(i.attendance='ATTENDING'),0) AS attending,
