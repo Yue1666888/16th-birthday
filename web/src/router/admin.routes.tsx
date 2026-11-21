@@ -44,6 +44,12 @@ export const adminRoutes: RouteObject[] = [
               Component: (await import('@/pages/admin/mail/MailPage')).MailPage,
             }),
           },
+          {
+            path: 'logs',
+            lazy: async () => ({
+              Component: (await import('@/pages/admin/logs/LogsPage')).LogsPage,
+            }),
+          },
         ],
       },
     ],
