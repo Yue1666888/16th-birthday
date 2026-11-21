@@ -1,6 +1,7 @@
 package com.sipc115.birthday.memory.mapper;
 
 import com.sipc115.birthday.memory.entity.MemoryEntity;
+import com.sipc115.birthday.memory.model.MemoryNameCount;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,6 +17,8 @@ public interface MemoryMapper {
     int insert(MemoryEntity entity);
 
     long count();
+
+    List<MemoryNameCount> nameCounts();
 
     List<MemoryEntity> page(@Param("offset") long offset, @Param("limit") int limit);
 }

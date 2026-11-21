@@ -152,6 +152,21 @@ public class MemoryService {
     }
 
     @Transactional(readOnly = true)
+    public MemoryNameWallResponse nameWall() {
+        long total = mapper.count();
+        if (total == 0) {
+            return new MemoryNameWallResponse(0, 0, List.of());
+        }
+        var counts = mapper.nameCounts();
+        long named = counts.stream().mapToLong(entry -> entry.getSubmissionCount()).sum();
+        var names = counts.stream()
+                .map(entry -> new MemoryNameWallResponse.Name(
+                        entry.getName(), entry.getSubmissionCount(), (double) entry.getSubmissionCount() / total))
+                .toList();
+        return new MemoryNameWallResponse(total, named, names);
+    }
+
+    @Transactional(readOnly = true)
     public MemoryDetailResponse detail(long id) {
         var entry = mapper.findById(id);
         if (entry == null) {

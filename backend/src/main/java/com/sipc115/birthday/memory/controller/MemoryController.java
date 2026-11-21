@@ -36,6 +36,11 @@ public class MemoryController {
         return CommonResponse.success(BusinessCode.OK, service.page(page, size));
     }
 
+    @GetMapping("/names")
+    public CommonResponse<MemoryNameWallResponse> names() {
+        return CommonResponse.success(BusinessCode.OK, service.nameWall());
+    }
+
     @GetMapping("/{id}")
     public CommonResponse<MemoryDetailResponse> detail(@PathVariable String id) {
         return CommonResponse.success(BusinessCode.OK, service.detail(RequestValues.id(id)));

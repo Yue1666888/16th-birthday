@@ -308,6 +308,49 @@ class WallsIT {
         assertEquals(0, jdbc.queryForObject("SELECT COUNT(*) FROM honor_entries", Integer.class));
     }
 
+    private void publishNamedMemory(String name) throws Exception {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("submissionId", UUID.randomUUID().toString());
+        if (name != null) payload.put("displayName", name);
+        payload.put("content", "姓名墙统计验证");
+        payload.put("imageIds", List.of());
+        mvc.perform(post("/api/v1/memories").contentType(MediaType.APPLICATION_JSON)
+                        .content(json.writeValueAsString(payload)))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void nameWallAggregatesAllPagesAndIncludesAnonymousPostsInTheDenominator() throws Exception {
+        for (int i = 0; i < 25; i++) publishNamedMemory(i < 20 ? "陈同学" : i < 24 ? "林同学" : null);
+        mvc.perform(get("/api/v1/memories")).andExpect(jsonPath("$.data.content.length()").value(20));
+        mvc.perform(get("/api/v1/memories/names"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.totalSubmissions").value(25))
+                .andExpect(jsonPath("$.data.namedSubmissions").value(24))
+                .andExpect(jsonPath("$.data.names.length()").value(2))
+                .andExpect(jsonPath("$.data.names[0].name").value("陈同学"))
+                .andExpect(jsonPath("$.data.names[0].submissionCount").value(20))
+                .andExpect(jsonPath("$.data.names[0].weight").value(0.8))
+                .andExpect(jsonPath("$.data.names[1].weight").value(0.16));
+        mvc.perform(get("/api/v1/memories/names").param("page", "1"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void nameWallReturnsNoNamesForEmptyOrAnonymousOnlySubmissions() throws Exception {
+        mvc.perform(get("/api/v1/memories/names"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.totalSubmissions").value(0))
+                .andExpect(jsonPath("$.data.names.length()").value(0));
+        publishNamedMemory(null);
+        publishNamedMemory("   ");
+        mvc.perform(get("/api/v1/memories/names"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.totalSubmissions").value(2))
+                .andExpect(jsonPath("$.data.namedSubmissions").value(0))
+                .andExpect(jsonPath("$.data.names.length()").value(0));
+    }
+
     @Test
     void multipartAndJsonBoundariesHaveUniformErrors() throws Exception {
         mvc.perform(multipart("/api/v1/media/images"))

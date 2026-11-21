@@ -1,10 +1,10 @@
 # 社团十六周年邀请函 API 契约
 
-文档版本为 v2.0，API 主版本为 v1，更新日期为 2026-11-21。
+文档版本为 v2.1，API 主版本为 v1，更新日期为 2026-11-21。
 
 依据 [需求规格与实现链路 v1.5](需求规格与实现链路.md) 和 [数据库设计 v1.2](数据库设计.md) 编写。本文确定统一响应、分页、字段类型、全部首版接口、业务码、错误码、状态枚举和幂等规则，作为前后端实现与后续 OpenAPI 同步的契约。业务接口实现与 HTTP 联调在开发阶段验证。
 
-> 最新管理员接口以 [v2扩展](API接口文档-v2管理员扩展.md) 为准：新增详情、收件人快照、自定义单发/群发、集中历史和服务日志；原接口保留兼容，合计29个HTTP方法/路径组合。
+> 最新管理员接口以 [v2扩展](API接口文档-v2管理员扩展.md) 为准：新增详情、收件人快照、自定义单发/群发、集中历史和服务日志；原接口保留兼容，加上下文新增的公开姓名墙接口，当前合计30个HTTP方法/路径组合。
 
 ## 1. 基础约定
 
@@ -1842,3 +1842,38 @@ API Markdown 是当前契约，开发时据此同步正式 OpenAPI、后端 DTO 
 - [现有图片服务](sipc-org/sipc-infra/storage/file-api/infra/图片上传服务调用说明.md)。
 
 本文示例使用演示数据，客户端 Secret、用户令牌和数据库密码由各自环境管理。
+
+
+## 13. 公开回忆姓名墙统计（2026-11-21）
+
+`GET /api/v1/memories/names`，无需登录；不接收查询参数或请求体，不分页。成功HTTP 200、code=OK，沿用五字段统一响应。该静态路径与`/memories/{id}`分别映射。
+
+| 响应data字段 | 类型 | 规则 |
+| --- | --- | --- |
+| totalSubmissions | 非负整数 | 全部已公开回忆投稿总数，包含匿名投稿，不局限当前加载页 |
+| namedSubmissions | 非负整数 | 非空署名投稿数，同一姓名多篇逐篇计数，≤totalSubmissions |
+| names | 数组 | 所有非空姓名的汇总；按投稿数降序，同数按姓名二进制升序 |
+| names[].name | 字符串 | 投稿署名文本，最多50码点，去首尾空白；相同文本归并，不推断真实身份、不拆成多个人 |
+| names[].submissionCount | 正整数 | 此姓名在全部投稿中的出现次数，每篇计一次，与图片数量无关 |
+| names[].weight | number，0～1 | submissionCount / totalSubmissions；所有weight的和可小于1，因为分母包含匿名投稿 |
+
+例如10篇投稿中6篇署名甲、2篇署名乙、2篇匿名时：
+
+```json
+{
+  "code": "OK",
+  "message": "读取成功或健康检查成功",
+  "data": {
+    "totalSubmissions": 10,
+    "namedSubmissions": 8,
+    "names": [
+      {"name": "甲", "submissionCount": 6, "weight": 0.6},
+      {"name": "乙", "submissionCount": 2, "weight": 0.2}
+    ]
+  },
+  "fieldErrors": {},
+  "traceId": "由服务生成"
+}
+```
+
+无投稿返回`totalSubmissions=0,namedSubmissions=0,names=[]`；仅匿名投稿返回真实总数、namedSubmissions=0、names=[]，均为正常成功，前端隐藏姓名墙。读取失败仍使用原统一错误包装和通用错误码，不伪装成空数据；额外query参数按现有严格参数规则返回400。没有新增业务码或数据库字段。

@@ -1,6 +1,6 @@
 # birthday16-api
 
-十六周年邀请函后端，采用 Java 21、Spring Boot 4.1.2、MyBatis-Plus 3.5.18、MySQL 8。29 个业务和健康检查接口已经落地，与上一级 API 文档中的路径一致。
+十六周年邀请函后端，采用 Java 21、Spring Boot 4.1.2、MyBatis-Plus 3.5.18、MySQL 8。30 个业务和健康检查接口已经落地，与上一级 API 文档中的路径一致。
 
 ## 本机启动
 
@@ -22,7 +22,7 @@ $env:JAVA_HOME='C:\Users\zhangyue\.jdks\jdk-21.0.13.1+2'
 | 报名回执 | 大陆手机号创建或更新、内容不变保持版本、到场与领取方式联动校验、限流 |
 | 网页报名管理 | Keycloak Bearer JWT 验证、分页筛选、统计、CSV 导出、带版本校验的修正 |
 | 邮件 | 后端预览、管理员确认、冻结收件人与正文、幂等提交、发送历史、后台查询中台 SMTP 结果 |
-| 回忆墙 | 免登录投稿、正文或图片至少一项、最多 9 图、立即公开、列表与详情 |
+| 回忆墙 | 免登录投稿、正文或图片至少一项、最多 9 图、立即公开、列表与详情，以及全部投稿的姓名权重统计 |
 | 荣誉墙 | 管理员维护标题、人员文本、1～9 图；版本控制、软删除、公开展示 |
 | 图片 | 调用现有 file-api；本地只保存 URL 与元信息；匿名上传凭 Cookie 归属，管理上传凭 SSO sub 归属 |
 | 公共能力 | 固定五字段响应、分页、严格 JSON 与查询参数校验、请求编号、操作审计、请求幂等 |
@@ -123,3 +123,8 @@ docker run -d --name birthday16-api --restart unless-stopped --env-file .env.pro
 新增测试覆盖了批次变量/幂等/版本整批回滚/创建人隔离/禁用发送，以及日志cursor/中文/轮转/脱敏/HTTP鉴权。50项全量测试通过；实际本机HTTP使用真实SSO签发JWT验证读取、快照、变量预览、日志下载，临时记录已清理，未确认实际发送批次。
 
 完整字段与错误码见上级API接口文档-v2管理员扩展.md。前端8项单元和7项隔离Chrome流程验证通过；SSO浏览器只验证到登录页，没有代用户输入真实成员密码。
+
+
+## 回忆姓名墙统计
+
+新增公开GET /api/v1/memories/names，从全部memories汇总非空display_name，返回totalSubmissions/namedSubmissions/names（name、submissionCount、weight）。投稿数而非图片数作为权重，分母包含匿名投稿；只读聚合，不建人员表，不改schema。52项本机独立库测试通过，覆盖跨分页统计与空/匿名投稿。新JAR已重启，云库接口返回正常空数组。

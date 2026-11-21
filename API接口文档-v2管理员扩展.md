@@ -155,3 +155,6 @@ GET /admin/logs/download返回text/plain;charset=UTF-8、附件Content-Dispositi
 新增审计和幂等操作MAIL_BATCH_CONFIRM，resourceType=MAIL_BATCH；审计只保存模式、人数、批次等必要摘要。其余SMTP错误字典不变。数据迁移见数据库文档及backend/sql/migrations/01_mail_management.sql。
 
 本机dev/test已迁移；本轮未操作生产库，测试不试发真实邮件。
+
+
+公开扩展补充：新增GET /api/v1/memories/names，完整契约见[API主文档第13节](API接口文档.md#13-公开回忆姓名墙统计2026-11-21)。在本扩展29条的基础上，当前总计30个方法/路径组合。
