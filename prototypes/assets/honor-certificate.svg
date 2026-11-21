@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+<rect width="900" height="600" fill="#f1f4f9"/><rect x="26" y="26" width="848" height="548" rx="5" fill="#fff" stroke="#dce4ef"/><rect x="42" y="42" width="816" height="516" rx="3" fill="none" stroke="#e8edf5"/>
+<path d="M26 170V26h144M730 26h144v144M26 430v144h144m560 0h144V430" stroke="#506f9e" fill="none" stroke-width="3" opacity=".5"/>
+<circle cx="450" cy="173" r="43" fill="#506f9e" opacity=".08"/><path d="m450 141 10 21 24 3-18 16 5 24-21-12-21 12 5-24-18-16 24-3z" fill="none" stroke="#506f9e" stroke-width="2"/>
+<text x="450" y="270" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" letter-spacing="7" fill="#506f9e">CERTIFICATE</text>
+<text x="450" y="335" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-weight="600" font-size="37" fill="#384b69">荣誉证书</text>
+<path d="M355 367h190" stroke="#dce4ef"/><text x="450" y="405" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="17" fill="#8d9bb2">全国大学生竞赛 · 获奖纪念</text>
+<text x="450" y="492" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" letter-spacing="3" fill="#aab5c5">SIPC · 16TH ANNIVERSARY</text>
+<text x="823" y="537" text-anchor="end" font-family="Microsoft YaHei,sans-serif" font-size="12" fill="#b3bdcc">原型示例图片</text></svg>
