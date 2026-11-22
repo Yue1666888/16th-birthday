@@ -1,9 +1,17 @@
 import { useSyncExternalStore } from 'react'
 import { useOutletContext } from 'react-router'
-const desktopQuery = '(min-width: 1024px)'
-const hoverQuery = '(hover: hover) and (pointer: fine)'
+import {
+  desktopWideQuery,
+  desktopCompactQuery,
+  desktopHoverQuery,
+  selectVisitorView,
+} from '@/lib/visitor-view'
 function subscribe(change: () => void) {
-  const queries = [matchMedia(desktopQuery), matchMedia(hoverQuery)]
+  const queries = [
+    matchMedia(desktopWideQuery),
+    matchMedia(desktopCompactQuery),
+    matchMedia(desktopHoverQuery),
+  ]
   queries.forEach((query) => query.addEventListener('change', change))
   return () =>
     queries.forEach((query) => query.removeEventListener('change', change))
@@ -14,12 +22,17 @@ export function useVisitorContext() {
 export function useVisitorView() {
   const desktop = useSyncExternalStore(
     subscribe,
-    () => matchMedia(desktopQuery).matches,
+    () =>
+      selectVisitorView(
+        matchMedia(desktopWideQuery).matches,
+        matchMedia(desktopCompactQuery).matches,
+        matchMedia(desktopHoverQuery).matches,
+      ) === 'desktop',
     () => false,
   )
   const canHover = useSyncExternalStore(
     subscribe,
-    () => matchMedia(hoverQuery).matches,
+    () => matchMedia(desktopHoverQuery).matches,
     () => false,
   )
   return {

@@ -48,7 +48,9 @@ export async function toApiError(error: unknown): Promise<AppApiError> {
       )
     return new AppApiError(
       error.response
-        ? '服务响应异常，请稍后重试'
+        ? error.response.status === 403
+          ? '当前访问地址暂未被服务允许，请联系维护者'
+          : '服务响应异常，请稍后重试'
         : error.code === 'ECONNABORTED'
           ? '请求超时，写入结果请先核对'
           : '网络连接失败，请检查服务',

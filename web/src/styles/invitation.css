@@ -536,7 +536,8 @@
   gap: 10px;
   margin-top: 22px;
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px),
+  (max-width: 1023px) and (not ((any-hover: hover) and (any-pointer: fine))) {
   .invitation-hero {
     padding-top: 30px;
     padding-bottom: 44px;
@@ -732,7 +733,8 @@
 .invitation-field textarea {
   font-size: 20px;
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px),
+  (max-width: 1023px) and (not ((any-hover: hover) and (any-pointer: fine))) {
   .invitation-mark-motto {
     display: none;
   }
@@ -769,7 +771,8 @@
 .invitation-greeting-comma {
   margin-left: 5px;
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px),
+  (max-width: 1023px) and (not ((any-hover: hover) and (any-pointer: fine))) {
   .invitation-greeting-comma {
     display: none;
   }

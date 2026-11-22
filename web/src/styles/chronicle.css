@@ -169,7 +169,8 @@
     stroke-dashoffset: -56;
   }
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px),
+  (max-width: 1023px) and (not ((any-hover: hover) and (any-pointer: fine))) {
   .chronicle-spiral {
     padding-top: 20px;
   }
@@ -247,7 +248,8 @@
 .chronicle-spiral-tools > div > span {
   font-size: 16px;
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px),
+  (max-width: 1023px) and (not ((any-hover: hover) and (any-pointer: fine))) {
   .chronicle-node-detail > ul > li {
     font-size: 18px;
   }

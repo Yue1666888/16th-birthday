@@ -856,7 +856,7 @@ body:has([data-visitor-modal]) .visitor-particles {
     background-position: -150% 0;
   }
 }
-@media (min-width: 1024px) and (max-width: 1279px) {
+@media (min-width: 768px) and (max-width: 1279px) {
   .memory-grid-desktop {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -867,7 +867,8 @@ body:has([data-visitor-modal]) .visitor-particles {
     height: 270px;
   }
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px),
+  (max-width: 1023px) and (not ((any-hover: hover) and (any-pointer: fine))) {
   .visitor-app[data-view] {
     padding-top: 76px;
   }
@@ -1213,7 +1214,8 @@ body:has([data-visitor-modal]) .visitor-particles {
   color: var(--v-accent);
   margin-left: 10px;
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px),
+  (max-width: 1023px) and (not ((any-hover: hover) and (any-pointer: fine))) {
   .memory-names {
     padding: 22px 0;
   }
@@ -1289,7 +1291,8 @@ body:has([data-visitor-modal]) .visitor-particles {
   font-size: 15px;
   line-height: 1.8;
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px),
+  (max-width: 1023px) and (not ((any-hover: hover) and (any-pointer: fine))) {
   .visitor-app[data-view] {
     padding-top: calc(124px + env(safe-area-inset-top));
   }
