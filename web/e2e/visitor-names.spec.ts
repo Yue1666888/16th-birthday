@@ -30,7 +30,9 @@ test('name wall uses complete contribution weights before loading more memories'
   const names = wall.locator('.memory-name')
   await expect(names).toHaveCount(3)
   await expect(names.nth(0)).toHaveText('高频投稿者')
-  await expect(names.nth(0)).toHaveAttribute('title', /20 篇，占全部投稿 50.0%/)
+  await expect(
+    wall.locator('.memory-cloud-word').first().locator('title'),
+  ).toHaveText(/20 篇，占全部投稿 50.0%/)
   const sizes = await names.evaluateAll((nodes) =>
     nodes.map((node) => parseFloat(getComputedStyle(node).fontSize)),
   )
@@ -98,7 +100,13 @@ test('mobile name wall wraps long names without overflowing and preserves single
   await expect(
     page.getByRole('region', { name: '回忆姓名墙', exact: true }),
   ).toBeVisible()
-  await expect(page.locator('.memory-name').first()).toHaveText(longName)
+  await expect(
+    page.locator('.memory-name').filter({ hasText: longName }),
+  ).toHaveText(longName)
+  await page.locator('.memory-cloud-more summary').click()
+  await expect(
+    page.locator('.memory-name').filter({ hasText: longName }),
+  ).toBeVisible()
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
