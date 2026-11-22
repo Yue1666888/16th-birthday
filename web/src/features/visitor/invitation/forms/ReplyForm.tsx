@@ -99,6 +99,11 @@ export function ReplyForm({
                 render={({ field }) => (
                   <label className="invitation-attendance">
                     <input
+                      id="reply-attendance"
+                      aria-label="是否到场"
+                      name={field.name}
+                      ref={field.ref}
+                      onBlur={field.onBlur}
                       type="checkbox"
                       checked={field.value === 'ATTENDING'}
                       onChange={(event) => {
@@ -115,11 +120,8 @@ export function ReplyForm({
                           })
                       }}
                     />
-                    <span className="attendance-tick">
-                      <Check size={15} />
-                    </span>
-                    <span>
-                      {attendance === 'ATTENDING' ? '可以到场' : '本次不能到场'}
+                    <span className="attendance-tick" aria-hidden="true">
+                      {field.value === 'ATTENDING' && <Check size={15} />}
                     </span>
                   </label>
                 )}

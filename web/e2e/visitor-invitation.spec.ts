@@ -44,7 +44,7 @@ test('reply validates conditional fields, saves a real-shaped payload and does n
   await page.locator('#reply-name').fill('回来的同学')
   await page.locator('#reply-phone').fill('13800138000')
   await page.locator('#reply-email').fill('person@example.com')
-  await page.getByRole('checkbox', { name: '可以到场', exact: true }).uncheck()
+  await page.getByRole('checkbox', { name: '是否到场', exact: true }).uncheck()
   await expect(
     page.getByRole('radio', { name: '到场自取', exact: true }),
   ).toHaveCount(0)

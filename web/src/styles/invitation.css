@@ -215,7 +215,7 @@
   color: #b4d7e2;
   padding-top: 9px;
 }
-.invitation-field > label > span,
+.invitation-field > label:not(.invitation-attendance) > span,
 .invitation-field-label > span {
   color: var(--v-accent);
   font-size: 16px;
@@ -279,7 +279,8 @@
   align-items: center;
   gap: 12px;
   color: #c7e3ec;
-  min-height: 42px;
+  min-width: 44px;
+  min-height: 44px;
   position: relative;
   cursor: pointer;
   padding-top: 0 !important;
@@ -287,10 +288,10 @@
 .invitation-attendance > input {
   position: absolute;
   opacity: 0;
-  width: 24px;
-  height: 24px;
-  left: 0;
-  top: 9px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 .attendance-tick {
   display: inline-grid;
@@ -309,9 +310,6 @@
 .invitation-attendance input:focus-visible + .attendance-tick {
   outline: 2px solid var(--v-accent);
   outline-offset: 3px;
-}
-.invitation-attendance > span:last-child {
-  font-size: 19px;
 }
 .invitation-radio-group {
   display: flex;
