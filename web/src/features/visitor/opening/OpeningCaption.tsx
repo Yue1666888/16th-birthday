@@ -73,14 +73,6 @@ export function OpeningCaption({
           ))}
         </span>
       </button>
-      <small
-        aria-hidden="true"
-        style={{
-          visibility: !revealed && text !== line.text ? 'visible' : 'hidden',
-        }}
-      >
-        轻点文字，读完这一句
-      </small>
     </div>
   )
 }

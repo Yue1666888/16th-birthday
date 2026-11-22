@@ -139,10 +139,7 @@ function MemoryCloud({
     >
       <img className="opening-cloud-base" src={openingAssets.S03} alt="" />
       <div className="opening-cloud-paper">
-        <span className="opening-eyebrow">
-          {data.english}
-          <b>0{page + 1} / 04</b>
-        </span>
+        <span className="opening-eyebrow">{data.english}</span>
         <h2>{data.title}</h2>
         {page === 0 ? (
           <div className="opening-history-stamps">
@@ -162,7 +159,7 @@ function MemoryCloud({
             </div>
             <div>
               <strong>
-                2010<span>12.10</span>
+                2010<span>冬</span>
               </strong>
               <p>学生创新实践中心</p>
               <small>一个共同的名字 · SIPC</small>
@@ -316,6 +313,23 @@ function Letter({
 }) {
   const arrive = ease(time / 1.5)
   const zoom = 0.6 + 0.4 * ease((time - 1.5) / 3)
+  if (!opened)
+    return (
+      <div
+        className="opening-letter opening-letter-cover"
+        style={{
+          opacity: arrive,
+          translate: reduced ? '0 0' : `0 ${(1 - arrive) * -80}dvh`,
+          scale: reduced ? 1 : zoom,
+          rotate: reduced
+            ? '0deg'
+            : `${Math.sin(time * 2) * (1 - clamp(time / 5)) * 3}deg`,
+        }}
+      >
+        <img src={openingAssets.COVER} alt="SIPC十六周年邀请函封面" />
+      </div>
+    )
+
   return (
     <div
       className={`opening-letter ${opened ? 'is-open' : ''}`}
@@ -362,20 +376,18 @@ function Letter({
               <br />
               Back!
             </p>
-            <dl className="opening-invitation-details">
-              <div>
-                <dt>时间</dt>
-                <dd>
-                  <time dateTime={invitationContent.dateISO}>
-                    {invitationContent.dateLabel}
-                  </time>
-                </dd>
-              </div>
-              <div>
-                <dt>地点</dt>
-                <dd>{invitationContent.venue}</dd>
-              </div>
-            </dl>
+            <div
+              className="opening-invitation-details"
+              role="group"
+              aria-label="活动信息"
+            >
+              <p>
+                <time dateTime={invitationContent.dateISO}>
+                  {invitationContent.dateLabel}
+                </time>
+              </p>
+              <p>{invitationContent.venue}</p>
+            </div>
             <span className="opening-letter-mark">SIPC · 16TH ANNIVERSARY</span>
           </>
         ) : (

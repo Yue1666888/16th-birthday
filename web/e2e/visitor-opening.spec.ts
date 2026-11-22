@@ -98,16 +98,18 @@ test('cloud photo pages pause for reading and survive phone/desktop changes', as
   await page.setViewportSize({ width: 390, height: 844 })
   await expect(page.locator('.opening-buffer')).toHaveCount(0)
   await expect(page.locator('.opening-photo-row img')).toHaveCount(1)
-  await expect(page.locator('.opening-memory-controls')).toContainText(
-    '02 / 04',
+  await expect(page.locator('.opening-memory-cloud')).toHaveAttribute(
+    'aria-label',
+    '云中回忆第2页',
   )
   const box = (await page.locator('.opening-memory-cloud').boundingBox())!
   expect(box.x).toBeGreaterThanOrEqual(0)
   expect(box.x + box.width).toBeLessThanOrEqual(390)
   await page.setViewportSize({ width: 1440, height: 900 })
   await expect(page.locator('.opening-photo-row img')).toHaveCount(2)
-  await expect(page.locator('.opening-memory-controls')).toContainText(
-    '02 / 04',
+  await expect(page.locator('.opening-memory-cloud')).toHaveAttribute(
+    'aria-label',
+    '云中回忆第2页',
   )
 })
 

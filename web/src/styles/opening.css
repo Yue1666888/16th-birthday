@@ -1656,7 +1656,8 @@
 .opening-lamp-frame.is-portrait {
   clip-path: inset(22% 35% 70% 35%);
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px),
+  (max-width: 1023px) and (not ((any-hover: hover) and (any-pointer: fine))) {
   .opening-mobile .opening-caption {
     width: 96%;
     bottom: 17%;
@@ -2001,7 +2002,8 @@
 .opening-letter.is-open .opening-letter-mark {
   bottom: 7%;
 }
-@media (max-width: 1023px) {
+@media (max-width: 767px),
+  (max-width: 1023px) and (not ((any-hover: hover) and (any-pointer: fine))) {
   .opening-mobile .opening-letter.is-open .opening-letter-page {
     padding: 9% 8%;
   }
@@ -2031,4 +2033,86 @@
 }
 .opening-mobile .opening-invitation-details dd {
   font-size: 15px;
+}
+
+/* Keep the history card and dialogue in separate rows, including short phone viewports. */
+.opening-mobile[data-scene='S05'] .opening-stage {
+  display: grid;
+  grid-template-rows: minmax(100px, 22dvh) minmax(245px, 1fr) max-content 54px;
+  gap: 10px;
+  padding-bottom: env(safe-area-inset-bottom);
+  overflow-y: auto;
+}
+.opening-mobile[data-scene='S05'] .opening-scenery-S05 {
+  display: contents;
+}
+.opening-mobile[data-scene='S05'] .opening-memory-cloud {
+  position: relative;
+  inset: auto;
+  width: 90%;
+  height: 100%;
+  min-height: 245px;
+  grid-row: 2;
+  margin: 0 auto;
+}
+.opening-mobile[data-scene='S05'] .opening-caption {
+  position: relative;
+  inset: auto;
+  translate: none;
+  grid-row: 3;
+  justify-self: center;
+  align-self: center;
+  margin: 0;
+  padding-block: 30px 22px;
+}
+.opening-mobile[data-scene='S05'] .opening-scene-actions {
+  position: relative;
+  inset: auto;
+  translate: none;
+  grid-row: 4;
+  justify-self: center;
+  align-self: center;
+  width: auto;
+  margin: 0;
+}
+.opening-bottom {
+  padding: 0;
+  height: 2px;
+  background: none;
+}
+.opening-memory-controls {
+  gap: 20px;
+  padding-inline: 12px;
+}
+.opening-letter-cover {
+  width: calc(54dvh * 1080 / 1540);
+  height: 54dvh;
+}
+.opening-letter-cover > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.opening-mobile .opening-letter-cover {
+  width: min(70vw, 36.46dvh);
+  height: auto;
+  aspect-ratio: 1080 / 1540;
+}
+.opening-letter.is-open .opening-invitation-details {
+  display: grid;
+  gap: 12px;
+  text-align: center;
+}
+.opening-letter.is-open .opening-invitation-details p {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.7;
+  letter-spacing: 0;
+  color: #3d788c;
+  text-align: center;
+}
+.opening-mobile .opening-letter.is-open .opening-invitation-details p {
+  font-size: clamp(13px, 3.7vw, 15px);
+  white-space: nowrap;
 }

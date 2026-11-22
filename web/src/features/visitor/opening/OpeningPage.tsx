@@ -338,9 +338,7 @@ export function OpeningPage() {
                   >
                     <ChevronLeft size={18} />
                   </button>
-                  <span>
-                    0{Math.min(4, Math.floor(state.time / 9) + 1)} / 04
-                  </span>
+
                   <button
                     aria-label="下一页回忆"
                     disabled={state.time >= 27}
@@ -386,12 +384,6 @@ export function OpeningPage() {
             )}
           </div>
           <footer className="opening-bottom">
-            <span>
-              {scene.id.replace('S', '')} / 11 <i /> {scene.title}
-            </span>
-            <span>
-              {paused || chapters ? '旅程已暂停' : 'A JOURNEY BACK TO 115'}
-            </span>
             <div className="opening-story-progress">
               <i style={{ width: `${progress}%` }} />
             </div>

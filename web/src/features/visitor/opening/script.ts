@@ -356,8 +356,8 @@ export const openingScenes = [
     title: '把邀请，交到你手里',
     duration: 8,
     wait: 'receive-letter',
-    desktop: ['D06', 'S04', 'DOM'],
-    mobile: ['M06', 'S04', 'DOM'],
+    desktop: ['D06', 'COVER', 'DOM'],
+    mobile: ['M06', 'COVER', 'DOM'],
     shots: [
       '0–1.5秒：邀请函从画面上方进入，做小幅摆动，不盖住人物脸部的主要欢迎动作。',
       '1.5–4.5秒：纸张由远到近放大，最后停在画面中央、像落到观众手边。',
