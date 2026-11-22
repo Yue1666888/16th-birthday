@@ -1,4 +1,6 @@
+import { invitationPoster } from '@/domain/invitation-content'
 export const openingAssets = {
+  POSTER: invitationPoster,
   M01: '/opening/M01.webp',
   M02: '/opening/M02.webp',
   M03: '/opening/M03.webp',

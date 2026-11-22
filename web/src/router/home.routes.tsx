@@ -1,5 +1,5 @@
 import type { RouteObject } from 'react-router'
-export const homeRoutes: RouteObject[] = [
+const visitorPageRoutes: RouteObject[] = [
   {
     path: '/',
     lazy: async () => ({
@@ -40,5 +40,16 @@ export const homeRoutes: RouteObject[] = [
         }),
       },
     ],
+  },
+]
+
+export const homeRoutes: RouteObject[] = [
+  {
+    lazy: async () => ({
+      Component: (
+        await import('@/features/visitor/experience/VisitorExperienceLayout')
+      ).VisitorExperienceLayout,
+    }),
+    children: visitorPageRoutes,
   },
 ]

@@ -1,3 +1,4 @@
+import { invitationContent } from '@/domain/invitation-content'
 import { useState } from 'react'
 import type { CSSProperties } from 'react'
 import { openingAssets } from './assets'
@@ -361,6 +362,20 @@ function Letter({
               <br />
               Back!
             </p>
+            <dl className="opening-invitation-details">
+              <div>
+                <dt>时间</dt>
+                <dd>
+                  <time dateTime={invitationContent.dateISO}>
+                    {invitationContent.dateLabel}
+                  </time>
+                </dd>
+              </div>
+              <div>
+                <dt>地点</dt>
+                <dd>{invitationContent.venue}</dd>
+              </div>
+            </dl>
             <span className="opening-letter-mark">SIPC · 16TH ANNIVERSARY</span>
           </>
         ) : (
@@ -618,10 +633,6 @@ export function OpeningSceneView({
       {id === 'S11' && (
         <>
           <Letter time={time} opened mobile={mobile} reduced={reduced} />
-          <div
-            className="opening-final-fade"
-            style={{ opacity: ease((time - 5.7) / 1.3) }}
-          />
         </>
       )}
     </div>

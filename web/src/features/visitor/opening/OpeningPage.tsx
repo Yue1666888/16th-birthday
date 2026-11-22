@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   ArrowRight,
   ChevronLeft,
@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { Link, useNavigate, useSearchParams } from 'react-router'
 import { useVisitorView } from '@/hooks/use-visitor-view'
-import { openingMusic } from './assets'
+import { useVisitorExperience } from '../experience/context'
 import { openingDuration, openingScenes } from './script'
 import {
   advanceOpening,
@@ -49,12 +49,20 @@ export function OpeningPage() {
   const readyToStart = assets.ready && displayedProgress === 100
   const [paused, setPaused] = useState(false)
   const [chapters, setChapters] = useState(false)
-  const [muted, setMuted] = useState(false)
-  const [audioNotice, setAudioNotice] = useState('')
+  const {
+    musicEnabled,
+    musicNotice: audioNotice,
+    setMusicEnabled,
+    activateMusic,
+    retryMusic,
+    setOpeningSuspended,
+    setMusicVolume,
+    flyInvitation,
+  } = useVisitorExperience()
+  const muted = !musicEnabled
   const [homePrefetchFailed, setHomePrefetchFailed] = useState(false)
   const [loadingSlow, setLoadingSlow] = useState(false)
   const [state, setState] = useState(initialPlayback)
-  const audio = useRef<HTMLAudioElement>(null)
   const scene = openingScenes[state.index]
   const nextIndex = Math.min(state.index + 1, openingScenes.length - 1)
   const nextReady = assets.isReady(nextIndex)
@@ -70,9 +78,11 @@ export function OpeningPage() {
     } catch {
       /* Private mode may deny storage. */
     }
-    audio.current?.pause()
+    const card =
+      scene.id === 'S11' ? document.querySelector('.opening-letter-page') : null
+    flyInvitation(card?.getBoundingClientRect() ?? null)
     navigate('/invitation', { replace: true })
-  }, [navigate])
+  }, [navigate, scene.id, flyInvitation])
 
   useEffect(() => {
     if (seen && !replay) navigate('/invitation', { replace: true })
@@ -85,32 +95,14 @@ export function OpeningPage() {
     return () => clearTimeout(timeout)
   }, [])
   useEffect(() => {
-    const element = audio.current
-    return () => element?.pause()
-  }, [])
-
-  const playAudio = useCallback(() => {
-    const element = audio.current
-    if (!element) return
-    element.volume = 0.26
-    void element.play().then(
-      () => setAudioNotice(''),
-      () => setAudioNotice('音乐暂未播放，点声音按钮重试；旅程可以继续。'),
-    )
-  }, [])
+    setOpeningSuspended(!started || stopped || waitingForAsset)
+  }, [started, stopped, waitingForAsset, setOpeningSuspended])
+  useEffect(() => () => setOpeningSuspended(false), [setOpeningSuspended])
   useEffect(() => {
     if (!started) return
-    if (stopped || waitingForAsset) audio.current?.pause()
-    else playAudio()
-  }, [started, stopped, waitingForAsset, playAudio])
-
-  useEffect(() => {
-    if (!audio.current || !started) return
     const fadeIn = scene.id === 'S01' ? Math.min(1, state.time / 1.5) : 1
-    const fadeOut =
-      scene.id === 'S11' ? Math.max(0, 1 - (state.time - 5.7) / 1.3) : 1
-    audio.current.volume = 0.26 * fadeIn * Math.min(1, fadeOut)
-  }, [started, scene.id, state.time])
+    setMusicVolume(0.26 * fadeIn)
+  }, [started, scene.id, state.time, setMusicVolume])
 
   useEffect(() => {
     if (!started || stopped || state.finished) return
@@ -133,7 +125,8 @@ export function OpeningPage() {
   const begin = () => {
     if (!readyToStart) return
     setStarted(true)
-    playAudio()
+    setOpeningSuspended(false)
+    activateMusic()
     // Prefetch the route module while the first line is being read.
     void import('@/pages/visitor/invitation/InvitationPage').catch(() =>
       setHomePrefetchFailed(true),
@@ -172,14 +165,6 @@ export function OpeningPage() {
       data-reduced={reduced}
     >
       <h1 className="opening-sr-only">回到115的风 · SIPC十六周年邀请函</h1>
-      <audio
-        ref={audio}
-        src={openingMusic}
-        preload="none"
-        loop
-        muted={muted}
-        onError={() => setAudioNotice('音乐文件暂时不可用，旅程将继续。')}
-      />
       <header className="opening-topbar">
         <Link
           to="/invitation"
@@ -201,8 +186,7 @@ export function OpeningPage() {
               <button
                 aria-label={muted ? '开启音乐' : '关闭音乐'}
                 onClick={() => {
-                  setMuted(!muted)
-                  if (muted || audioNotice) playAudio()
+                  setMusicEnabled(!musicEnabled)
                 }}
               >
                 {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
@@ -276,7 +260,7 @@ export function OpeningPage() {
                 <input
                   type="checkbox"
                   checked={!muted}
-                  onChange={(e) => setMuted(!e.target.checked)}
+                  onChange={(e) => setMusicEnabled(e.target.checked)}
                 />
                 开启背景音乐，也可以安静观看
               </label>
@@ -424,7 +408,7 @@ export function OpeningPage() {
         </>
       )}
       {audioNotice && started && (
-        <button className="opening-audio-notice" onClick={playAudio}>
+        <button className="opening-audio-notice" onClick={retryMusic}>
           {audioNotice}
         </button>
       )}

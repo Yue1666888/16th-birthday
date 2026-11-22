@@ -387,8 +387,8 @@ export const openingScenes = [
     title: '欢迎回来，旅程在首页继续',
     duration: 7,
     wait: null,
-    desktop: ['S04', 'DOM'],
-    mobile: ['S04', 'DOM'],
+    desktop: ['S04', 'POSTER', 'DOM'],
+    mobile: ['S04', 'POSTER', 'DOM'],
     shots: [
       '0–1.2秒：邀请函像书页一样翻开；手机降低透视幅度，保证文字正对屏幕。',
       '1.2–5.7秒：显示欢迎语，并提示“正在前往首页”；不出现回执、礼物或地址表单。',

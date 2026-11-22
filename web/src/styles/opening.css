@@ -1956,3 +1956,79 @@
 .opening-mobile .opening-eyebrow {
   font-size: 12px;
 }
+
+/* Event details stay readable in the opened letter and remain available in the dock. */
+.opening-letter.is-open .opening-letter-page {
+  padding: 9% 8%;
+}
+.opening-letter.is-open .opening-letter-page > small {
+  margin-top: 8%;
+}
+.opening-letter.is-open h1 {
+  margin: 5% 0 0;
+  font-size: 22px;
+}
+.opening-letter.is-open .opening-welcome {
+  font-size: 32px;
+  line-height: 1.05;
+  margin: 5% 0 6%;
+}
+.opening-invitation-details {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  margin: 0;
+  color: #3d788c;
+}
+.opening-invitation-details > div {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+}
+.opening-invitation-details dt {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #7b9eac;
+}
+.opening-invitation-details dd {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.7;
+  font-weight: 600;
+}
+.opening-letter.is-open .opening-letter-mark {
+  bottom: 7%;
+}
+@media (max-width: 1023px) {
+  .opening-mobile .opening-letter.is-open .opening-letter-page {
+    padding: 9% 8%;
+  }
+  .opening-mobile .opening-letter.is-open h1 {
+    font-size: 21px;
+  }
+  .opening-mobile .opening-letter.is-open .opening-welcome {
+    font-size: 28px;
+  }
+  .opening-mobile .opening-invitation-details {
+    gap: 8px;
+  }
+  .opening-mobile .opening-invitation-details > div {
+    grid-template-columns: 26px minmax(0, 1fr);
+    gap: 6px;
+  }
+  .opening-mobile .opening-invitation-details dt {
+    font-size: 13px;
+  }
+  .opening-mobile .opening-invitation-details dd {
+    font-size: 14px;
+  }
+}
+
+.opening-invitation-details dd {
+  font-size: 17px;
+}
+.opening-mobile .opening-invitation-details dd {
+  font-size: 15px;
+}
