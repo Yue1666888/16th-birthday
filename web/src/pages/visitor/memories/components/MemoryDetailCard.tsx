@@ -1,3 +1,4 @@
+import { subscribePublicMemories } from '@/hooks/use-paged-feed'
 import * as Dialog from '@radix-ui/react-dialog'
 import { createPortal } from 'react-dom'
 import {
@@ -8,14 +9,12 @@ import {
   useState,
 } from 'react'
 import { X, ArrowUpRight } from 'lucide-react'
-import type { MemoryDetail } from '@/types/public/walls.types'
 import type { GallerySelection } from '@/components/visitor/VisitorImageGallery'
 import { VisitorImage } from '@/components/visitor/VisitorImage'
 import { useResource } from '@/hooks/use-resource'
 import { getMemory } from '@/api/public/walls.api'
 import { errorMessage } from '@/lib/api-error'
 import type { MemorySelection } from '../hooks/use-memory-preview'
-const details = new Map<string, MemoryDetail>()
 interface Props {
   selection: MemorySelection
   mobile: boolean
@@ -40,9 +39,6 @@ export function MemoryDetailCard({
   const [position, setPosition] = useState({ left: 20, top: 120 })
   const load = useCallback(
     async (signal: AbortSignal) => {
-      const key = (preview ? 'preview:' : '') + selection.id
-      const cached = details.get(key)
-      if (cached) return cached
       const data =
         preview && import.meta.env.DEV
           ? (await import('@/dev/wall-preview')).previewMemories.find(
@@ -50,12 +46,15 @@ export function MemoryDetailCard({
             )
           : await getMemory(selection.id, signal)
       if (!data) throw new Error('这段回忆暂时无法找到')
-      if (!signal.aborted) details.set(key, data)
       return data
     },
     [preview, selection.id],
   )
   const resource = useResource(load)
+  useEffect(
+    () => (!preview ? subscribePublicMemories(resource.reload) : undefined),
+    [preview, resource.reload],
+  )
   const data = resource.data?.id === selection.id ? resource.data : null
   useLayoutEffect(() => {
     if (mobile) return

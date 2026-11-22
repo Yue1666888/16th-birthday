@@ -57,6 +57,17 @@ export interface Honor {
   createdAt: string
   updatedAt: string
 }
+export interface AdminMemory {
+  id: string
+  displayName: string | null
+  title: string | null
+  content: string | null
+  images: ImageItem[]
+  version: string
+  publishedAt: string
+  updatedAt: string
+  source: 'VISITOR' | 'ADMIN'
+}
 export interface RecipientQuery {
   keyword?: string
   attendance?: string

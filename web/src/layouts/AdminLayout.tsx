@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation } from 'react-router'
 import {
   CodeXml,
   LayoutGrid,
+  Images,
   Award,
   Mail,
   Terminal,
@@ -16,6 +17,7 @@ import { toast } from 'sonner'
 import '@/styles/admin.css'
 const items = [
   { path: '/admin/invitations', label: '报名管理', Icon: LayoutGrid },
+  { path: '/admin/memories', label: '回忆管理', Icon: Images },
   { path: '/admin/honors', label: '荣誉墙', Icon: Award },
   { path: '/admin/mail', label: '邮件管理', Icon: Mail },
   { path: '/admin/logs', label: '日志管理', Icon: Terminal },

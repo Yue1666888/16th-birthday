@@ -39,6 +39,13 @@ export const adminRoutes: RouteObject[] = [
             }),
           },
           {
+            path: 'memories',
+            lazy: async () => ({
+              Component: (await import('@/pages/admin/memories/MemoriesPage'))
+                .MemoriesPage,
+            }),
+          },
+          {
             path: 'mail',
             lazy: async () => ({
               Component: (await import('@/pages/admin/mail/MailPage')).MailPage,

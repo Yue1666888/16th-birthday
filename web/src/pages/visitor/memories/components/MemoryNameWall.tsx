@@ -1,4 +1,5 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
+import { subscribePublicMemories } from '@/hooks/use-paged-feed'
 import { useResource } from '@/hooks/use-resource'
 import { useVisitorContext } from '@/hooks/use-visitor-view'
 import { getMemoryNames } from '@/api/public/walls.api'
@@ -19,6 +20,10 @@ export function MemoryNameWall({ preview }: { preview: boolean }) {
     [preview],
   )
   const { data, error, reload } = useResource(load, cache.get(preview) || null)
+  useEffect(
+    () => (!preview ? subscribePublicMemories(reload) : undefined),
+    [preview, reload],
+  )
   if (!data)
     return error ? (
       <section className="memory-names-error" role="status">
