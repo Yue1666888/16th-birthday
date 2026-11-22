@@ -81,6 +81,9 @@ CREATE TABLE email_notifications (
 CREATE TABLE media_images (
   `id` CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `url` VARCHAR(2048) NOT NULL,
+  `thumbnail_url` VARCHAR(3000) NULL DEFAULT NULL,
+  `upload_request_id` CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NULL DEFAULT NULL,
+  `upload_hash` CHAR(64) CHARACTER SET ascii COLLATE ascii_bin NULL DEFAULT NULL,
   `original_name` VARCHAR(255) NOT NULL,
   `uploaded_name` VARCHAR(255) NULL DEFAULT NULL,
   `source_mime_type` VARCHAR(50) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
@@ -92,6 +95,8 @@ CREATE TABLE media_images (
   `upload_owner_hash` CHAR(64) CHARACTER SET ascii COLLATE ascii_bin NULL DEFAULT NULL,
   `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (id),
+  UNIQUE KEY uq_media_user_request (uploader_sub, upload_request_id),
+  UNIQUE KEY uq_media_session_request (upload_owner_hash, upload_request_id),
   KEY ix_media_created (created_at, id),
   KEY ix_media_uploader (uploader_sub, created_at),
   KEY ix_media_owner (upload_owner_hash),

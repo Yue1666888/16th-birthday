@@ -39,12 +39,53 @@ public class MediaService {
         this.clock = clock;
     }
 
-    public ImageUploadResponse upload(MultipartFile file, UploadOwner owner) {
+    private final java.util.concurrent.ConcurrentHashMap<String, java.util.concurrent.CompletableFuture<ImageUploadResponse>> uploads = new java.util.concurrent.ConcurrentHashMap<>();
+    public ImageUploadResponse upload(MultipartFile file, UploadOwner owner) { return upload(file, owner, null); }
+    public ImageUploadResponse upload(MultipartFile file, UploadOwner owner, String requestId) {
+        validator.validate(file);
+        if (requestId == null) return store(file, owner, null, null);
+        RequestValues.uuid(requestId, "X-Upload-ID");
+        String hash;
+        try (var input=file.getInputStream()) {
+            var digest=java.security.MessageDigest.getInstance("SHA-256");
+            byte[] buffer=new byte[16384]; int read;
+            while((read=input.read(buffer))!=-1) digest.update(buffer,0,read);
+            hash=java.util.HexFormat.of().formatHex(digest.digest());
+        } catch (java.io.IOException ex) { throw new BusinessException(ErrorCode.IMAGE_INVALID); }
+          catch (java.security.NoSuchAlgorithmException ex) { throw new IllegalStateException(ex); }
+        var prior=mapper.findUpload(requestId,owner.sub(),owner.sessionHash());
+        if(prior!=null) return replay(prior,hash);
+        String key=(owner.sub()!=null?"user:"+owner.sub():"session:"+owner.sessionHash())+":"+requestId;
+        var future=new java.util.concurrent.CompletableFuture<ImageUploadResponse>();
+        var active=uploads.putIfAbsent(key,future);
+        if(active!=null) {
+            try { active.get(2,java.util.concurrent.TimeUnit.SECONDS); }
+            catch(Exception waiting) { if(waiting instanceof InterruptedException)Thread.currentThread().interrupt();throw BusinessException.uploadBusy(); }
+            var stored=mapper.findUpload(requestId,owner.sub(),owner.sessionHash());
+            if(stored==null)throw BusinessException.uploadBusy();
+            return replay(stored,hash);
+        }
+        try {
+            // Recheck after taking the per-operation slot, including another completed retry.
+            prior=mapper.findUpload(requestId,owner.sub(),owner.sessionHash());
+            var result=prior!=null?replay(prior,hash):store(file,owner,requestId,hash);
+            future.complete(result);return result;
+        } catch(RuntimeException failure) {future.completeExceptionally(failure);throw failure;}
+        finally {uploads.remove(key,future);}
+    }
+    private ImageUploadResponse replay(MediaImageEntity image,String hash) {
+        if(!hash.equals(image.getUploadHash()))throw new BusinessException(ErrorCode.IDEMPOTENCY_CONFLICT);
+        return MediaAssembler.uploaded(image);
+    }
+    private ImageUploadResponse store(MultipartFile file, UploadOwner owner,String requestId,String hash) {
         String mime = validator.validate(file);
         var result = upstream.upload(file);
         var entity = new MediaImageEntity();
         entity.setId(UUID.randomUUID().toString());
         entity.setUrl(result.url());
+        entity.setThumbnailUrl(result.thumbnailUrl());
+        entity.setUploadRequestId(requestId);
+        entity.setUploadHash(hash);
         entity.setOriginalName(result.originalName());
         entity.setUploadedName(result.uploadedName());
         entity.setSourceMimeType(mime);
@@ -52,7 +93,7 @@ public class MediaService {
         entity.setWidth(result.width());
         entity.setHeight(result.height());
         entity.setUploaderSub(owner.sub());
-        entity.setUploadOwnerHash(owner.sessionHash());
+        entity.setUploadOwnerHash(owner.sub()==null?owner.sessionHash():null);
         entity.setCreatedAt(ApiTime.now(clock));
         mapper.insert(entity);
         return MediaAssembler.uploaded(entity);

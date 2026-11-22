@@ -28,6 +28,7 @@ public class MediaController {
     @PostMapping(value = "/api/v1/media/images", consumes = "multipart/form-data")
     public ResponseEntity<CommonResponse<ImageUploadResponse>> upload(
             @RequestPart("file") MultipartFile file,
+            @RequestHeader(value="X-Upload-ID", required=false) String uploadId,
             HttpServletRequest request,
             HttpServletResponse response) {
         if (request instanceof MultipartHttpServletRequest multipart
@@ -37,6 +38,6 @@ public class MediaController {
         }
         return CommonResponse.respond(
                 BusinessCode.IMAGE_UPLOADED,
-                media.upload(file, owners.resolveOrCreate(request, response)));
+                media.upload(file, owners.resolveOrCreate(request, response), uploadId));
     }
 }

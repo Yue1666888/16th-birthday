@@ -9,6 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface MediaImageMapper {
+    MediaImageEntity findUpload(@org.apache.ibatis.annotations.Param("requestId") String requestId, @org.apache.ibatis.annotations.Param("sub") String sub, @org.apache.ibatis.annotations.Param("ownerHash") String ownerHash);
     int insert(MediaImageEntity image);
 
     List<MediaImageEntity> selectByIds(@Param("ids") List<String> ids);

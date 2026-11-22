@@ -9,7 +9,7 @@ public final class MediaAssembler {
 
     public static ImageResponse image(MediaImageEntity entity) {
         return new ImageResponse(
-                entity.getId(), entity.getUrl(), entity.getWidth(), entity.getHeight());
+                entity.getId(), entity.getUrl(), entity.getWidth(), entity.getHeight(), entity.getThumbnailUrl());
     }
 
     public static ImageUploadResponse uploaded(MediaImageEntity entity) {
@@ -20,6 +20,6 @@ public final class MediaAssembler {
                 entity.getHeight(),
                 entity.getOriginalName(),
                 entity.getSourceMimeType(),
-                entity.getSourceSizeBytes());
+                entity.getSourceSizeBytes(), entity.getThumbnailUrl());
     }
 }

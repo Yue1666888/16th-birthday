@@ -146,7 +146,7 @@ class UpstreamClientsTest {
                                 org.hamcrest.Matchers.startsWith("multipart/form-data;boundary=")))
                 .andRespond(
                         withSuccess(
-                                "{\"success\":true,\"url\":\"https://image.sipc115.com/1.webp\",\"original_name\":\"a.png\",\"uploaded_name\":\"1.webp\",\"data\":{\"data\":{\"width\":20,\"height\":30}}}",
+                                "{\"success\":true,\"url\":\"https://image.sipc115.com/1.webp\",\"original_name\":\"a.png\",\"uploaded_name\":\"1.webp\",\"data\":{\"data\":{\"width\":20,\"height\":30,\"links\":{\"thumbnail_url\":\"https://image.sipc115.com/thumbnails/1.webp\"}}}}",
                                 MediaType.APPLICATION_JSON));
         server.expect(anything())
                 .andRespond(
@@ -158,6 +158,7 @@ class UpstreamClientsTest {
         var result = client.upload(file);
         assertEquals(20, result.width());
         assertEquals(30, result.height());
+        assertEquals("https://image.sipc115.com/thumbnails/1.webp", result.thumbnailUrl());
         assertEquals(
                 ErrorCode.IMAGE_SERVICE_ERROR,
                 assertThrows(BusinessException.class, () -> client.upload(file)).errorCode());
@@ -182,6 +183,18 @@ class UpstreamClientsTest {
                                                         "image/png",
                                                         new byte[] {1})))
                         .errorCode());
+        server.verify();
+    }
+
+    @Test
+    void imageProviderRateLimitRetainsItsCooldownInsteadOfBecomingAnUnknownUploadFailure() {
+        var builder = RestClient.builder().baseUrl("https://file.example");
+        var server = MockRestServiceServer.bindTo(builder).build();
+        server.expect(anything()).andRespond(withStatus(HttpStatus.TOO_MANY_REQUESTS).header("Retry-After", "5").body("busy"));
+        var client = new FileApiClient(builder.build(), json(), "image.sipc115.com");
+        var failure = assertThrows(BusinessException.class, () -> client.upload(new MockMultipartFile("file", "a.png", "image/png", new byte[] {1})));
+        assertEquals(ErrorCode.TOO_MANY_REQUESTS, failure.errorCode());
+        assertEquals(5, failure.retryAfterSeconds());
         server.verify();
     }
 }

@@ -7,4 +7,5 @@ public record ImageUploadResponse(
         Integer height,
         String originalName,
         String sourceMimeType,
-        long sourceSizeBytes) {}
+        long sourceSizeBytes,
+        String thumbnailUrl) {}

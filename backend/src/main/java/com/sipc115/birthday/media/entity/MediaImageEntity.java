@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 public class MediaImageEntity {
     private String id;
     private String url;
+    private String thumbnailUrl;
+    private String uploadRequestId;
+    private String uploadHash;
     private String originalName;
     private String uploadedName;
     private String sourceMimeType;

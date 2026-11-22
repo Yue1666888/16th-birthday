@@ -25,7 +25,9 @@ import java.util.Map;
 @Component
 public class FileApiClient {
     public record Result(
-            String url, String originalName, String uploadedName, Integer width, Integer height) {}
+            String url, String originalName, String uploadedName, Integer width, Integer height, String thumbnailUrl) {
+        public Result(String url, String originalName, String uploadedName, Integer width, Integer height) { this(url, originalName, uploadedName, width, height, null); }
+    }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     private record Reply(
@@ -74,6 +76,12 @@ public class FileApiClient {
                     .body(body)
                     .exchange(
                             (request, response) -> {
+                                if (response.getStatusCode().value() == 429) {
+                                    int delay = 3;
+                                    try { delay = Math.max(1, Math.min(86400, Integer.parseInt(response.getHeaders().getFirst("Retry-After")))); }
+                                    catch (NumberFormatException ignored) { /* Provider omitted a numeric cooldown. */ }
+                                    throw BusinessException.throttled(delay);
+                                }
                                 if (response.getStatusCode().value() == 413) {
                                     throw new BusinessException(ErrorCode.IMAGE_FILE_TOO_LARGE);
                                 }
@@ -122,6 +130,15 @@ public class FileApiClient {
                                 if (metadata.get("data") instanceof Map<?, ?> nested) {
                                     metadata = nested;
                                 }
+                                String thumbnail = null;
+                                if (metadata.get("links") instanceof Map<?, ?> links
+                                        && links.get("thumbnail_url") instanceof String candidate) {
+                                    try {
+                                        URI uri = URI.create(candidate);
+                                        if ("https".equals(uri.getScheme()) && allowedHost.equalsIgnoreCase(uri.getHost())
+                                                && uri.getUserInfo() == null && candidate.length() <= 3000) thumbnail = candidate;
+                                    } catch (IllegalArgumentException ignored) { /* Optional thumbnail falls back to the original. */ }
+                                }
                                 Integer width = dimension(metadata.get("width"));
                                 Integer height = dimension(metadata.get("height"));
                                 if (width == null || height == null) {
@@ -135,7 +152,7 @@ public class FileApiClient {
                                                 : reply.originalName(),
                                         reply.uploadedName(),
                                         width,
-                                        height);
+                                        height, thumbnail);
                             });
         } catch (ResourceAccessException ex) {
             Throwable cause = ex;
