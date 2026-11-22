@@ -1175,19 +1175,54 @@ body:has([data-visitor-modal]) .visitor-particles {
   letter-spacing: 1px;
 }
 .memory-names-cloud {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  margin-top: 18px;
+}
+.memory-names-cloud svg {
+  display: block;
+  overflow: visible;
+}
+.memory-cloud-outline {
+  fill: #5ad9ed08;
+  stroke: #8adce333;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.memory-name {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+text.memory-name {
+  letter-spacing: 0;
+  fill: currentColor;
+}
+.memory-cloud-word {
+  cursor: pointer;
+  outline: none;
+}
+.memory-cloud-word:hover text,
+.memory-cloud-word:focus-visible text {
+  fill: #fff;
+  filter: drop-shadow(0 0 5px #5ad9edaa);
+}
+.memory-cloud-info {
+  min-height: 32px;
+  margin: 10px 0 0;
+  text-align: center;
+  color: var(--v-muted);
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+.memory-cloud-overflow {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 38px;
-  min-height: 100px;
-  padding: 5px 0 16px;
-}
-.memory-name {
-  display: block;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  line-height: 1.3;
-  letter-spacing: 2px;
+  justify-content: center;
+  gap: 10px 24px;
+  margin-top: 18px;
 }
 .memory-name-tone-0 {
   color: #e9f1f4;
@@ -1236,14 +1271,6 @@ body:has([data-visitor-modal]) .visitor-particles {
     letter-spacing: 0;
     max-width: 130px;
     text-align: right;
-  }
-  .memory-names-cloud {
-    gap: 6px 22px;
-    min-height: 85px;
-    padding-top: 10px;
-  }
-  .memory-name {
-    letter-spacing: 1px;
   }
 }
 
@@ -1365,5 +1392,42 @@ body:has([data-visitor-modal]) .visitor-particles {
   .memory-fulltext,
   .honor-people p {
     font-size: 18px;
+  }
+}
+
+.memory-cloud-more {
+  margin: 14px 0 0;
+  border-top: 1px solid var(--v-line);
+}
+.memory-cloud-more summary {
+  width: fit-content;
+  margin: 0 auto;
+  padding: 12px;
+  color: var(--v-muted);
+  cursor: pointer;
+  font-size: 15px;
+}
+.memory-cloud-more summary:hover {
+  color: var(--v-accent);
+}
+.memory-cloud-extra-name {
+  border: 0;
+  background: none;
+  padding: 3px;
+  max-width: 100%;
+  text-align: left;
+  line-height: 1.5;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .memory-cloud-word {
+    animation: memory-name-enter 0.65s ease-out both;
+  }
+}
+@keyframes memory-name-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

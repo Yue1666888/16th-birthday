@@ -5,6 +5,7 @@ import { useVisitorContext } from '@/hooks/use-visitor-view'
 import { getMemoryNames } from '@/api/public/walls.api'
 import type { MemoryNameWallResponse } from '@/types/public/walls.types'
 import { errorMessage } from '@/lib/api-error'
+import { MemoryNameCloud } from './MemoryNameCloud'
 const cache = new Map<boolean, MemoryNameWallResponse>()
 export function MemoryNameWall({ preview }: { preview: boolean }) {
   const { view } = useVisitorContext()
@@ -46,35 +47,7 @@ export function MemoryNameWall({ preview }: { preview: boolean }) {
           {data.namedSubmissions} 篇署名回忆
         </p>
       </div>
-      <div className="memory-names-cloud" aria-label="投稿姓名，按投稿次数排序">
-        {data.names.map((entry, index) => {
-          const scale = Math.sqrt(Math.max(0, Math.min(1, entry.weight)))
-          return (
-            <span
-              key={entry.name}
-              className={'memory-name memory-name-tone-' + (index % 4)}
-              style={{
-                fontSize:
-                  (view === 'mobile' ? 14 + 22 * scale : 18 + 44 * scale) +
-                  'px',
-                fontWeight: entry.weight >= 0.2 ? 600 : 400,
-                paddingTop: [0, 9, 3, 15][index % 4],
-              }}
-              title={
-                entry.name +
-                ' · ' +
-                entry.submissionCount +
-                ' 篇，占全部投稿 ' +
-                (entry.weight * 100).toFixed(1) +
-                '%'
-              }
-              aria-label={entry.name + '，' + entry.submissionCount + '篇回忆'}
-            >
-              {entry.name}
-            </span>
-          )
-        })}
-      </div>
+      <MemoryNameCloud names={data.names} mobile={view === 'mobile'} />
       {!!error && (
         <p className="memory-names-stale" role="status">
           姓名统计更新失败，暂时显示上次结果。
