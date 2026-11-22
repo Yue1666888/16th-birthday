@@ -79,7 +79,8 @@ public class IdempotencyService {
                         ? "MAIL_BATCH"
                         : operation == AdminOperationCode.EMAIL_CONFIRM
                                 ? "EMAIL_NOTIFICATION"
-                                : operation.name().startsWith("HONOR") ? "HONOR" : "INVITATION");
+                                : operation.name().startsWith("HONOR") ? "HONOR"
+                                : operation.name().startsWith("MEMORY") ? "MEMORY" : "INVITATION");
         stored.setResponseStatus(result.code().status());
         stored.setResponseBodyJson(
                 json.writeValueAsString(new SavedResult(result.code().name(), result.data())));

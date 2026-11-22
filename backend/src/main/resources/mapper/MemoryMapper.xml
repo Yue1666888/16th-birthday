@@ -1,27 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sipc115.birthday.memory.mapper.MemoryMapper">
-  <sql id="columns">id,submission_id,submission_hash,display_name,title,content,published_at</sql>
+  <sql id="columns">id,submission_id,submission_hash,display_name,title,content,published_at,version,updated_at,deleted_at,created_by_sub,updated_by_sub</sql>
   <select id="findSubmission" resultType="com.sipc115.birthday.memory.entity.MemoryEntity">
     SELECT <include refid="columns"/> FROM memories WHERE submission_id=#{submissionId}
   </select>
   <select id="findById" resultType="com.sipc115.birthday.memory.entity.MemoryEntity">
-    SELECT <include refid="columns"/> FROM memories WHERE id=#{id}
+    SELECT <include refid="columns"/> FROM memories WHERE id=#{id} AND deleted_at IS NULL
   </select>
   <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO memories(submission_id,submission_hash,display_name,title,content,published_at)
-    VALUES(#{submissionId},#{submissionHash},#{displayName},#{title},#{content},#{publishedAt})
+    INSERT INTO memories(submission_id,submission_hash,display_name,title,content,published_at,version,updated_at,created_by_sub,updated_by_sub)
+    VALUES(#{submissionId},#{submissionHash},#{displayName},#{title},#{content},#{publishedAt},#{version},#{updatedAt},#{createdBySub},#{updatedBySub})
   </insert>
-  <select id="count" resultType="long">SELECT COUNT(*) FROM memories</select>
+  <select id="count" resultType="long">SELECT COUNT(*) FROM memories WHERE deleted_at IS NULL</select>
   <select id="nameCounts" resultType="com.sipc115.birthday.memory.model.MemoryNameCount">
     SELECT TRIM(display_name) COLLATE utf8mb4_bin AS name,COUNT(*) AS submission_count
     FROM memories
-    WHERE display_name IS NOT NULL AND CHAR_LENGTH(TRIM(display_name)) > 0
+    WHERE deleted_at IS NULL AND display_name IS NOT NULL AND CHAR_LENGTH(TRIM(display_name)) > 0
     GROUP BY TRIM(display_name) COLLATE utf8mb4_bin
     ORDER BY submission_count DESC,name ASC
   </select>
   <select id="page" resultType="com.sipc115.birthday.memory.entity.MemoryEntity">
-    SELECT <include refid="columns"/> FROM memories
+    SELECT <include refid="columns"/> FROM memories WHERE deleted_at IS NULL
     ORDER BY published_at DESC,id DESC LIMIT #{limit} OFFSET #{offset}
+  </select>
+  <select id="lock" resultType="com.sipc115.birthday.memory.entity.MemoryEntity">
+    SELECT <include refid="columns"/> FROM memories WHERE id=#{id} AND deleted_at IS NULL FOR UPDATE
+  </select>
+  <update id="updateByVersion">
+    UPDATE memories SET display_name=#{entity.displayName},title=#{entity.title},content=#{entity.content},
+      version=#{entity.version},updated_at=#{entity.updatedAt},updated_by_sub=#{entity.updatedBySub}
+    WHERE id=#{entity.id} AND version=#{expected} AND deleted_at IS NULL
+  </update>
+  <update id="deleteByVersion">
+    UPDATE memories SET deleted_at=#{entity.deletedAt},version=#{entity.version},updated_at=#{entity.updatedAt},updated_by_sub=#{entity.updatedBySub}
+    WHERE id=#{entity.id} AND version=#{expected} AND deleted_at IS NULL
+  </update>
+  <sql id="adminFilter">
+    deleted_at IS NULL
+    <if test="keyword != null">
+      AND (display_name LIKE CONCAT('%',#{keyword},'%') ESCAPE '!' OR title LIKE CONCAT('%',#{keyword},'%') ESCAPE '!' OR content LIKE CONCAT('%',#{keyword},'%') ESCAPE '!')
+    </if>
+  </sql>
+  <select id="adminCount" resultType="long">SELECT COUNT(*) FROM memories WHERE <include refid="adminFilter"/></select>
+  <select id="adminPage" resultType="com.sipc115.birthday.memory.entity.MemoryEntity">
+    SELECT <include refid="columns"/> FROM memories WHERE <include refid="adminFilter"/>
+    ORDER BY updated_at DESC,id DESC LIMIT #{limit} OFFSET #{offset}
   </select>
 </mapper>

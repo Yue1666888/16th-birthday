@@ -9,6 +9,8 @@ public enum BusinessCode {
     INVITATION_UPDATED(200, "同手机号更新或管理员更正成功"),
     IMAGE_UPLOADED(201, "单张图片上传并登记成功"),
     MEMORY_CREATED(201, "投稿已保存并公开"),
+    MEMORY_UPDATED(200, "回忆已更新"),
+    MEMORY_DELETED(200, "回忆已软删除"),
     HONOR_CREATED(201, "荣誉创建成功"),
     HONOR_UPDATED(200, "荣誉编辑成功，包括内容未变化的保存"),
     HONOR_DELETED(200, "荣誉软删除成功"),

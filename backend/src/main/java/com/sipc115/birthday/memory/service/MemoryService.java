@@ -84,6 +84,8 @@ public class MemoryService {
                                 entry.setTitle(title);
                                 entry.setContent(content);
                                 entry.setPublishedAt(ApiTime.now(clock));
+                                entry.setUpdatedAt(entry.getPublishedAt());
+                                entry.setVersion(1L);
                                 mapper.insert(entry);
                                 if (!ids.isEmpty()) {
                                     List<MemoryImageEntity> rows = new ArrayList<>();
@@ -112,6 +114,7 @@ public class MemoryService {
         if (!hash.equals(entry.getSubmissionHash())) {
             throw new BusinessException(ErrorCode.IDEMPOTENCY_CONFLICT);
         }
+        if (entry.getDeletedAt() != null) throw new BusinessException(ErrorCode.MEMORY_NOT_FOUND);
         return new CommandResult<>(BusinessCode.MEMORY_CREATED, detailEntity(entry), true);
     }
 

@@ -16,4 +16,5 @@ public interface MemoryImageMapper {
     int deleteForParent(@Param("id") long id);
 
     long claimed(@Param("ids") List<String> ids);
+    long claimedByOther(@Param("ids") List<String> ids, @Param("parent") long parent);
 }

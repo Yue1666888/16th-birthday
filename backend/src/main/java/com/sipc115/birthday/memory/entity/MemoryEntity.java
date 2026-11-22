@@ -15,4 +15,9 @@ public class MemoryEntity {
     private String title;
     private String content;
     private LocalDateTime publishedAt;
+    private Long version;
+    private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
+    private String createdBySub;
+    private String updatedBySub;
 }

@@ -18,4 +18,8 @@
     SELECT COUNT(*) FROM memory_images WHERE image_id IN
     <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
   </select>
+  <select id="claimedByOther" resultType="long">
+    SELECT COUNT(*) FROM memory_images WHERE memory_id != #{parent} AND image_id IN
+    <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
+  </select>
 </mapper>
