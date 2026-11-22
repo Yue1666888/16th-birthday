@@ -127,7 +127,7 @@ HTTP 状态用于区分成功、校验、认证、冲突或服务失败。code �
 | 参数或行为 | 约定 |
 | --- | --- |
 | page | 从 1 开始，默认 1 |
-| size | 默认 20 |
+| size | 公开双墙默认 10；后台分页默认 20 |
 | 公开回忆、公开荣誉 | size 最大 50 |
 | 后台报名、后台荣誉、邮件历史 | size 最大 100 |
 | 参数越界 | 返回 400，不静默截断或改为默认值 |
@@ -753,7 +753,7 @@ IdempotencyState 与 AdminOperationCode 用于后端任务、幂等与操作记�
 - 首次手机号返回 201 / INVITATION_CREATED，data.result=CREATED；已有手机号返回 200 / INVITATION_UPDATED，data.result=UPDATED。
 - 同内容重复提交仍返回 UPDATED，业务版本保持，submittedAt 是本次处理时间。
 - 保存回执后邮件状态为 NOT_SENT，发送由管理员手动确认。
-- 默认每客户端 IP 每分钟 10 次，超限返回 Retry-After。
+- 默认每访客会话每分钟 10 次，另有共享出口的 IP 粗粒度总阀；超限返回 Retry-After。
 
 重点错误码包括 `VALIDATION_ERROR`、`TOO_MANY_REQUESTS`，含义与 HTTP 映射见第 4 节。
 
@@ -1249,7 +1249,7 @@ Content-Type: image/png
 - imageIds 为有序数组，最多 9 张；[] 合法，null 非法。
 - 确认图片归属与认领状态，原子保存内容和全部图片关联，提交成功即公开。
 - 同 submissionId 同规范化参数返回原 201 / MEMORY_CREATED，标记幂等重放；不同参数返回 409。
-- 默认每客户端 IP 每分钟 5 次，可配置。
+- 默认每访客会话每分钟 5 次，另有 IP 粗粒度总阀，均可配置。
 
 重点错误码包括 `MEMORY_CONTENT_REQUIRED`、`IMAGE_COUNT_INVALID`、`IMAGE_DUPLICATED`、`IMAGE_NOT_FOUND`、`IMAGE_ACCESS_DENIED`、`IMAGE_ALREADY_USED`、`IDEMPOTENCY_CONFLICT`、`TOO_MANY_REQUESTS`，含义与 HTTP 映射见第 4 节。
 
@@ -1263,7 +1263,7 @@ Content-Type: image/png
 | 参数 | 类型 | 必填 | 规则 |
 | --- | --- | --- | --- |
 | `page` | `integer` | 否 | 默认 1，最小 1。 |
-| `size` | `integer` | 否 | 默认 20，范围按接口上限。 |
+| `size` | `integer` | 否 | 默认 10，范围按接口上限。 |
 
 请求体为空。
 
@@ -1293,7 +1293,7 @@ Content-Type: image/png
       }
     ],
     "page": 1,
-    "size": 20,
+    "size": 10,
     "totalElements": 1,
     "totalPages": 1
   },
@@ -1360,7 +1360,7 @@ Content-Type: image/png
 | 参数 | 类型 | 必填 | 规则 |
 | --- | --- | --- | --- |
 | `page` | `integer` | 否 | 默认 1，最小 1。 |
-| `size` | `integer` | 否 | 默认 20，范围按接口上限。 |
+| `size` | `integer` | 否 | 默认 10，范围按接口上限。 |
 
 请求体为空。
 
@@ -1389,7 +1389,7 @@ Content-Type: image/png
       }
     ],
     "page": 1,
-    "size": 20,
+    "size": 10,
     "totalElements": 1,
     "totalPages": 1
   },
@@ -1716,7 +1716,7 @@ Content-Type: image/png
 6. 回忆可为 0～9 张且有非空正文，荣誉必须为 1～9 张。
 7. 投稿或荣誉保存事务校验所有图片并完整保存，单张失败可重试；响应丢失导致上传重试时可能产生未关联图片，按既有图床能力维护。
 
-前端使用同源 /api 代理，浏览器保留会话 Cookie。单次 multipart 仅一个 file，文件上限为 10 MiB，代理请求体上限应留出 multipart 元数据空间。公开图片接口默认匿名每 IP 每分钟 20 次，登录上传每 sub 每分钟 60 次；公开投稿每 IP 每分钟 5 次，均可配置。
+前端使用同源 /api 代理，浏览器保留会话 Cookie。单次 multipart 仅一个 file，文件上限为 10 MiB，代理请求体上限应留出 multipart 元数据空间。公开图片接口默认匿名每访客会话每分钟 20 次，登录上传每 sub 每分钟 60 次；公开投稿每访客会话每分钟 5 次。公共写请求另有每 IP 每分钟 3000 次粗粒度总阀，均可配置。
 
 ### 8.3 邮件预览与确认
 
@@ -1885,3 +1885,6 @@ API Markdown 是当前契约，开发时据此同步正式 OpenAPI、后端 DTO 
 
 
 新增5个回忆管理接口，统一字段和错误码沿用本文；补充契约见《API接口文档-v3回忆管理》。
+
+
+2026-11-23上传头X-Upload-ID、nullable thumbnailUrl、UPLOAD_BUSY与公开默认10条以《API接口文档-v4上传与浏览优化》为准。
