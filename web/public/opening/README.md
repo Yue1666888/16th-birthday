@@ -21,3 +21,5 @@ The audio is requested after the visitor clicks Start, at a controlled volume. I
 ## Visual revision v2
 
 Seven additional frame/sky/light images are under `v2/`, with source PNGs and exact built-in-imagegen prompts in `frontend-sources/opening-assets/v2/assets-manifest.json`. Dialogue/narration text remains live HTML. Two generated lamp states per viewport are combined with the original normal frame and clipped to the tube area during playback.
+
+2026-11-22: S10 now preloads the user-supplied invitation-cover-v2 asset from public/invitation; the opened event details use separate centered rows. See the repository public compatibility v3 notes for the removed hints and counters.

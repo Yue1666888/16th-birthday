@@ -1882,3 +1882,6 @@ API Markdown 是当前契约，开发时据此同步正式 OpenAPI、后端 DTO 
 ## 14. 首页公开表单消费说明（2026-11-22）
 
 /invitation使用现有GET /memories/names、POST /invitations、POST /media/images、POST /memories，不增加后端路径或业务码。回执同手机号更新、邮件由管理员确认；匿名图片首张完成后再进行后续有限并发。投稿UUID及完整body在未知结果时冻结并原样重试，成功后不复用已领取的图片ID。浏览器getRandomValues生成v4 UUID以兼容HTTP局域网。payload字段仍按本文既有契约，公开POST没有管理员Bearer。
+
+
+新增5个回忆管理接口，统一字段和错误码沿用本文；补充契约见《API接口文档-v3回忆管理》。
