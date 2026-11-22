@@ -8,7 +8,7 @@ test('desktop memory preview pins, opens nine images, restores the detail and ne
   page.on('pageerror', (error) => errors.push(error.message))
   const requests = await mockVisitorApi(page)
   await page.goto('/memories')
-  await expect(page.locator('.memory-card')).toHaveCount(20)
+  await expect(page.locator('.memory-card')).toHaveCount(10)
   await expect(page.locator('.visitor-app[data-view]')).toHaveAttribute(
     'data-view',
     'desktop',
@@ -73,14 +73,14 @@ test('wall navigation restores loaded records and scroll position', async ({
   await mockVisitorApi(page)
   await page.goto('/memories')
   await page.getByRole('button', { name: '继续浏览' }).click()
-  await expect(page.locator('.memory-card')).toHaveCount(25)
+  await expect(page.locator('.memory-card')).toHaveCount(20)
   await page.evaluate(() => window.scrollTo(0, 950))
   const scroll = await page.evaluate(() => scrollY)
   await page.getByRole('link', { name: '荣誉墙', exact: true }).click()
   await expect(page.locator('.honor-card')).toHaveCount(8)
   await expect.poll(() => page.evaluate(() => scrollY)).toBe(0)
   await page.getByRole('link', { name: '回忆墙', exact: true }).click()
-  await expect(page.locator('.memory-card')).toHaveCount(25)
+  await expect(page.locator('.memory-card')).toHaveCount(20)
   await expect.poll(() => page.evaluate(() => scrollY)).toBe(scroll)
 })
 
@@ -248,7 +248,7 @@ test('explicit development preview is marked and carries its mode between walls'
   })
   await page.goto('/memories?preview=1')
   await expect(page.locator('.visitor-preview-banner')).toBeVisible()
-  await expect(page.locator('.memory-card')).toHaveCount(20)
+  await expect(page.locator('.memory-card')).toHaveCount(10)
   await page.getByRole('link', { name: '荣誉墙', exact: true }).click()
   await expect(page).toHaveURL(/honors\?preview=1$/)
   await expect(page.locator('.honor-card')).toHaveCount(8)
@@ -262,7 +262,7 @@ test('reduced motion and narrow mobile keep content readable', async ({
   await page.setViewportSize({ width: 320, height: 700 })
   await mockVisitorApi(page)
   await page.goto('/memories')
-  await expect(page.locator('.memory-card')).toHaveCount(20)
+  await expect(page.locator('.memory-card')).toHaveCount(10)
   await expect(page.locator('.visitor-particles')).toBeHidden()
   expect(
     await page.evaluate(

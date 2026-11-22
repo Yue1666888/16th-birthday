@@ -26,7 +26,7 @@ test('name wall uses complete contribution weights before loading more memories'
   await page.goto('/memories')
   const wall = page.getByRole('region', { name: '回忆姓名墙', exact: true })
   await expect(wall).toBeVisible()
-  await expect(page.locator('.memory-card')).toHaveCount(20)
+  await expect(page.locator('.memory-card')).toHaveCount(10)
   const names = wall.locator('.memory-name')
   await expect(names).toHaveCount(3)
   await expect(names.nth(0)).toHaveText('高频投稿者')
@@ -66,7 +66,7 @@ test('name wall stays hidden for empty and anonymous-only contributions', async 
       }),
     )
     await page.goto('/memories')
-    await expect(page.locator('.memory-card')).toHaveCount(20)
+    await expect(page.locator('.memory-card')).toHaveCount(10)
     await expect(
       page.getByRole('region', { name: '回忆姓名墙', exact: true }),
     ).toHaveCount(0)

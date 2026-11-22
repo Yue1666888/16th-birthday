@@ -67,7 +67,7 @@ export function MemoryNameCloud({
         className="memory-names-cloud"
         data-shape="115"
         data-layout-state={current ? 'ready' : 'loading'}
-        style={{ height }}
+        data-mobile={mobile}
         aria-busy={!current}
       >
         <svg

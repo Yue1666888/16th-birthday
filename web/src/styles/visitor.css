@@ -1431,3 +1431,26 @@ text.memory-name {
     opacity: 1;
   }
 }
+
+/* Cover aspect ratios already fix geometry: skip offscreen paint without moving cards. */
+.memory-cover,
+.honor-artwork {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 320px;
+}
+
+/* Size exists before ResizeObserver runs, so returning to a wall never shifts scroll anchoring. */
+.memory-names-cloud {
+  aspect-ratio: 100 / 42;
+  min-height: 300px;
+  max-height: 460px;
+}
+.memory-names-cloud[data-mobile='true'] {
+  aspect-ratio: 100 / 82;
+  min-height: 250px;
+  max-height: 360px;
+}
+.memory-names-cloud > svg {
+  position: absolute;
+  inset: 0;
+}

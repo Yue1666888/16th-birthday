@@ -96,11 +96,11 @@ export const previewHonors: PublicHonor[] = Array.from(
 )
 function paginate<T>(rows: T[], page: number): PageResponse<T> {
   return {
-    content: rows.slice((page - 1) * 20, page * 20),
+    content: rows.slice((page - 1) * 10, page * 10),
     page,
-    size: 20,
+    size: 10,
     totalElements: rows.length,
-    totalPages: Math.ceil(rows.length / 20),
+    totalPages: Math.ceil(rows.length / 10),
   }
 }
 export const getPreviewMemories = (page: number) =>

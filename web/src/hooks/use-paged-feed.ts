@@ -7,35 +7,39 @@ interface Feed<T> {
   pages: number
 }
 const savedFeeds = new Map<string, Feed<unknown>>()
-const memoryRevisionKey = 'birthday16.memories-revision'
-const memoryUpdatedEvent = 'birthday:memories-updated'
-export function invalidatePublicMemories() {
-  savedFeeds.delete('memories:false')
-  window.dispatchEvent(new Event(memoryUpdatedEvent))
+function invalidateWall(kind: 'memories' | 'honors') {
+  savedFeeds.delete(kind + ':false')
+  window.dispatchEvent(new Event('birthday:' + kind + '-updated'))
   try {
     localStorage.setItem(
-      memoryRevisionKey,
+      'birthday16.' + kind + '-revision',
       Date.now().toString() + ':' + Math.random(),
     )
   } catch {
-    /* Same-tab invalidation still works without browser storage. */
+    /* Same-tab updates remain available when browser storage is disabled. */
   }
 }
-export function subscribePublicMemories(listener: () => void) {
+function subscribeWall(kind: 'memories' | 'honors', listener: () => void) {
   const changed = () => {
-    savedFeeds.delete('memories:false')
+    savedFeeds.delete(kind + ':false')
     listener()
   }
   const storage = (event: StorageEvent) => {
-    if (event.key === memoryRevisionKey) changed()
+    if (event.key === 'birthday16.' + kind + '-revision') changed()
   }
-  window.addEventListener(memoryUpdatedEvent, changed)
+  window.addEventListener('birthday:' + kind + '-updated', changed)
   window.addEventListener('storage', storage)
   return () => {
-    window.removeEventListener(memoryUpdatedEvent, changed)
+    window.removeEventListener('birthday:' + kind + '-updated', changed)
     window.removeEventListener('storage', storage)
   }
 }
+export const invalidatePublicMemories = () => invalidateWall('memories')
+export const invalidatePublicHonors = () => invalidateWall('honors')
+export const subscribePublicMemories = (listener: () => void) =>
+  subscribeWall('memories', listener)
+export const subscribePublicHonors = (listener: () => void) =>
+  subscribeWall('honors', listener)
 export function usePagedFeed<T extends { id: string }>(
   key: string,
   load: (page: number, signal: AbortSignal) => Promise<PageResponse<T>>,
@@ -52,8 +56,10 @@ export function usePagedFeed<T extends { id: string }>(
   const [loading, setLoading] = useState(!savedFeeds.has(key))
   const [error, setError] = useState<unknown>(null)
   const active = useRef<AbortController | null>(null)
+  const requestedPage = useRef(1)
   const read = useCallback(
     async (page: number) => {
+      requestedPage.current = page
       active.current?.abort()
       const controller = new AbortController()
       active.current = controller
@@ -102,7 +108,11 @@ export function usePagedFeed<T extends { id: string }>(
         ? subscribePublicMemories(() => {
             void read(1)
           })
-        : undefined,
+        : key === 'honors:false'
+          ? subscribePublicHonors(() => {
+              void read(1)
+            })
+          : undefined,
     [key, read],
   )
   return {
@@ -110,6 +120,6 @@ export function usePagedFeed<T extends { id: string }>(
     loading,
     error,
     more: () => read(feed.page + 1),
-    retry: () => read(feed.page === 0 ? 1 : feed.page + 1),
+    retry: () => read(requestedPage.current),
   }
 }

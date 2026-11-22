@@ -1,3 +1,4 @@
+import { publicAsset } from '@/lib/public-asset'
 import { useState } from 'react'
 import type { RefObject } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -40,7 +41,7 @@ export function InvitationDock({
             data-playing={music.playing}
             aria-hidden="true"
           >
-            <img src="/brand/sipc-emblem.png" alt="" />
+            <img src={publicAsset('/brand/sipc-emblem.png')} alt="" />
           </span>
           <span
             className="invitation-dock-signal"

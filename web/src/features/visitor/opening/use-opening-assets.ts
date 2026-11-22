@@ -1,3 +1,4 @@
+import { publicAsset } from '@/lib/public-asset'
 import { useCallback, useEffect, useState } from 'react'
 import { openingAssets } from './assets'
 import { openingScenes } from './script'
@@ -46,7 +47,7 @@ export function useOpeningAssets(mobile: boolean) {
     [openingAssets[mobile ? 'M01' : 'D01'], 25],
     [openingAssets.B01, 15],
     [openingAssets[mobile ? 'M02' : 'D02'], 20],
-    ['/brand/sipc-emblem.png', 10],
+    [publicAsset('/brand/sipc-emblem.png'), 10],
     [openingAssets.DIALOGUE, 10],
     [openingAssets.NARRATION, 10],
   ]
@@ -64,7 +65,7 @@ export function useOpeningAssets(mobile: boolean) {
       openingAssets[mobile ? 'M01' : 'D01'],
       openingAssets.B01,
       openingAssets[mobile ? 'M02' : 'D02'],
-      '/brand/sipc-emblem.png',
+      publicAsset('/brand/sipc-emblem.png'),
       openingAssets.DIALOGUE,
       openingAssets.NARRATION,
     ]

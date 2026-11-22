@@ -1,3 +1,4 @@
+import { publicAsset } from '@/lib/public-asset'
 import source from '@/content/invitation-template.txt?raw'
 
 export function parseInvitationTemplate(text: string) {
@@ -25,8 +26,8 @@ export function parseInvitationTemplate(text: string) {
   }
 }
 export const invitationContent = parseInvitationTemplate(source)
-export const invitationPoster = '/invitation/invitation-16th.webp'
-export const invitationOriginal = '/invitation/invitation-16th.png'
+export const invitationPoster = publicAsset('/invitation/invitation-16th.webp')
+export const invitationOriginal = publicAsset('/invitation/invitation-16th.png')
 export function createInvitationMailPreset(name?: string) {
   return {
     subject: invitationContent.subject,

@@ -1,3 +1,4 @@
+import { invalidatePublicHonors } from '@/hooks/use-paged-feed'
 import { useCallback, useRef, useState } from 'react'
 import { Plus, RefreshCw } from 'lucide-react'
 import { toast } from 'sonner'
@@ -53,6 +54,7 @@ export function HonorsPage() {
     setRemove(null)
     try {
       await honorsApi.delete(row.id, row.version, requestId)
+      invalidatePublicHonors()
       toast.success('荣誉已删除')
       data.reload()
     } catch (e) {
@@ -180,7 +182,10 @@ export function HonorsPage() {
           key={editing.row?.id || 'new'}
           row={editing.row}
           onClose={() => setEditing(null)}
-          onSaved={data.reload}
+          onSaved={() => {
+            invalidatePublicHonors()
+            data.reload()
+          }}
         />
       )}
       {detail && (

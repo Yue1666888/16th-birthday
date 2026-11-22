@@ -1,0 +1,52 @@
+map $arg_v $public_asset_cache {
+    default "public, max-age=0, must-revalidate";
+    "~^[0-9a-f]{16}$" "public, max-age=31536000, immutable";
+}
+log_format birthday '$request_method $uri status=$status sent=$body_bytes_sent duration=$request_time upstream=$upstream_response_time';
+server {
+    listen 80;
+    root /usr/share/nginx/html;
+    index index.html;
+    access_log /var/log/nginx/access.log birthday;
+    client_max_body_size 11m;
+    client_body_timeout 60s;
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+
+    location /api/ {
+        proxy_pass ${BACKEND_ORIGIN};
+        set $api_origin $http_origin;
+        if ($http_origin = "${PUBLIC_SCHEME}://$http_host") { set $api_origin ""; }
+        proxy_set_header Origin $api_origin;
+        proxy_set_header Host $http_host;
+        # Overwrite browser-supplied forwarding headers. Configure the trusted
+        # outer proxy here if this Nginx is itself behind an ingress/load balancer.
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto ${PUBLIC_SCHEME};
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 120s;
+        proxy_send_timeout 120s;
+        proxy_request_buffering off;
+        add_header Cache-Control "no-store" always;
+    }
+    location /assets/ {
+        try_files $uri =404;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+    location ~ ^/(opening|brand|invitation)/ {
+        try_files $uri =404;
+        add_header Cache-Control $public_asset_cache;
+    }
+    # The SPA route /invitation shares its name with an asset directory.
+    location = /invitation { rewrite ^ /index.html last; }
+    location = /invitation/ { rewrite ^ /index.html last; }
+    location = /index.html {
+        add_header Cache-Control "no-cache" always;
+    }
+    location / {
+        try_files $uri $uri/ /index.html;
+        add_header Cache-Control "no-cache" always;
+    }
+}

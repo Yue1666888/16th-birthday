@@ -1,3 +1,4 @@
+import { publicAsset } from '@/lib/public-asset'
 import { ArrowUpRight } from 'lucide-react'
 import { Link, NavLink, useSearchParams } from 'react-router'
 export function VisitorNavigation() {
@@ -13,7 +14,7 @@ export function VisitorNavigation() {
       >
         <img
           className="brand-logo"
-          src="/brand/sipc-logo.png"
+          src={publicAsset('/brand/sipc-logo.png')}
           alt="SIPC"
           width="2085"
           height="608"

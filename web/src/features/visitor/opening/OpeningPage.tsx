@@ -1,3 +1,4 @@
+import { publicAsset } from '@/lib/public-asset'
 import { useCallback, useEffect, useState } from 'react'
 import {
   ArrowRight,
@@ -179,7 +180,7 @@ export function OpeningPage() {
           }}
           aria-label="SIPC，直接进入首页"
         >
-          <img src="/brand/sipc-emblem.png" alt="" />
+          <img src={publicAsset('/brand/sipc-emblem.png')} alt="" />
           <span>
             SIPC <small>16TH ANNIVERSARY</small>
           </span>
@@ -226,7 +227,10 @@ export function OpeningPage() {
             // SIPC · RETURN JOURNEY / 001
           </span>
           <div className="opening-loader-symbol">
-            <img src="/brand/sipc-emblem.png" alt="SIPC社团标识" />
+            <img
+              src={publicAsset('/brand/sipc-emblem.png')}
+              alt="SIPC社团标识"
+            />
             <i />
             <i />
           </div>

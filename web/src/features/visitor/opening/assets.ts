@@ -1,5 +1,6 @@
 import { invitationPoster } from '@/domain/invitation-content'
-export const openingAssets = {
+import { publicAsset } from '@/lib/public-asset'
+const paths = {
   COVER: '/invitation/invitation-cover-v2.webp',
   POSTER: invitationPoster,
   M01: '/opening/M01.webp',
@@ -36,5 +37,8 @@ export const openingAssets = {
   LMB: '/opening/v2/lamp-mobile-bright.webp',
 } as const
 
-export type OpeningAssetId = keyof typeof openingAssets
-export const openingMusic = '/opening/return-to-115.m4a'
+export const openingAssets = Object.fromEntries(
+  Object.entries(paths).map(([key, path]) => [key, publicAsset(path)]),
+) as Record<keyof typeof paths, string>
+export type OpeningAssetId = keyof typeof paths
+export const openingMusic = publicAsset('/opening/return-to-115.m4a')

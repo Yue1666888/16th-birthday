@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import { useVisitorContext } from '@/hooks/use-visitor-view'
-import { usePagedFeed } from '@/hooks/use-paged-feed'
+import { usePagedFeed, subscribePublicHonors } from '@/hooks/use-paged-feed'
 import { getHonors } from '@/api/public/walls.api'
 import type { PublicHonor } from '@/types/public/walls.types'
 import { WallHeading } from '@/components/visitor/WallHeading'
@@ -28,6 +28,14 @@ export function HonorWallPage() {
     null,
   )
   const [gallery, setGallery] = useState<GallerySelection | null>(null)
+  useEffect(
+    () =>
+      subscribePublicHonors(() => {
+        setPeople(null)
+        setGallery(null)
+      }),
+    [],
+  )
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const cancel = () => clearTimeout(timer.current)
   const close = () => {

@@ -54,7 +54,12 @@ export function HonorCard({
           disabled={!cover}
         >
           {cover ? (
-            <VisitorImage src={cover.url} alt={item.title} eager={index < 2} />
+            <VisitorImage
+              src={cover.url}
+              thumbnailSrc={cover.thumbnailUrl}
+              alt={item.title}
+              eager={index < 2}
+            />
           ) : (
             <span>图片暂时无法显示</span>
           )}

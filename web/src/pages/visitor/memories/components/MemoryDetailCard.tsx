@@ -177,6 +177,7 @@ export function MemoryDetailCard({
                   >
                     <VisitorImage
                       src={image.url}
+                      thumbnailSrc={image.thumbnailUrl}
                       alt={'回忆照片 ' + (index + 1)}
                     />
                   </button>

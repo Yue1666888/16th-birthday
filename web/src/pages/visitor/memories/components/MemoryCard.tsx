@@ -51,6 +51,7 @@ export function MemoryCard({
           {item.coverImage ? (
             <VisitorImage
               src={item.coverImage.url}
+              thumbnailSrc={item.coverImage.thumbnailUrl}
               alt={item.title || '社团回忆照片'}
               eager={index < 2}
             />
