@@ -106,6 +106,7 @@ test('image upload establishes the anonymous cookie first and image-only memory 
   })
   const state = await mockInvitationApi(page, { holdFirstUpload: gate })
   await page.goto('/invitation')
+  await expect(page.locator('#memory-images')).toBeEnabled()
   await page.locator('#memory-images').setInputFiles(
     [1, 2, 3].map((number) => ({
       name: number + '.png',
@@ -113,16 +114,17 @@ test('image upload establishes the anonymous cookie first and image-only memory 
       buffer: pixel,
     })),
   )
+  await expect(page.locator('.invitation-photo')).toHaveCount(3)
+  expect(state.uploads).toBe(0)
+  await page.getByRole('button', { name: '前移第3张照片' }).click()
+  await page.getByRole('button', { name: '发布回忆', exact: true }).click()
   await expect.poll(() => state.uploads).toBe(1)
   await expect(
-    page.getByRole('button', { name: '发布回忆', exact: true }),
+    page.getByRole('button', { name: '正在发布…', exact: true }),
   ).toBeDisabled()
+  expect(state.memories).toHaveLength(0)
   release()
-  await expect(
-    page
-      .locator('.invitation-photo-state')
-      .getByText('已上传', { exact: true }),
-  ).toHaveCount(3)
+  await expect(page.getByText('回忆已发布', { exact: true })).toBeVisible()
   expect(
     state.calls
       .filter((call) => call.path.includes('media'))
@@ -131,9 +133,6 @@ test('image upload establishes the anonymous cookie first and image-only memory 
         call.cookie?.includes('birthday_upload_session=upload-test'),
       ),
   ).toBeTruthy()
-  await page.getByRole('button', { name: '前移第3张照片' }).click()
-  await page.getByRole('button', { name: '发布回忆', exact: true }).click()
-  await expect(page.getByText('回忆已发布', { exact: true })).toBeVisible()
   expect(state.memories[0].imageIds).toEqual([
     '10000000-0000-4000-8000-000000000001',
     '10000000-0000-4000-8000-000000000003',

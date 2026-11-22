@@ -72,6 +72,7 @@ export const memoryPayloadSchema = z.object({
 })
 export type MemoryPayload = z.infer<typeof memoryPayloadSchema>
 export const storedImageSchema = z.object({
+  thumbnailUrl: z.string().max(3000).nullable().optional(),
   id: uuid,
   url: z.string().max(3000),
   width: z.number().nullable(),

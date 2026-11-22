@@ -8,6 +8,7 @@ import {
   Upload,
   X,
 } from 'lucide-react'
+import { uploadLabel } from '@/lib/upload-label'
 import { errorMessage } from '@/lib/api-error'
 import type { useContributionForm } from './use-contribution-form'
 export function ContributionForm({
@@ -100,14 +101,20 @@ export function ContributionForm({
                   onDragOver={(event) => event.preventDefault()}
                   onDrop={(event) => {
                     event.preventDefault()
-                    if (!locked) uploads.add(event.dataTransfer.files)
+                    if (!locked && !isSubmitting)
+                      uploads.add(event.dataTransfer.files)
                   }}
                 >
                   <Upload size={21} />
-                  <span>选择照片，或拖拽到这里</span>
+                  <span>
+                    {uploads.restoring
+                      ? '正在恢复照片草稿…'
+                      : '选择照片，或拖拽到这里'}
+                  </span>
                   <small>最多9张 · 单张10 MB · JPG / PNG / WebP / GIF</small>
                   <input
                     id="memory-images"
+                    disabled={uploads.restoring}
                     type="file"
                     multiple
                     accept="image/jpeg,image/png,image/webp,image/gif"
@@ -122,7 +129,8 @@ export function ContributionForm({
                   onDragOver={(event) => event.preventDefault()}
                   onDrop={(event) => {
                     event.preventDefault()
-                    if (!locked) uploads.add(event.dataTransfer.files)
+                    if (!locked && !isSubmitting)
+                      uploads.add(event.dataTransfer.files)
                   }}
                 >
                   <div className="invitation-photo-grid">
@@ -156,9 +164,7 @@ export function ContributionForm({
                             </button>
                           ) : (
                             <span>
-                              {item.state === 'queued'
-                                ? '等待上传'
-                                : '正在上传…'}
+                              {uploadLabel(item.state, item.progress)}
                             </span>
                           )}
                         </div>
@@ -199,6 +205,20 @@ export function ContributionForm({
               </div>
             </div>
           </fieldset>
+          {uploads.draftNotice && (
+            <p className="invitation-field-hint" role="status">
+              {uploads.draftNotice}
+            </p>
+          )}
+          {uploads.busy && (
+            <button
+              type="button"
+              className="visitor-button"
+              onClick={uploads.cancel}
+            >
+              取消上传，保留草稿
+            </button>
+          )}
           {uncertain && (
             <p className="invitation-submit-error" role="status">
               尚未确认发布结果。请重试核对；本次内容暂时锁定，以免重复投稿。
@@ -224,7 +244,7 @@ export function ContributionForm({
           <div className="invitation-submit-row">
             <p>
               {uploads.busy
-                ? '照片正在上传，完成后即可发布。'
+                ? '正在压缩并上传照片，请保留当前页面。'
                 : uploads.failed
                   ? '请重试失败照片，或移除后再发布。'
                   : '投稿成功后会直接展示在回忆墙。'}
@@ -232,7 +252,7 @@ export function ContributionForm({
             <button
               className="invitation-submit"
               type="submit"
-              disabled={isSubmitting || uploads.busy || uploads.failed}
+              disabled={isSubmitting || uploads.restoring}
             >
               {isSubmitting
                 ? '正在发布…'

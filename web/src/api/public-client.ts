@@ -32,8 +32,16 @@ export function publicGet<T>(
 ) {
   return publicRequest<T>({ method: 'GET', url, signal, params }, ['OK'])
 }
-export function publicPost<T>(url: string, data: unknown, signal: AbortSignal) {
-  return publicRequest<T>({ method: 'POST', url, data, signal }, [
+export function publicPost<T>(
+  url: string,
+  data: unknown,
+  signal: AbortSignal,
+  options?: Pick<
+    AxiosRequestConfig,
+    'timeout' | 'headers' | 'onUploadProgress'
+  >,
+) {
+  return publicRequest<T>({ method: 'POST', url, data, signal, ...options }, [
     'INVITATION_CREATED',
     'INVITATION_UPDATED',
     'MEMORY_CREATED',

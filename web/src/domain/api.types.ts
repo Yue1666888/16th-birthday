@@ -43,6 +43,7 @@ export interface InvitationStats {
   }
 }
 export interface ImageItem {
+  thumbnailUrl?: string | null
   id: string
   url: string
   width: number | null

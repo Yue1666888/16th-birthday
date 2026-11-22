@@ -62,8 +62,12 @@ export async function mockInvitationApi(
       )
     }
     if (path === '/api/v1/media/images') {
-      const number = ++state.uploads
-      if (number === 1 && options.holdFirstUpload) await options.holdFirstUpload
+      const uploadNumber = ++state.uploads
+      const data = request.postDataBuffer()?.toString('latin1') || ''
+      const match = /filename="([123])\.png"/.exec(data)
+      const number = match ? Number(match[1]) : uploadNumber
+      if (uploadNumber === 1 && options.holdFirstUpload)
+        await options.holdFirstUpload
       return ok(
         {
           id: '10000000-0000-4000-8000-' + String(number).padStart(12, '0'),
@@ -73,7 +77,7 @@ export async function mockInvitationApi(
         },
         'IMAGE_UPLOADED',
         201,
-        number === 1
+        uploadNumber === 1
           ? {
               'set-cookie':
                 'birthday_upload_session=upload-test; Path=/api/v1; HttpOnly; SameSite=Lax',

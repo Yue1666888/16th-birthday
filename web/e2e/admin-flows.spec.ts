@@ -93,6 +93,10 @@ test('version conflicts keep form content and require discard confirmation', asy
 test('honors support required fields, nine uploaded photos, ordering, creation and deletion', async ({
   page,
 }) => {
+  let uploads = 0
+  page.on('request', (request) => {
+    if (request.url().includes('/media/images')) uploads++
+  })
   const db = await mockApi(page)
   await page.goto('/admin/honors')
   await page.getByRole('button', { name: '新增荣誉', exact: true }).click()
@@ -113,6 +117,7 @@ test('honors support required fields, nine uploaded photos, ordering, creation a
     })),
   )
   await expect(page.locator('.photo-tile img')).toHaveCount(9)
+  expect(uploads).toBe(0)
   await expect(
     page.getByRole('button', { name: '新增', exact: true }),
   ).toBeEnabled()
@@ -123,6 +128,7 @@ test('honors support required fields, nine uploaded photos, ordering, creation a
     page.getByText('前端集成测试荣誉', { exact: true }),
   ).toBeVisible()
   expect(db.getHonors()[0].images).toHaveLength(9)
+  expect(uploads).toBe(9)
   await page.getByRole('button', { name: '删除', exact: true }).first().click()
   await page
     .getByRole('alertdialog')

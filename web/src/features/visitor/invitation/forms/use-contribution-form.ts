@@ -44,10 +44,11 @@ export function useContributionForm(onPublished: () => void) {
       attempt: frozen.current,
     })
   useLayoutEffect(() => {
+    if (uploads.restoring) return
     images.current = uploads.items.flatMap((item) =>
       item.image ? [item.image] : [],
     )
-    const ids = images.current.map((image) => image.id)
+    const ids = uploads.items.map((item) => item.image?.id || item.key)
     if (JSON.stringify(ids) !== JSON.stringify(form.getValues('imageIds')))
       form.setValue('imageIds', ids, {
         shouldValidate: true,
@@ -62,7 +63,7 @@ export function useContributionForm(onPublished: () => void) {
         images: images.current,
         attempt: frozen.current,
       })
-  }, [uploads.items, form])
+  }, [uploads.items, uploads.restoring, form])
   useEffect(() => {
     const subscription = form.subscribe({
       formState: { values: true },
@@ -86,26 +87,28 @@ export function useContributionForm(onPublished: () => void) {
   }, [form])
   const submit = (event: FormEvent<HTMLFormElement>) =>
     form.handleSubmit(async (value) => {
-      if (uploads.busy || uploads.failed) return
-      const payload = frozen.current || {
-        submissionId: newSubmissionId(),
-        displayName: value.displayName || null,
-        title: value.title || null,
-        content: value.content || null,
-        imageIds: [...value.imageIds],
-      }
-      frozen.current = payload
-      setAttempt(payload)
-      persist()
+      if (uploads.busy || uploads.restoring) return
       setError(null)
       const controller = new AbortController()
       request.current = controller
       try {
+        const uploaded = frozen.current ? null : await uploads.uploadAll()
+        const payload = frozen.current || {
+          submissionId: newSubmissionId(),
+          displayName: value.displayName || null,
+          title: value.title || null,
+          content: value.content || null,
+          imageIds: uploaded!.map((image) => image.id),
+        }
+        images.current = uploaded || images.current
+        frozen.current = payload
+        setAttempt(payload)
+        persist()
         const saved = await publishMemory(payload, controller.signal)
         sent.current = true
         frozen.current = null
         setAttempt(null)
-        uploads.clear()
+        await uploads.clear()
         form.reset(emptyContribution)
         removeDraft(memoryDraftKey)
         setResult(saved)

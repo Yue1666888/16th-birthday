@@ -18,11 +18,24 @@ export const honorsApi = {
       method: 'DELETE',
       params: { expectedVersion: version, requestId },
     }),
-  upload: (file: File, signal?: AbortSignal) => {
+  upload: (
+    file: File,
+    signal: AbortSignal,
+    progress?: (value: number) => void,
+    uploadId?: string,
+  ) => {
     const data = new FormData()
     data.append('file', file)
     return request<ImageItem>({
       url: '/media/images',
+      timeout: 150000,
+      headers: uploadId ? { 'X-Upload-ID': uploadId } : undefined,
+      onUploadProgress: (event) => {
+        if (event.total)
+          progress?.(
+            Math.min(100, Math.round((event.loaded / event.total) * 100)),
+          )
+      },
       method: 'POST',
       data,
       signal,

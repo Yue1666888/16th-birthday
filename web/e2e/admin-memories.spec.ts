@@ -329,6 +329,9 @@ test('image-only memories accept nine uploaded pictures and reject a tenth', asy
     })),
   )
   await expect(page.locator('.photo-tile img')).toHaveCount(9)
+  expect(
+    state.calls.filter((call) => call.path === '/api/v1/media/images'),
+  ).toHaveLength(0)
   await page
     .locator('#memory-files')
     .setInputFiles({ name: 'extra.png', mimeType: 'image/png', buffer })

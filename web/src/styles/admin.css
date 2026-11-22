@@ -1493,3 +1493,12 @@
   font-size: 12px;
   width: max-content;
 }
+
+.upload-phase {
+  display: block;
+  padding: 4px 6px;
+  font-size: 11px;
+  color: #526079;
+  line-height: 1.6;
+  background: #f5f8fc;
+}
