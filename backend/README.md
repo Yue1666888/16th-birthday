@@ -130,3 +130,7 @@ docker run -d --name birthday16-api --restart unless-stopped --env-file .env.pro
 ## 回忆姓名墙统计
 
 新增公开GET /api/v1/memories/names，从全部memories汇总非空display_name，返回totalSubmissions/namedSubmissions/names（name、submissionCount、weight）。投稿数而非图片数作为权重，分母包含匿名投稿；只读聚合，不建人员表，不改schema。52项本机独立库测试通过，覆盖跨分页统计与空/匿名投稿。新JAR已重启，云库接口返回正常空数组。
+
+## 邀请函预置更新
+
+固定邮件预览的主题/文本/HTML已按新邀请函稿件同步为“山海几重，今盼汝归”，包含2026年12月19日及天津理工大学7号教学楼115室。模板版本invitation-16th-v2参与预览哈希，HTML姓名继续一次性转义替换。新增模板单元测试，19项普通测试通过；未提交真实试发任务。前端单发/群发预置与主动载入入口见[邀请函浮窗与音乐续播](../邀请函浮窗与音乐续播.md)。
