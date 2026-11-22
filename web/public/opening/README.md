@@ -17,3 +17,7 @@ The runtime uses B01 for the main balloon and B02 for the foreground wipe. S01 i
 Extraction: `ffmpeg -i INPUT -map 0:a:0 -c:a copy -movflags +faststart return-to-115.m4a`.
 
 The audio is requested after the visitor clicks Start, at a controlled volume. It is optional and is paused when the story is paused or hidden.
+
+## Visual revision v2
+
+Seven additional frame/sky/light images are under `v2/`, with source PNGs and exact built-in-imagegen prompts in `frontend-sources/opening-assets/v2/assets-manifest.json`. Dialogue/narration text remains live HTML. Two generated lamp states per viewport are combined with the original normal frame and clipped to the tube area during playback.
