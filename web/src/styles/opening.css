@@ -2085,8 +2085,8 @@
   padding-inline: 12px;
 }
 .opening-letter-cover {
-  width: calc(54dvh * 1080 / 1540);
-  height: 54dvh;
+  width: calc(48dvh * 1080 / 1540);
+  height: 48dvh;
 }
 .opening-letter-cover > img {
   width: 100%;
@@ -2094,7 +2094,7 @@
   object-fit: contain;
 }
 .opening-mobile .opening-letter-cover {
-  width: min(70vw, 36.46dvh);
+  width: min(70vw, 29.46dvh);
   height: auto;
   aspect-ratio: 1080 / 1540;
 }

@@ -100,6 +100,11 @@ test.describe('touch devices', () => {
         (img: HTMLImageElement) => img.complete && img.naturalWidth > 0,
       ),
     ).toBeTruthy()
+    const coverBounds = (await cover.boundingBox())!
+    const coverCaption = (await page.locator('.opening-caption').boundingBox())!
+    expect(coverBounds.y + coverBounds.height).toBeLessThanOrEqual(
+      coverCaption.y,
+    )
     await page.screenshot({ path: testInfo.outputPath('cover-phone.png') })
     await page.getByRole('button', { name: '打开邀请函', exact: true }).click()
     await page.clock.runFor(1700)
