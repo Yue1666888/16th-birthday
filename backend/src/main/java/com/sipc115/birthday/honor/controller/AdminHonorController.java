@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/admin/honors")
 public class AdminHonorController {
+    private final com.sipc115.birthday.common.cache.PublicWallCache cache;
     private final HonorService service;
     private final UploadOwnershipService owners;
 
-    public AdminHonorController(HonorService service, UploadOwnershipService owners) {
-        this.service = service;
+    public AdminHonorController(com.sipc115.birthday.common.cache.PublicWallCache cache, HonorService service, UploadOwnershipService owners) {
+        this.cache=cache; this.service = service;
         this.owners = owners;
     }
 
@@ -38,7 +39,7 @@ public class AdminHonorController {
     @PostMapping
     public ResponseEntity<CommonResponse<HonorAdminResponse>> create(
             @RequestBody HonorCreateRequest request, HttpServletRequest http) {
-        return CommonResponse.toEntity(service.create(request, owners.current(http)));
+        return CommonResponse.toEntity(cache.afterWrite(service.create(request, owners.current(http))));
     }
 
     @PatchMapping("/{id}")
@@ -47,7 +48,7 @@ public class AdminHonorController {
             @RequestBody HonorPatchRequest request,
             HttpServletRequest http) {
         return CommonResponse.toEntity(
-                service.update(RequestValues.id(id), request, owners.current(http)));
+                cache.afterWrite(service.update(RequestValues.id(id), request, owners.current(http))));
     }
 
     @DeleteMapping("/{id}")
@@ -56,6 +57,6 @@ public class AdminHonorController {
             @RequestParam String expectedVersion,
             @RequestParam String requestId) {
         return CommonResponse.toEntity(
-                service.delete(RequestValues.id(id), expectedVersion, requestId));
+                cache.afterWrite(service.delete(RequestValues.id(id), expectedVersion, requestId)));
     }
 }

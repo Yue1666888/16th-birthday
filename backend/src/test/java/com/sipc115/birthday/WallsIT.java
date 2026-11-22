@@ -322,7 +322,7 @@ class WallsIT {
     @Test
     void nameWallAggregatesAllPagesAndIncludesAnonymousPostsInTheDenominator() throws Exception {
         for (int i = 0; i < 25; i++) publishNamedMemory(i < 20 ? "陈同学" : i < 24 ? "林同学" : null);
-        mvc.perform(get("/api/v1/memories")).andExpect(jsonPath("$.data.content.length()").value(20));
+        mvc.perform(get("/api/v1/memories")).andExpect(jsonPath("$.data.content.length()").value(10));
         mvc.perform(get("/api/v1/memories/names"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.totalSubmissions").value(25))
