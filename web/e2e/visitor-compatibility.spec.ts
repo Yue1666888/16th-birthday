@@ -79,7 +79,7 @@ test.describe('touch devices', () => {
       '12.10',
     )
     await expect(page.getByText(/轻点文字/)).toHaveCount(0)
-    await expect(page.locator('.opening-memory-controls')).toHaveText('')
+    await expect(page.locator('.opening-memory-controls')).toHaveCount(0)
     await expect(page.locator('.opening-bottom')).toHaveText('')
     for (const height of [700, 600]) {
       await page.setViewportSize({ width: 390, height })

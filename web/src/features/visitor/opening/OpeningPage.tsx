@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
   ArrowRight,
-  ChevronLeft,
-  ChevronRight,
   List,
   Pause,
   Play,
@@ -14,12 +12,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router'
 import { useVisitorView } from '@/hooks/use-visitor-view'
 import { useVisitorExperience } from '../experience/context'
 import { openingDuration, openingScenes } from './script'
-import {
-  advanceOpening,
-  initialPlayback,
-  releaseOpening,
-  turnMemoryPage,
-} from './playback'
+import { advanceOpening, initialPlayback, releaseOpening } from './playback'
 import { useOpeningAssets } from './use-opening-assets'
 import { useStagedLoading } from './use-staged-loading'
 import { useOpeningEnvironment } from './use-opening-environment'
@@ -163,6 +156,17 @@ export function OpeningPage() {
       data-scene={started ? scene.id : 'S00'}
       data-paused={stopped}
       data-reduced={reduced}
+      onClick={(event) => {
+        if (!started || !paused || chapters) return
+        const target = event.target
+        if (
+          target instanceof Element &&
+          !target.closest(
+            '.opening-topbar, .opening-chapters, .opening-scene-actions, .opening-buffer, .opening-audio-notice, a, input, select, textarea',
+          )
+        )
+          setPaused(false)
+      }}
     >
       <h1 className="opening-sr-only">回到115的风 · SIPC十六周年邀请函</h1>
       <header className="opening-topbar">
@@ -325,31 +329,6 @@ export function OpeningPage() {
                   {action}
                   <ArrowRight size={18} />
                 </button>
-              )}
-              {scene.id === 'S05' && (
-                <div className="opening-memory-controls">
-                  <button
-                    aria-label="上一页回忆"
-                    disabled={state.time < 9}
-                    onClick={() => {
-                      setState((s) => turnMemoryPage(s, -1))
-                      setPaused(true)
-                    }}
-                  >
-                    <ChevronLeft size={18} />
-                  </button>
-
-                  <button
-                    aria-label="下一页回忆"
-                    disabled={state.time >= 27}
-                    onClick={() => {
-                      setState((s) => turnMemoryPage(s, 1))
-                      setPaused(true)
-                    }}
-                  >
-                    <ChevronRight size={18} />
-                  </button>
-                </div>
               )}
               {scene.id === 'S11' &&
                 (homePrefetchFailed ? (

@@ -329,23 +329,36 @@
 }
 .opening-door-number {
   position: absolute;
-  top: 26.3%;
-  left: 50%;
-  translate: -50% -50%;
+  /* Coordinates are relative to the 850×1700 portrait art, not the viewport. */
+  top: 25.3%;
+  left: 39.5%;
+  width: 21.2%;
+  height: 5.1%;
+  display: grid;
+  place-items: center;
   color: #544b3b;
   font:
     bold clamp(14px, 2.5dvh, 27px) Georgia,
     serif;
-  letter-spacing: 2px;
+  line-height: 1;
+  letter-spacing: 0;
 }
 .opening-door-banner {
   position: absolute;
-  top: 35%;
-  right: 7%;
-  writing-mode: vertical-rl;
+  top: 27.6%;
+  left: 80.2%;
+  width: 14.2%;
+  height: 20.6%;
+  display: grid;
+  place-items: center;
   color: #f5cb72;
   font: 700 clamp(14px, 2.2dvh, 22px) serif;
+}
+.opening-door-banner > span {
+  writing-mode: vertical-rl;
+  line-height: 1;
   letter-spacing: 8px;
+  text-indent: 8px;
 }
 .opening-lamp-glow {
   position: absolute;
@@ -748,25 +761,6 @@
   font-size: 8px;
   rotate: 8deg;
   color: #8c784d;
-}
-.opening-memory-controls {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 2px 8px;
-  border-radius: 40px;
-  background: #ffffefca;
-  font: 11px monospace;
-}
-.opening-memory-controls button {
-  min-width: 44px;
-  min-height: 44px;
-  background: transparent;
-  display: grid;
-  place-items: center;
-}
-.opening-memory-controls button:disabled {
-  opacity: 0.3;
 }
 .opening-letter-shade {
   position: absolute;
@@ -1596,9 +1590,6 @@
 .opening-bird span {
   font-size: 11px;
 }
-.opening-memory-controls {
-  font-size: 16px;
-}
 .opening-buffer > p {
   font-size: 18px;
   line-height: 1.8;
@@ -1828,9 +1819,6 @@
   .opening-mobile[data-scene='S05'] .opening-scene-actions {
     bottom: max(6%, calc(env(safe-area-inset-bottom) + 35px));
   }
-  .opening-mobile .opening-memory-controls {
-    font-size: 15px;
-  }
   .opening-mobile .opening-caption.is-letter-copy {
     bottom: 16%;
     width: 94%;
@@ -2038,7 +2026,12 @@
 /* Keep the history card and dialogue in separate rows, including short phone viewports. */
 .opening-mobile[data-scene='S05'] .opening-stage {
   display: grid;
-  grid-template-rows: minmax(100px, 22dvh) minmax(245px, 1fr) max-content 54px;
+  /* Reserve the dialogue row even during the gaps between typed lines. */
+  grid-template-rows: minmax(100px, 22dvh) minmax(245px, 1fr) clamp(
+      210px,
+      30dvh,
+      252px
+    );
   gap: 10px;
   padding-bottom: env(safe-area-inset-bottom);
   overflow-y: auto;
@@ -2061,28 +2054,17 @@
   translate: none;
   grid-row: 3;
   justify-self: center;
-  align-self: center;
+  align-self: start;
   margin: 0;
   padding-block: 30px 22px;
 }
 .opening-mobile[data-scene='S05'] .opening-scene-actions {
-  position: relative;
-  inset: auto;
-  translate: none;
-  grid-row: 4;
-  justify-self: center;
-  align-self: center;
-  width: auto;
-  margin: 0;
+  display: none;
 }
 .opening-bottom {
   padding: 0;
   height: 2px;
   background: none;
-}
-.opening-memory-controls {
-  gap: 20px;
-  padding-inline: 12px;
 }
 .opening-letter-cover {
   width: calc(48dvh * 1080 / 1540);

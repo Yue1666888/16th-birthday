@@ -49,18 +49,6 @@ export function releaseOpening(state: OpeningPlayback): OpeningPlayback {
   }
 }
 
-export function turnMemoryPage(
-  state: OpeningPlayback,
-  direction: -1 | 1,
-): OpeningPlayback {
-  if (openingScenes[state.index].id !== 'S05') return state
-  return {
-    ...state,
-    // Manual browsing pauses after the entrance fade, so the selected photo stays visible.
-    time: clamp(Math.floor(state.time / 9) + direction, 0, 3) * 9 + 0.8,
-  }
-}
-
 export function typedText(
   text: string,
   elapsed: number,

@@ -84,12 +84,16 @@ test('the balloon approaches automatically and boarding waits for confirmation',
   )
 })
 
-test('cloud photo pages pause for reading and survive phone/desktop changes', async ({
+test('cloud photos rotate automatically, pause for reading and survive viewport changes', async ({
   page,
 }) => {
   await begin(page)
   await chapter(page, '云里的四页旧时光')
-  await page.getByRole('button', { name: '下一页回忆', exact: true }).click()
+  await expect(
+    page.getByRole('button', { name: /[上下]一页回忆/ }),
+  ).toHaveCount(0)
+  await page.clock.runFor(10000)
+  await page.getByRole('button', { name: '暂停旅程', exact: true }).click()
   await expect(page.locator('.opening-photo-row img')).toHaveCount(2)
   await expect(page.locator('.opening-memory-cloud')).toHaveCSS('opacity', '1')
   await expect(

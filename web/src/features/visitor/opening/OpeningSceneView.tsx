@@ -39,7 +39,9 @@ function Picture({
       />
       {id === 'M04' && <span className="opening-door-number">115</span>}
       {doorway && mobile && (
-        <span className="opening-door-banner">欢迎回家</span>
+        <span className="opening-door-banner">
+          <span>欢迎回家</span>
+        </span>
       )}
     </div>
   )

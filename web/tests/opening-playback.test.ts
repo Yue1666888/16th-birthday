@@ -3,7 +3,6 @@ import {
   advanceOpening,
   initialPlayback,
   releaseOpening,
-  turnMemoryPage,
   typedText,
 } from '../src/features/visitor/opening/playback'
 import { openingScenes } from '../src/features/visitor/opening/script'
@@ -52,13 +51,6 @@ describe('interactive opening clock', () => {
     expect(advanceOpening({ ...initialPlayback, index: 10 }, 7).finished).toBe(
       true,
     )
-  })
-
-  it('turns memory pages without carrying over a partially read caption', () => {
-    const page = { ...initialPlayback, index: 4, time: 13.4 }
-    expect(turnMemoryPage(page, 1).time).toBe(18.8)
-    expect(turnMemoryPage(page, -1).time).toBe(0.8)
-    expect(turnMemoryPage({ ...page, time: 35 }, 1).time).toBe(27.8)
   })
 
   it('types unicode characters progressively and leaves time to read the full line', () => {
