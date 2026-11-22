@@ -38,6 +38,8 @@ Vite同时监听局域网，手机连接同一Wi-Fi后使用启动输出的Netwo
 
 浏览器流程使用5175的独立测试配置，测试专属认证适配器与截获API；生产vite.config.ts不包含认证绕过。默认使用本机Chrome，无需下载另一套浏览器。后端真实MySQL集成测试在birthday16_test独立验证，不向真实邮箱试发或向云端上传测试图片。
 
+开发服务的Vite依赖缓存为node_modules/.vite-dev，E2E为node_modules/.vite-e2e；两者必须分开，避免测试认证适配器使真实后台的keycloak-js加载出现504 Outdated Optimize Dep。开发配置预优化keycloak-js，以支持直接打开/admin。自动化后台流程使用测试身份，真实SSO还需另行打开/admin确认能够到达社团登录页；不用在测试脚本里填写成员密码。2026-11-22已复现旧缓存故障、隔离修复，并在后台测试结束后重新验证真实SSO跳转。
+
 构建产物为dist。Docker构建位置仍可选择“Docker内构建”或“预构建dist再封装”，本轮未发布到服务器。
 
 ## 115编年史

@@ -5,7 +5,10 @@ import { defineConfig, loadEnv } from 'vite'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
+    // Keep the running development optimizer separate from the E2E auth alias.
+    cacheDir: 'node_modules/.vite-dev',
     plugins: [react(), tailwindcss()],
+    optimizeDeps: { include: ['keycloak-js'] },
     resolve: {
       alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
     },

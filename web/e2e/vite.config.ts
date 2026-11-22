@@ -4,6 +4,8 @@ import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
 // Test-only alias: the production Vite configuration contains no authentication bypass.
 export default defineConfig({
+  // This server replaces auth.client; sharing its optimizer breaks real SSO in dev.
+  cacheDir: 'node_modules/.vite-e2e',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: [
