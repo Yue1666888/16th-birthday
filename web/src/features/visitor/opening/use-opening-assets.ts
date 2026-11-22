@@ -43,10 +43,12 @@ export function useOpeningAssets(mobile: boolean) {
   const [attempt, setAttempt] = useState(0)
   const [fontReady, setFontReady] = useState(false)
   const core: [string, number][] = [
-    [openingAssets[mobile ? 'M01' : 'D01'], 30],
-    [openingAssets.B01, 20],
-    [openingAssets[mobile ? 'M02' : 'D02'], 25],
-    ['/brand/sipc-emblem.png', 15],
+    [openingAssets[mobile ? 'M01' : 'D01'], 25],
+    [openingAssets.B01, 15],
+    [openingAssets[mobile ? 'M02' : 'D02'], 20],
+    ['/brand/sipc-emblem.png', 10],
+    [openingAssets.DIALOGUE, 10],
+    [openingAssets.NARRATION, 10],
   ]
   useEffect(() => {
     let active = true
@@ -63,6 +65,8 @@ export function useOpeningAssets(mobile: boolean) {
       openingAssets.B01,
       openingAssets[mobile ? 'M02' : 'D02'],
       '/brand/sipc-emblem.png',
+      openingAssets.DIALOGUE,
+      openingAssets.NARRATION,
     ]
     const rest = [
       ...new Set(

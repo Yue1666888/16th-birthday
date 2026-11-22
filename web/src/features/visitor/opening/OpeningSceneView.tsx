@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { CSSProperties } from 'react'
 import { openingAssets } from './assets'
 import type { OpeningAssetId } from './assets'
@@ -190,6 +191,54 @@ function MemoryCloud({
   )
 }
 
+function SkyClouds({
+  time,
+  mobile,
+  reduced,
+}: {
+  time: number
+  mobile: boolean
+  reduced: boolean
+}) {
+  const [clouds] = useState(() =>
+    Array.from({ length: 8 }, () => ({
+      phase: Math.random() * 140,
+      top: 6 + Math.random() * 43,
+      width: 9 + Math.random() * 7,
+      speed: 1.2 + Math.random() * 1.5,
+      opacity: 0.65 + Math.random() * 0.25,
+    })),
+  )
+  return (
+    <>
+      {clouds.slice(0, mobile ? 5 : 8).map((cloud, index) => (
+        <img
+          key={index}
+          className="opening-sky-cloud"
+          src={openingAssets.CLOUD}
+          alt=""
+          style={{
+            left: `${115 - ((cloud.phase + (reduced ? 0 : time * cloud.speed)) % 145)}%`,
+            top: `${cloud.top}%`,
+            width: `${cloud.width * (mobile ? 1.4 : 1)}%`,
+            opacity: cloud.opacity,
+          }}
+        />
+      ))}
+    </>
+  )
+}
+
+const balloonPaths = [
+  { from: [26, 96], to: [83, 0], height: 17, delay: 0, duration: 7.2 },
+  { from: [52, 83], to: [96, 4], height: 11, delay: 0.7, duration: 8 },
+  { from: [68, 54], to: [113, -14], height: 8, delay: 0.2, duration: 10 },
+  { from: [80, 26], to: [120, -20], height: 14, delay: 1.1, duration: 7.8 },
+  { from: [88, 48], to: [128, 2], height: 6, delay: 0, duration: 9 },
+  { from: [39, 40], to: [90, -24], height: 21, delay: 1.6, duration: 8.5 },
+  { from: [10, 85], to: [76, -10], height: 10, delay: 0.5, duration: 9 },
+  { from: [14, 110], to: [38, 36], height: 9, delay: 0.4, duration: 8.4 },
+] as const
 function DistantBalloons({
   time,
   mobile,
@@ -201,19 +250,28 @@ function DistantBalloons({
 }) {
   return (
     <>
-      {Array.from({ length: mobile ? 4 : 6 }, (_, i) => {
-        const progress = clamp((time - i * 0.4) / 5)
+      {balloonPaths.slice(0, mobile ? 5 : 8).map((path, index) => {
+        const progress = reduced
+          ? 0.5
+          : clamp((time - path.delay) / path.duration)
+        const x = path.from[0] + (path.to[0] - path.from[0]) * progress
+        const y =
+          path.from[1] +
+          (path.to[1] - path.from[1]) * progress +
+          (reduced ? 0 : Math.sin(time * 0.8 + index * 1.9) * 2)
+        const cell = index % 6
         return (
           <svg
-            key={i}
+            key={index}
             className="opening-distant-balloon"
             aria-hidden="true"
-            viewBox={`${(i % 3) * 512} ${Math.floor(i / 3) * 512} 512 512`}
+            viewBox={`${(cell % 3) * 512} ${Math.floor(cell / 3) * 512} 512 512`}
             style={{
-              left: `${8 + i * 11 + (reduced ? 0 : progress * 30)}%`,
-              top: `${78 - i * 5 - (reduced ? 30 : progress * 60)}%`,
-              height: `${10 + (i % 3) * 3}%`,
-              opacity: ease((time - i * 0.4) / 0.8),
+              left: `${x}%`,
+              top: `${y}%`,
+              height: `${path.height * (mobile ? 0.85 : 1)}%`,
+              opacity: ease((time - path.delay) / 0.7),
+              rotate: `${reduced ? 0 : Math.sin(time * 0.6 + index) * 4}deg`,
             }}
           >
             <image href={openingAssets.S05} width="1536" height="1024" />
@@ -221,6 +279,26 @@ function DistantBalloons({
         )
       })}
     </>
+  )
+}
+
+function LampFrames({ mobile }: { mobile: boolean }) {
+  return (
+    <div
+      className={`opening-door-frame opening-lamp-frame ${mobile ? 'is-portrait' : ''}`}
+      style={{ transform: 'translate(-50%, -50%) scale(1.12)' }}
+    >
+      <img
+        className="opening-lamp-off"
+        src={openingAssets[mobile ? 'LMO' : 'LDO']}
+        alt=""
+      />
+      <img
+        className="opening-lamp-bright"
+        src={openingAssets[mobile ? 'LMB' : 'LDB']}
+        alt=""
+      />
+    </div>
   )
 }
 
@@ -334,19 +412,7 @@ export function OpeningSceneView({
       }}
     >
       {picture('D03', 'M03')}
-      {!reduced && (
-        <img
-          className="opening-passing-cloud"
-          src={openingAssets.S03}
-          alt=""
-          style={{
-            left: `${110 - ((time % 24) / 24) * 160}%`,
-            top: '5%',
-            opacity: 0.45,
-            width: mobile ? '65%' : '28%',
-          }}
-        />
-      )}
+      <SkyClouds time={flightTime} mobile={mobile} reduced={reduced} />
     </div>
   )
   return (
@@ -385,7 +451,7 @@ export function OpeningSceneView({
           {picture('D02', 'M02', 1, 1.015)}
           <div
             className="opening-scene-veil"
-            style={{ background: '#172b32', opacity: ease((time - 8.6) / 0.4) }}
+            style={{ background: '#fff5dc', opacity: ease((time - 8.6) / 0.4) }}
           />
         </>
       )}
@@ -421,21 +487,19 @@ export function OpeningSceneView({
             }
             time={reduced ? 0 : time}
           />
-          <img
-            className="opening-passing-cloud"
-            src={openingAssets.S03}
-            alt=""
-            style={{ left: `${105 - clamp(time / 7) * 150}%`, top: '62%' }}
-          />
+          <SkyClouds time={time} mobile={mobile} reduced={reduced} />
           <div
             className="opening-scene-veil"
-            style={{ background: '#172b32', opacity: 1 - ease(time / 0.4) }}
+            style={{ background: '#fff5dc', opacity: 1 - ease(time / 0.4) }}
           />
         </>
       )}
       {(id === 'S05' || id === 'S06') && (
         <>
           {flight}
+          {id === 'S06' && (
+            <DistantBalloons time={time} mobile={mobile} reduced={reduced} />
+          )}
           <Balloon
             x={19}
             y={mobile ? 18 : 47}
@@ -446,7 +510,6 @@ export function OpeningSceneView({
             <MemoryCloud time={time} mobile={mobile} reduced={reduced} />
           ) : (
             <>
-              <DistantBalloons time={time} mobile={mobile} reduced={reduced} />
               <Balloon
                 x={-15 + ease((time - 4.5) / 2.5) * 65}
                 y={85 - ease((time - 4.5) / 2.5) * 35}
@@ -491,12 +554,7 @@ export function OpeningSceneView({
       {id === 'S08' && (
         <>
           {picture('D05', 'M05', 1, 1.12)}
-          <div
-            className="opening-lamp-glow"
-            style={{
-              opacity: reduced ? 0.15 : 0.15 + Math.sin(time * 2.1) * 0.04,
-            }}
-          />
+          {!reduced && <LampFrames mobile={mobile} />}
           {time > 5.2 && (
             <>
               {picture('D06', 'M06', ease((time - 6.2) / 0.8))}

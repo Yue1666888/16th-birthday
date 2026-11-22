@@ -21,6 +21,7 @@ import {
   turnMemoryPage,
 } from './playback'
 import { useOpeningAssets } from './use-opening-assets'
+import { useStagedLoading } from './use-staged-loading'
 import { useOpeningEnvironment } from './use-opening-environment'
 import { OpeningSceneView } from './OpeningSceneView'
 import { OpeningCaption } from './OpeningCaption'
@@ -44,8 +45,9 @@ export function OpeningPage() {
   const { reduced, hidden } = useOpeningEnvironment()
   const assets = useOpeningAssets(mobile)
   const [started, setStarted] = useState(false)
+  const displayedProgress = useStagedLoading(assets.progress, !started)
+  const readyToStart = assets.ready && displayedProgress === 100
   const [paused, setPaused] = useState(false)
-  const [walking, setWalking] = useState(false)
   const [chapters, setChapters] = useState(false)
   const [muted, setMuted] = useState(false)
   const [audioNotice, setAudioNotice] = useState('')
@@ -119,46 +121,17 @@ export function OpeningPage() {
       if (elapsed >= 1000 / 30) {
         previous = now
         setState((s) =>
-          advanceOpening(s, Math.min(elapsed / 1000, 0.12), walking, nextReady),
+          advanceOpening(s, Math.min(elapsed / 1000, 0.12), nextReady),
         )
       }
       frame = requestAnimationFrame(tick)
     }
     frame = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(frame)
-  }, [started, stopped, walking, nextReady, state.finished])
-
-  useEffect(() => {
-    if (!started || scene.id !== 'S02' || stopped) return
-    const down = (event: KeyboardEvent) => {
-      if (
-        event.code === 'KeyW' &&
-        !event.ctrlKey &&
-        !event.metaKey &&
-        !event.altKey
-      ) {
-        event.preventDefault()
-        setWalking(true)
-      }
-    }
-    const up = (event: KeyboardEvent) => {
-      if (event.code === 'KeyW') setWalking(false)
-    }
-    const stop = () => setWalking(false)
-    window.addEventListener('keydown', down)
-    window.addEventListener('keyup', up)
-    window.addEventListener('blur', stop)
-    document.addEventListener('visibilitychange', stop)
-    return () => {
-      window.removeEventListener('keydown', down)
-      window.removeEventListener('keyup', up)
-      window.removeEventListener('blur', stop)
-      document.removeEventListener('visibilitychange', stop)
-    }
-  }, [started, scene.id, stopped])
+  }, [started, stopped, nextReady, state.finished])
 
   const begin = () => {
-    if (!assets.ready) return
+    if (!readyToStart) return
     setStarted(true)
     playAudio()
     // Prefetch the route module while the first line is being read.
@@ -167,11 +140,9 @@ export function OpeningPage() {
     )
   }
   const release = () => {
-    setWalking(false)
     setState(releaseOpening)
   }
   const jump = (index: number) => {
-    setWalking(false)
     setChapters(false)
     setPaused(false)
     setState({ ...initialPlayback, index })
@@ -239,7 +210,6 @@ export function OpeningPage() {
               <button
                 aria-label={paused ? '继续旅程' : '暂停旅程'}
                 onClick={() => {
-                  setWalking(false)
                   setPaused(!paused)
                 }}
               >
@@ -249,7 +219,6 @@ export function OpeningPage() {
                 aria-label="旅程章节"
                 aria-expanded={chapters}
                 onClick={() => {
-                  setWalking(false)
                   setChapters(!chapters)
                 }}
               >
@@ -273,9 +242,9 @@ export function OpeningPage() {
             <i />
             <i />
           </div>
-          <h2>{assets.ready ? '风已经到了。' : '正在准备，回到115的旅程'}</h2>
+          <h2>{readyToStart ? '风已经到了。' : '正在准备，回到115的旅程'}</h2>
           <p>
-            {assets.ready
+            {readyToStart
               ? '我们出发吧。'
               : '整理行囊中，每一段回忆都值得被好好安放。'}
           </p>
@@ -283,21 +252,22 @@ export function OpeningPage() {
             className="opening-loading-track"
             role="progressbar"
             aria-label="启程资源准备"
-            aria-valuenow={assets.progress}
+            aria-valuenow={displayedProgress}
+            data-resource-progress={assets.progress}
             aria-valuemin={0}
             aria-valuemax={100}
           >
-            <i style={{ width: `${assets.progress}%` }} />
+            <i style={{ width: `${displayedProgress}%` }} />
           </div>
           <div className="opening-loading-detail">
-            <span>LOADING — {assets.progress}%</span>
+            <span>LOADING — {displayedProgress}%</span>
             <span>
-              {assets.ready
+              {readyToStart
                 ? 'READY FOR DEPARTURE'
                 : 'PREPARING OUR MEMORIES ......'}
             </span>
           </div>
-          {assets.ready ? (
+          {readyToStart ? (
             <>
               <button className="opening-start" onClick={begin}>
                 启程 <ArrowRight size={19} />
@@ -362,43 +332,6 @@ export function OpeningPage() {
               />
             )}
             <div className="opening-scene-actions">
-              {scene.id === 'S02' && state.time < 6 && (
-                <>
-                  <button
-                    className="opening-action opening-walk"
-                    disabled={stopped}
-                    onPointerDown={(e) => {
-                      if (e.button !== 0) return
-                      e.currentTarget.setPointerCapture(e.pointerId)
-                      setWalking(true)
-                    }}
-                    onPointerUp={() => setWalking(false)}
-                    onPointerCancel={() => setWalking(false)}
-                    onLostPointerCapture={() => setWalking(false)}
-                    onKeyDown={(e) => {
-                      if (e.key === ' ' || e.key === 'Enter') {
-                        e.preventDefault()
-                        setWalking(true)
-                      }
-                    }}
-                    onKeyUp={() => setWalking(false)}
-                    onBlur={() => setWalking(false)}
-                  >
-                    {walking ? '向着115，继续走…' : '按住，向前走'}
-                    <ArrowRight size={18} />
-                  </button>
-                  <button
-                    className="opening-direct"
-                    disabled={stopped}
-                    onClick={release}
-                  >
-                    直接走近
-                  </button>
-                  <small>
-                    {mobile ? '松开手指就会停下' : '也可以按住 W 前进'}
-                  </small>
-                </>
-              )}
               {action && !state.released && (
                 <button
                   className="opening-action"

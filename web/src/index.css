@@ -73,3 +73,11 @@ button:disabled {
 [hidden] {
   display: none !important;
 }
+
+.reading-phrase {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: top;
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+}

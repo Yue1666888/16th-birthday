@@ -23,19 +23,14 @@ export const ease = (n: number) => {
 export function advanceOpening(
   state: OpeningPlayback,
   delta: number,
-  walking: boolean,
   nextReady = true,
 ): OpeningPlayback {
   if (state.finished || delta <= 0) return state
   const scene = openingScenes[state.index]
-  const waitingForConfirmation =
-    scene.waitAt !== null && !state.released && scene.id !== 'S02'
+  const waitingForConfirmation = scene.waitAt !== null && !state.released
   let time = Math.min(scene.duration, state.time + delta)
-  if (scene.id === 'S02' && !state.released && !walking && state.time < 6) {
-    time = Math.min(time, Math.max(state.time, 1.2))
-  } else if (scene.waitAt !== null && !state.released && scene.id !== 'S02') {
+  if (scene.waitAt !== null && !state.released)
     time = Math.min(time, scene.waitAt)
-  }
   if (time >= scene.duration && nextReady && !waitingForConfirmation) {
     if (state.index === openingScenes.length - 1)
       return { ...state, time, finished: true }
@@ -50,7 +45,7 @@ export function releaseOpening(state: OpeningPlayback): OpeningPlayback {
   return {
     ...state,
     released: true,
-    time: Math.max(state.time, scene.id === 'S02' ? 6 : (scene.waitAt ?? 0)),
+    time: Math.max(state.time, scene.waitAt ?? 0),
   }
 }
 

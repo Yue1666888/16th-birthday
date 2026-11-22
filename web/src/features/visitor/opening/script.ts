@@ -37,16 +37,16 @@ export const openingScenes = [
     id: 'S02',
     title: '走向那只热气球',
     duration: 7,
-    wait: 'walk',
+    wait: null,
     desktop: ['D01', 'B01'],
     mobile: ['M01', 'B01'],
     shots: [
-      '0–1.2秒：道路从画面下方延伸，远处热气球轻轻起伏。',
-      '1.2–6秒：累计向前约4.8秒，镜头沿路推进，气球逐渐放大。',
-      '6–7秒：热气球吊篮接近可登乘的位置，暖色短溶解至登船近景。',
+      '0–1.2秒：远处热气球轻轻起伏。',
+      '1.2–6秒：自动推进镜头，气球从远处逐渐靠近。',
+      '6–7秒：暖白溶解进入登船近景。',
     ],
     interaction:
-      '电脑按住W或屏幕“向前走”；手机按住同名按钮。累计前进而非按键次数，松开暂停；亦可点“直接走近”。未操作时不自动离开。',
+      '自动播放热气球由远及近，不需要按键、按住或确认；对白逐字呈现。',
     start: 8,
     end: 15,
     dialogues: [
@@ -63,7 +63,7 @@ export const openingScenes = [
         text: '学长学姐，这边！',
       },
     ],
-    waitAt: 1.2,
+    waitAt: null,
   },
   {
     id: 'S03',
@@ -108,8 +108,8 @@ export const openingScenes = [
     title: '离地，向着熟悉的方向',
     duration: 7,
     wait: null,
-    desktop: ['D01', 'D03', 'B01', 'S03'],
-    mobile: ['M01', 'M03', 'B01', 'S03'],
+    desktop: ['D01', 'D03', 'B01', 'S03', 'CLOUD'],
+    mobile: ['M01', 'M03', 'B01', 'S03', 'CLOUD'],
     shots: [
       '0–2秒：热气球先向右上方上升；镜头稍慢，球在屏幕里移到右侧。',
       '2–4.5秒：镜头加速追上并略微超过球，球的屏幕位置由右侧滑至左侧。',
@@ -150,6 +150,7 @@ export const openingScenes = [
       'P09',
       'P11',
       'P18',
+      'CLOUD',
     ],
     mobile: [
       'M03',
@@ -162,6 +163,7 @@ export const openingScenes = [
       'P09',
       'P11',
       'P18',
+      'CLOUD',
     ],
     shots: [
       '0–9秒·云页A：DOM时间签2009/602、2010/115、2010.12.10/SIPC，借一朵云呈现起点。',
@@ -230,8 +232,8 @@ export const openingScenes = [
     title: '看，大家都来了',
     duration: 7,
     wait: null,
-    desktop: ['D03', 'B01', 'B02', 'S01', 'S05'],
-    mobile: ['M03', 'B01', 'B02', 'S01', 'S05'],
+    desktop: ['D03', 'B01', 'B02', 'S01', 'S05', 'CLOUD'],
+    mobile: ['M03', 'B01', 'B02', 'S01', 'S05', 'CLOUD'],
     shots: [
       '0–2秒：第一批远景气球从左下方斜向右上方升起。',
       '2–4.5秒：第二批不同颜色气球分层跟上，形成前中远景，不遮挡当前对白。',
@@ -292,8 +294,8 @@ export const openingScenes = [
     title: '那盏熟悉的灯',
     duration: 7,
     wait: 'repair-light',
-    desktop: ['D05'],
-    mobile: ['M05'],
+    desktop: ['D05', 'LDO', 'LDB'],
+    mobile: ['M05', 'LMO', 'LMB'],
     shots: [
       '0–1秒：暗色门内与局部灯管出现。',
       '1–等待：灯管局部做缓慢、不规则明暗变化；房间不做全屏高频闪烁。',

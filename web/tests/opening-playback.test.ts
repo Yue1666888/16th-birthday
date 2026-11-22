@@ -26,37 +26,32 @@ describe('interactive opening clock', () => {
     expect(cursor).toBe(109)
   })
 
-  it('stops walking on release but continues the final approach automatically', () => {
+  it('approaches the balloon automatically without an input gate', () => {
     const start = { ...initialPlayback, index: 1 }
-    const waiting = advanceOpening(start, 2, false)
-    expect(waiting.time).toBe(1.2)
-    const moving = advanceOpening(waiting, 2, true)
-    expect(moving.time).toBe(3.2)
-    expect(advanceOpening(moving, 5, false)).toEqual(moving)
-    const close = advanceOpening(moving, 3, true)
-    expect(advanceOpening(close, 1, false).index).toBe(2)
-    expect(releaseOpening(start).time).toBe(6)
+    expect(advanceOpening(start, 2).time).toBe(2)
+    expect(advanceOpening(start, 7).index).toBe(2)
+    expect(releaseOpening(start)).toEqual(start)
   })
 
   it('gates boarding, door, lamp and letter, and a repeated click cannot replay a transition', () => {
     for (const index of [2, 6, 7, 9]) {
       const scene = openingScenes[index]
-      const waiting = advanceOpening({ ...initialPlayback, index }, 50, false)
+      const waiting = advanceOpening({ ...initialPlayback, index }, 50)
       expect(waiting.time).toBe(scene.waitAt)
       const released = releaseOpening(waiting)
       expect(releaseOpening(released)).toEqual(released)
-      expect(advanceOpening(released, 50, false).index).toBe(index + 1)
+      expect(advanceOpening(released, 50).index).toBe(index + 1)
     }
   })
 
   it('does not move into an undecoded scene and finishes only at the end', () => {
-    const end = advanceOpening(initialPlayback, 10, false, false)
+    const end = advanceOpening(initialPlayback, 10, false)
     expect(end.index).toBe(0)
     expect(end.time).toBe(8)
-    expect(advanceOpening(end, 0.1, false).index).toBe(1)
-    expect(
-      advanceOpening({ ...initialPlayback, index: 10 }, 7, false).finished,
-    ).toBe(true)
+    expect(advanceOpening(end, 0.1).index).toBe(1)
+    expect(advanceOpening({ ...initialPlayback, index: 10 }, 7).finished).toBe(
+      true,
+    )
   })
 
   it('turns memory pages without carrying over a partially read caption', () => {

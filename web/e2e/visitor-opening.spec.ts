@@ -2,10 +2,12 @@ import { expect, test, type Page } from '@playwright/test'
 import { mockInvitationApi } from './invitation-fixtures'
 
 async function begin(page: Page) {
+  await page.clock.install()
   await page.goto('/?replay=1')
   await expect(page.getByRole('progressbar')).toHaveAttribute(
     'aria-valuenow',
     '100',
+    { timeout: 15000 },
   )
   await page.getByRole('button', { name: /^启程/ }).click()
   await expect(page.locator('.opening-app')).toHaveAttribute(
@@ -35,9 +37,8 @@ test('real loader, typed text, pause and optional music work in the desktop open
   expect(partial.length).toBeLessThan(
     '有些地方，离开很久，也不会陌生。│'.length,
   )
-  await page.clock.install()
   await page.clock.runFor(2000)
-  await expect(caption).toHaveText(partial)
+  await expect.poll(() => caption.innerText()).toBe(partial)
   expect(
     await page
       .locator('audio')
@@ -57,22 +58,15 @@ test('real loader, typed text, pause and optional music work in the desktop open
   expect(errors).toEqual([])
 })
 
-test('W walking stops on release and boarding waits for a single confirmation', async ({
+test('the balloon approaches automatically and boarding waits for confirmation', async ({
   page,
 }) => {
   await begin(page)
   await chapter(page, '走向那只热气球')
-  await page.clock.install()
-  await page.clock.runFor(1600)
-  const balloon = page.locator('.opening-balloon')
-  await page.keyboard.down('w')
-  await page.clock.runFor(1600)
-  await page.keyboard.up('w')
-  const size = (await balloon.boundingBox())!.height
-  await page.clock.runFor(2000)
-  expect((await balloon.boundingBox())!.height).toBeCloseTo(size, 0)
-  await page.getByRole('button', { name: '直接走近', exact: true }).click()
-  await page.clock.runFor(1300)
+  await expect(
+    page.getByRole('button', { name: /向前走|直接走近/ }),
+  ).toHaveCount(0)
+  await page.clock.runFor(7500)
   await expect(page.locator('.opening-app')).toHaveAttribute(
     'data-scene',
     'S03',
@@ -123,7 +117,6 @@ test('door, lamp and invitation advance to the existing homepage without changin
   await mockInvitationApi(page)
   await begin(page)
   await chapter(page, '门牌上的三个数字')
-  await page.clock.install()
   await page.getByRole('button', { name: '推开115的门', exact: true }).click()
   await page.clock.runFor(1600)
   await expect(page.locator('.opening-app')).toHaveAttribute(
@@ -161,7 +154,9 @@ test('door, lamp and invitation advance to the existing homepage without changin
   await page
     .getByRole('button', { name: '离开并保留草稿', exact: true })
     .click()
-  await expect(page.getByRole('button', { name: /^启程/ })).toBeVisible()
+  await expect(page.getByRole('button', { name: /^启程/ })).toBeVisible({
+    timeout: 15000,
+  })
 })
 
 test('failed first-scene art stays below 100 percent and retry can recover', async ({
@@ -184,6 +179,7 @@ test('failed first-scene art stays below 100 percent and retry can recover', asy
   await expect(page.getByRole('progressbar')).toHaveAttribute(
     'aria-valuenow',
     '100',
+    { timeout: 15000 },
   )
   await page.getByRole('button', { name: /^启程/ }).click()
   await expect(page.locator('.opening-app')).toHaveAttribute(
@@ -198,40 +194,11 @@ test.describe('phone opening', () => {
     isMobile: true,
     hasTouch: true,
   })
-  test('real touch hold and cancel stop walking; portrait letter fits and reduced motion shows complete text', async ({
+  test('portrait letter and narration frame fit, and reduced motion shows complete text', async ({
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await begin(page)
-    await chapter(page, '走向那只热气球')
-    await page.clock.install()
-    await page.clock.runFor(1300)
-    const button = (await page
-      .getByRole('button', { name: /按住，向前走/ })
-      .boundingBox())!
-    const cdp = await page.context().newCDPSession(page)
-    await cdp.send('Input.dispatchTouchEvent', {
-      type: 'touchStart',
-      touchPoints: [
-        { x: button.x + button.width / 2, y: button.y + button.height / 2 },
-      ],
-    })
-    await expect(
-      page.getByRole('button', { name: /向着115，继续走/ }),
-    ).toBeVisible()
-    await page.clock.runFor(1500)
-    await cdp.send('Input.dispatchTouchEvent', {
-      type: 'touchCancel',
-      touchPoints: [],
-    })
-    await expect(
-      page.getByRole('button', { name: /按住，向前走/ }),
-    ).toBeVisible()
-    await page.clock.runFor(6000)
-    await expect(page.locator('.opening-app')).toHaveAttribute(
-      'data-scene',
-      'S02',
-    )
     await chapter(page, '把邀请，交到你手里')
     await page.clock.runFor(5000)
     const box = (await page.locator('.opening-letter').boundingBox())!

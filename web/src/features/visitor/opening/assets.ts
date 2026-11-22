@@ -24,6 +24,13 @@ export const openingAssets = {
   P09: '/opening/P09.webp',
   P11: '/opening/P11.webp',
   P18: '/opening/P18.webp',
+  DIALOGUE: '/opening/v2/dialogue.webp',
+  NARRATION: '/opening/v2/narration.webp',
+  CLOUD: '/opening/v2/sky-cloud.webp',
+  LDO: '/opening/v2/lamp-desktop-off.webp',
+  LDB: '/opening/v2/lamp-desktop-bright.webp',
+  LMO: '/opening/v2/lamp-mobile-off.webp',
+  LMB: '/opening/v2/lamp-mobile-bright.webp',
 } as const
 
 export type OpeningAssetId = keyof typeof openingAssets

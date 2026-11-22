@@ -1370,3 +1370,589 @@
     padding-right: 12px;
   }
 }
+
+/* Reading-first opening revision: generated frames, large labels and warm fades. */
+.opening-caption {
+  width: min(860px, 84%);
+  bottom: 15%;
+  padding: 40px 48px 28px;
+  min-height: 148px;
+  text-align: center;
+  color: #345459;
+}
+.opening-caption-art {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+.opening-caption.is-dialogue,
+.opening-caption.is-narration {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  text-shadow: none;
+}
+.opening-caption.is-dialogue::before,
+.opening-caption.is-dialogue::after {
+  display: none;
+}
+.opening-caption.is-dialogue {
+  padding: 43px 50px 30px;
+}
+.opening-caption-label {
+  position: absolute;
+  top: 9%;
+  left: 7%;
+  font:
+    800 21px/1.2 Georgia,
+    serif;
+  letter-spacing: 2px;
+  color: #527b91;
+}
+.opening-caption.is-narration .opening-caption-label {
+  top: 3%;
+  left: 8%;
+  color: #987540;
+}
+.opening-speaker {
+  margin: 0 0 4px;
+  font-size: 19px;
+  line-height: 1.5;
+  letter-spacing: 2px;
+  color: #64848b;
+  font-weight: 600;
+}
+.opening-typewriter {
+  font-size: clamp(25px, 2vw, 30px);
+  font-weight: 500;
+  line-height: 1.65;
+  letter-spacing: 1px;
+  min-height: 48px;
+  padding: 4px 0;
+  color: #345459 !important;
+}
+.opening-caption small {
+  font-size: 17px;
+  line-height: 1.5;
+  margin-top: 6px;
+  color: #7a9291;
+  opacity: 0.9;
+  letter-spacing: 1px;
+}
+.opening-last-character {
+  position: relative;
+}
+.opening-last-character::after {
+  content: '';
+  position: absolute;
+  height: 0.9em;
+  border-right: 1px solid #b89b6f;
+  right: -4px;
+  top: 0.12em;
+}
+.opening-caption.is-prologue {
+  top: 36%;
+  bottom: auto;
+  width: min(1050px, 88%);
+  padding: 58px 60px 40px;
+}
+.opening-caption.is-prologue .opening-typewriter {
+  font-size: clamp(28px, 2.7vw, 40px);
+  line-height: 1.7;
+  letter-spacing: 2px;
+}
+.opening-caption.is-prologue .opening-speaker {
+  margin-bottom: 12px;
+}
+.opening-caption.is-letter-copy {
+  bottom: 17%;
+  width: min(740px, 86%);
+}
+.is-night .opening-caption {
+  color: #345459;
+}
+.opening-loader {
+  width: min(720px, 84%);
+  inset: 12% 0 6%;
+}
+.opening-loader-code {
+  font-size: 16px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin-bottom: 28px;
+}
+.opening-loader-symbol {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 20px;
+}
+.opening-loader h2 {
+  font-size: clamp(28px, 2.6vw, 38px);
+  font-weight: 750;
+  line-height: 1.5;
+  letter-spacing: 2px;
+}
+.opening-loader > p {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.9;
+  margin-bottom: 30px;
+}
+.opening-loading-detail {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+.opening-start {
+  font-size: 24px;
+  font-weight: 700;
+  min-height: 58px;
+  min-width: 210px;
+  margin-top: 30px;
+}
+.opening-sound-choice {
+  font-size: 18px;
+  font-weight: 600;
+  min-height: 44px;
+  gap: 10px;
+}
+.opening-sound-choice input {
+  width: 18px;
+  height: 18px;
+}
+.opening-loader-foot {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.8;
+  margin-top: 30px;
+}
+.opening-loader-wait {
+  font-size: 18px;
+  line-height: 1.7;
+}
+.opening-top-controls > .opening-skip {
+  font-size: 17px;
+  font-weight: 600;
+}
+.opening-brand > span {
+  font-size: 24px;
+}
+.opening-brand small {
+  font-size: 12px;
+}
+.opening-action {
+  font-size: 20px;
+  font-weight: 600;
+  min-height: 54px;
+}
+.opening-bottom {
+  font-size: 16px;
+  line-height: 1.5;
+}
+.opening-bottom > span:last-of-type {
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+.opening-prologue-sign {
+  font-size: 16px;
+  top: 72%;
+}
+.opening-memory-cloud {
+  top: 16%;
+  height: 44%;
+}
+.opening-cloud-paper h2 {
+  font-size: 26px;
+  line-height: 1.5;
+}
+.opening-eyebrow {
+  font-size: 14px;
+}
+.opening-history-stamps p {
+  font-size: 19px;
+}
+.opening-history-stamps small {
+  font-size: 16px;
+}
+.opening-history-stamps strong > span {
+  font-size: 14px;
+}
+.opening-photo-row figcaption {
+  font-size: 17px;
+  line-height: 1.5;
+}
+.opening-photo-row {
+  height: calc(100% - 82px);
+}
+.opening-photo-row img {
+  max-height: calc(100% - 40px);
+}
+.opening-bird span {
+  font-size: 11px;
+}
+.opening-memory-controls {
+  font-size: 16px;
+}
+.opening-buffer > p {
+  font-size: 18px;
+  line-height: 1.8;
+}
+.opening-buffer button {
+  font-size: 18px;
+}
+.opening-chapter-panel header span {
+  font-size: 14px;
+}
+.opening-chapter-panel > p {
+  font-size: 17px;
+  line-height: 1.7;
+}
+.opening-chapter-panel li button {
+  font-size: 18px;
+  padding-block: 15px;
+}
+.opening-chapter-panel li button small {
+  font-size: 15px;
+}
+.opening-chapter-continue,
+.opening-resume {
+  font-size: 18px;
+}
+.opening-audio-notice {
+  font-size: 15px;
+  max-width: 420px;
+}
+.opening-letter-code {
+  font-size: 11px;
+  line-height: 1.7;
+}
+.opening-letter p {
+  font-size: 18px;
+}
+.opening-letter-page > b {
+  font-size: 16px;
+}
+.opening-letter.is-open .opening-letter-page > small {
+  font-size: 16px;
+}
+.opening-letter-mark {
+  font-size: 11px;
+}
+.opening-sky-cloud {
+  position: absolute;
+  height: auto;
+  pointer-events: none;
+  opacity: 0.85;
+}
+.opening-lamp-frame {
+  clip-path: inset(17% 34% 66% 39%);
+}
+.opening-lamp-frame.is-portrait {
+  clip-path: inset(22% 35% 70% 35%);
+}
+@media (max-width: 1023px) {
+  .opening-mobile .opening-caption {
+    width: 96%;
+    bottom: 17%;
+    min-height: 134px;
+    padding: 36px 24px 24px;
+  }
+  .opening-mobile .opening-caption.is-dialogue {
+    padding: 38px 24px 26px;
+    border-radius: 0;
+  }
+  .opening-mobile .opening-caption-label {
+    font-size: 18px;
+    top: 9%;
+    left: 7%;
+  }
+  .opening-mobile .opening-caption.is-narration .opening-caption-label {
+    top: 3%;
+  }
+  .opening-mobile .opening-speaker {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+  }
+  .opening-mobile .opening-typewriter {
+    font-size: clamp(18px, 5.2vw, 22px);
+    line-height: 1.65;
+    letter-spacing: 0.4px;
+    min-height: 36px;
+  }
+  .opening-mobile .opening-caption small {
+    font-size: 15px;
+    line-height: 1.5;
+    margin-top: 6px;
+    letter-spacing: 0;
+  }
+  .opening-mobile .opening-caption.is-prologue {
+    top: 34%;
+    bottom: auto;
+    width: 96%;
+    padding: 45px 26px 32px;
+  }
+  .opening-mobile .opening-caption.is-prologue .opening-typewriter {
+    font-size: clamp(21px, 5.7vw, 26px);
+    line-height: 1.8;
+    letter-spacing: 0.8px;
+  }
+  .opening-mobile .opening-prologue-sign {
+    top: 76%;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .opening-mobile .opening-loader {
+    inset: 13% 0 6%;
+    width: 84%;
+  }
+  .opening-mobile .opening-loader-code {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    margin-bottom: 24px;
+  }
+  .opening-mobile .opening-loader h2 {
+    font-size: 27px;
+    font-weight: 750;
+    letter-spacing: 1px;
+    line-height: 1.7;
+  }
+  .opening-mobile .opening-loader > p {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    line-height: 1.7;
+  }
+  .opening-mobile .opening-loader-symbol {
+    width: 90px;
+    height: 90px;
+    margin-bottom: 22px;
+  }
+  .opening-mobile .opening-loading-detail {
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 1.6;
+    gap: 10px;
+  }
+  .opening-mobile .opening-loading-detail > span:last-child {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .opening-mobile .opening-start {
+    font-size: 21px;
+    min-height: 52px;
+    margin-top: 24px;
+  }
+  .opening-mobile .opening-sound-choice {
+    font-size: 15px;
+    white-space: normal;
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+  .opening-mobile .opening-loader-foot {
+    font-size: 12px;
+    line-height: 1.8;
+    margin-top: 22px;
+    letter-spacing: 0.5px;
+  }
+  .opening-mobile .opening-top-controls > .opening-skip {
+    font-size: 13px;
+  }
+  .opening-mobile .opening-brand > span {
+    font-size: 18px;
+  }
+  .opening-mobile .opening-brand small {
+    font-size: 8px;
+  }
+  .opening-mobile .opening-action {
+    font-size: 18px;
+    min-height: 50px;
+  }
+  .opening-mobile .opening-bottom {
+    font-size: 13px;
+  }
+  .opening-mobile .opening-scene-actions {
+    bottom: max(7%, calc(env(safe-area-inset-bottom) + 45px));
+  }
+  .opening-mobile .opening-memory-cloud {
+    top: 27%;
+    height: 32%;
+    width: 90%;
+    left: 5%;
+  }
+  .opening-mobile .opening-cloud-paper {
+    padding: 20px 18px 16px;
+  }
+  .opening-mobile .opening-cloud-paper h2 {
+    font-size: 21px;
+    line-height: 1.5;
+    margin: 9px 0;
+  }
+  .opening-mobile .opening-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0;
+    gap: 5px;
+  }
+  .opening-mobile .opening-history-stamps {
+    height: calc(100% - 65px);
+  }
+  .opening-mobile .opening-history-stamps p {
+    font-size: 15px;
+  }
+  .opening-mobile .opening-history-stamps small {
+    font-size: 12px;
+  }
+  .opening-mobile .opening-history-stamps strong > span {
+    font-size: 11px;
+  }
+  .opening-mobile .opening-photo-row {
+    height: calc(100% - 75px);
+  }
+  .opening-mobile .opening-photo-row figcaption {
+    font-size: 14px;
+  }
+  .opening-mobile .opening-photo-row img {
+    max-height: calc(100% - 31px);
+  }
+  .opening-mobile[data-scene='S05'] .opening-caption {
+    bottom: 15%;
+  }
+  .opening-mobile[data-scene='S05'] .opening-scene-actions {
+    bottom: max(6%, calc(env(safe-area-inset-bottom) + 35px));
+  }
+  .opening-mobile .opening-memory-controls {
+    font-size: 15px;
+  }
+  .opening-mobile .opening-caption.is-letter-copy {
+    bottom: 16%;
+    width: 94%;
+  }
+  .opening-mobile .opening-chapter-panel li button {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .opening-mobile .opening-chapter-panel > p {
+    font-size: 16px;
+  }
+  .opening-mobile .opening-audio-notice {
+    font-size: 14px;
+  }
+  .opening-mobile .opening-letter-code {
+    font-size: 9px;
+    line-height: 1.7;
+  }
+  .opening-mobile .opening-letter-mark {
+    font-size: 10px;
+  }
+}
+@media (max-height: 650px) {
+  .opening-loader-symbol,
+  .opening-mobile .opening-loader-symbol {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+  }
+  .opening-loader-code,
+  .opening-mobile .opening-loader-code {
+    margin-bottom: 15px;
+  }
+  .opening-loader-foot {
+    display: none;
+  }
+  .opening-caption,
+  .opening-mobile .opening-caption {
+    padding-block: 30px 20px;
+    bottom: 18%;
+  }
+  .opening-caption small,
+  .opening-mobile .opening-caption small {
+    font-size: 14px;
+  }
+  .opening-loader > p,
+  .opening-mobile .opening-loader > p {
+    margin-bottom: 16px;
+  }
+  .opening-start,
+  .opening-mobile .opening-start {
+    margin-top: 16px;
+  }
+}
+
+.opening-lamp-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+.opening-lamp-off {
+  animation: opening-lamp-off-cycle 7.2s ease-in-out infinite;
+}
+.opening-lamp-bright {
+  animation: opening-lamp-bright-cycle 7.2s ease-in-out infinite;
+}
+@keyframes opening-lamp-off-cycle {
+  0%,
+  18%,
+  40%,
+  100% {
+    opacity: 0;
+  }
+  25%,
+  33% {
+    opacity: 1;
+  }
+}
+@keyframes opening-lamp-bright-cycle {
+  0%,
+  55%,
+  85%,
+  100% {
+    opacity: 0;
+  }
+  62%,
+  76% {
+    opacity: 1;
+  }
+}
+.opening-brand small {
+  font-size: 14px;
+}
+.opening-mobile .opening-loader-code,
+.opening-mobile .opening-loader-foot,
+.opening-mobile .opening-loading-detail > span:last-child {
+  font-size: 14px;
+}
+.opening-mobile .opening-brand small {
+  font-size: 12px;
+}
+@media (max-width: 400px) {
+  .opening-mobile .opening-brand small {
+    display: none;
+  }
+}
+
+.opening-speaker {
+  font-size: 21px;
+}
+.opening-caption small {
+  font-size: 20px;
+}
+.is-night .opening-caption.is-dialogue {
+  background: none;
+  border: 0;
+  backdrop-filter: none;
+}
+.opening-mobile .opening-caption small {
+  font-size: 16px;
+}
+.opening-mobile .opening-eyebrow {
+  font-size: 12px;
+}
