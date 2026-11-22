@@ -10,7 +10,8 @@ import { AppApiError } from '@/lib/api-error'
 import { createMailSchema } from '../schemas/mail.schema'
 import type { MailForm } from '../schemas/mail.schema'
 import type { Invitation, MailPreview } from '@/domain/api.types'
-import { giftLabels, attendanceLabels } from '@/domain/status'
+import { attendanceLabels } from '@/domain/status'
+import { createInvitationMailPreset } from '@/domain/invitation-content'
 export function MailComposer({
   mode,
   recipient,
@@ -29,21 +30,10 @@ export function MailComposer({
     saveDraft = useAdminStore((s) => s.saveMailDraft)
   const [initial] = useState(
     () =>
-      saved || {
-        subject:
-          mode === 'BULK'
-            ? '{{name}}，SIPC 十六周年期待与你重聚'
-            : (recipient?.name || '') + '，SIPC 十六周年期待与你重聚',
-        textBody:
-          mode === 'BULK'
-            ? '{{name}}，你好！\n\n感谢你填写邀请函回执。\n是否到场：{{attendance}}\n礼物领取方式：{{giftChoice}}\n回执编号：{{id}}\n\n期待与你再次相聚！\nSIPC'
-            : (recipient?.name || '') +
-              '，你好！\n\n感谢你填写邀请函回执。\n是否到场：' +
-              (recipient ? attendanceLabels[recipient.attendance] : '') +
-              '\n礼物领取方式：' +
-              (recipient ? giftLabels[recipient.giftChoice] : '') +
-              '\n\n期待与你再次相聚！\nSIPC',
-      },
+      saved ||
+      createInvitationMailPreset(
+        mode === 'BULK' ? undefined : recipient?.name || '',
+      ),
   )
   const form = useForm<MailForm>({
       resolver: zodResolver(createMailSchema(mode === 'BULK')),
@@ -225,6 +215,20 @@ export function MailComposer({
               : '发送给 ' + count + ' 位报名者'}
           </span>
           <div className="compose-actions">
+            <button
+              className="btn"
+              type="button"
+              onClick={() => {
+                const values = createInvitationMailPreset(
+                  mode === 'BULK' ? undefined : recipient?.name || '',
+                )
+                form.reset(values)
+                setStored(saveDraft(key, values))
+                toast.success('已载入邀请函模板，可继续编辑')
+              }}
+            >
+              载入邀请函模板
+            </button>
             <button
               className="btn"
               type="button"

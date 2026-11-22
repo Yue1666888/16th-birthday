@@ -15,16 +15,19 @@ import java.util.Map;
 
 @Component
 public class MailTemplateRenderer {
-    public static final String TEMPLATE_VERSION = "receipt-v1";
+    public static final String TEMPLATE_VERSION = "invitation-16th-v2";
     private final RequestFingerprint fingerprints;
     private final boolean enabled;
-    private final String textTemplate, htmlTemplate;
+    private final String subjectTemplate, textTemplate, htmlTemplate;
 
     public MailTemplateRenderer(
             RequestFingerprint fingerprints, @Value("${EMAIL_ENABLED:true}") boolean enabled)
             throws IOException {
         this.fingerprints = fingerprints;
         this.enabled = enabled;
+        subjectTemplate =
+                new ClassPathResource("mail/subject.txt")
+                        .getContentAsString(StandardCharsets.UTF_8).strip();
         textTemplate =
                 new ClassPathResource("mail/receipt.txt")
                         .getContentAsString(StandardCharsets.UTF_8);
@@ -34,7 +37,7 @@ public class MailTemplateRenderer {
     }
 
     public EmailPreviewResponse render(InvitationEntity i) {
-        String subject = "社团十六周年邀请函回执确认";
+        String subject = subjectTemplate;
         Map<String, String> values =
                 Map.of(
                         "name",
