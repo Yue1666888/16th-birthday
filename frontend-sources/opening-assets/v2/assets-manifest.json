@@ -1,0 +1,102 @@
+[
+  {
+    "id": "dialogue",
+    "file": "dialogue.png",
+    "runtimeFile": "/opening/v2/dialogue.webp",
+    "width": 2172,
+    "height": 724,
+    "bytes": 1115356,
+    "sha256": "56a0581a044021172ee427fae940ec8b4d099f9ad835a1d0d739c4c374a8420c",
+    "generation": "built-in imagegen",
+    "reference": null,
+    "prompt": "Use case: ui-mockup. Asset type: transparent illustrated dialogue-panel background for a warm flat 2D picture-book hot-air-balloon webpage. One wide horizontal panel, aspect 3:1, target1536x512. A softly scalloped cloud-shaped cream/ivory paper speech panel with a few restrained rounded cloud lobes, fine muted powder-blue edge, very soft pale-sand shadow confined to its silhouette, and a tiny rounded rectangular BLANK name tab integrated at upper left. Reserve the upper-left name tab for live HTML label SIPC; DO NOT draw any letters or words. The entire central80percent is opaque warm ivory and completely blank for large live dialogue text. Small short cloud-tail below left, restrained and elegant, not a toy or glossy 3D bubble. Full panel visible with5percent transparent padding. Real transparent alpha OUTSIDE panel, opaque interior. No text, characters, faces, balloons, scenery, watermarks, UI buttons or logos. Designed to remain clear over busy pale-blue landscape and to support a larger bold speaker label at upper-left.",
+    "alpha": [
+      0,
+      255
+    ]
+  },
+  {
+    "id": "narration",
+    "file": "narration.png",
+    "runtimeFile": "/opening/v2/narration.webp",
+    "width": 2172,
+    "height": 724,
+    "bytes": 2182976,
+    "sha256": "bbc0a6ad2872f6c5aacf5e20015bc06c867f42baebd5612c5b44c6defb6ec659",
+    "generation": "built-in imagegen",
+    "reference": null,
+    "prompt": "Use case: ui-mockup. Asset type: transparent illustrated narration-panel background for the same warm flat2D picture-book campus invitation. Single wide horizontal panel, aspect3:1, target1536x512. Quiet archival-note card in pale buttery ivory with gently rounded hand-drawn corners, a very fine warm-gold and desaturated blue-gray double rule, slight paper grain, tiny abstract corner ticks only. A small BLANK plaque/tab integrated at upper-left for a future live HTML115 label; DO NOT draw words or numerals. Center80percent is opaque ivory, flat, uncluttered and completely blank for large dark live narration text. Delicate outward paper-edge silhouette, subtle local shadow,5percent clear padding. Warm, welcoming and refined, visually distinct from a cloud speech bubble. Real transparent alpha outside, opaque paper inside. No people, props, scenery, logos, typography, buttons, watermark or glossy effects.",
+    "alpha": [
+      0,
+      255
+    ]
+  },
+  {
+    "id": "lamp-desktop-off",
+    "file": "lamp-desktop-off.png",
+    "runtimeFile": "/opening/v2/lamp-desktop-off.webp",
+    "width": 1679,
+    "height": 937,
+    "bytes": 1344163,
+    "sha256": "00367e6f344fcec3e3f537f74037fd6cbf426c8ffcdd67d80ee0c1a1cb45653d",
+    "generation": "built-in imagegen",
+    "reference": "D05-door-open.png",
+    "prompt": "Use case: lighting-weather. Edit target: supplied desktop illustrated doorway. Change ONLY the illumination of the existing horizontal fluorescent tube hanging inside the dark doorway. Preserve EXACT camera, image aspect ratio, doorframe, open door panel and handle, plant, framed pictures, banner, bunting, all shapes and all positions; no redesign, no additions, no writing. This is one aligned frame in a slow flickering-light sequence, so every object and the lamp fixture geometry must stay at exactly the same image coordinates. The fluorescent TUBE is switched OFF: dark muted gray-blue glass within the same fixture, no white emission and no halo. The room stays navy and all outside walls remain unchanged. Keep original flat2D cartoon colors and line style, and keep the rest of the image unchanged. Output the same full landscape approximately16:9 composition, not a crop or collage.",
+    "alpha": null
+  },
+  {
+    "id": "lamp-desktop-bright",
+    "file": "lamp-desktop-bright.png",
+    "runtimeFile": "/opening/v2/lamp-desktop-bright.webp",
+    "width": 1679,
+    "height": 937,
+    "bytes": 1421993,
+    "sha256": "7db34ab16447c0784d1797c112fd6c88c1bd13ba4f9a82e2277a7f84d91ad96d",
+    "generation": "built-in imagegen",
+    "reference": "D05-door-open.png",
+    "prompt": "Use case: lighting-weather. Edit target: supplied desktop illustrated doorway. Change ONLY the illumination of the existing horizontal fluorescent tube hanging inside the dark doorway. Preserve EXACT camera, image aspect ratio, doorframe, open door panel and handle, plant, framed pictures, banner, bunting, all shapes and all positions; no redesign, no additions, no writing. This is one aligned frame in a slow flickering-light sequence, so every object and the lamp fixture geometry must stay at exactly the same image coordinates. The fluorescent TUBE glows warmly and slightly brighter: ivory-white tube with a gentle pale-yellow local halo only near the lamp; the room stays navy, do NOT light the entire room or outside walls. Keep original flat2D cartoon colors and line style, and keep the rest of the image unchanged. Output the same full landscape approximately16:9 composition, not a crop or collage.",
+    "alpha": null
+  },
+  {
+    "id": "lamp-mobile-off",
+    "file": "lamp-mobile-off.png",
+    "runtimeFile": "/opening/v2/lamp-mobile-off.webp",
+    "width": 887,
+    "height": 1774,
+    "bytes": 1535567,
+    "sha256": "d78fb133de6dbf933b7bdea7218b4678b61319a27c25ae77ae6cf602155d8b78",
+    "generation": "built-in imagegen",
+    "reference": "M05-door-open.png",
+    "prompt": "Use case: lighting-weather. Edit target: supplied mobile illustrated doorway. Change ONLY the illumination of the existing horizontal fluorescent tube hanging inside the dark doorway. Preserve EXACT camera, image aspect ratio, doorframe, open door panel and handle, plant, framed pictures, banner, bunting, all shapes and all positions; no redesign, no additions, no writing. This is one aligned frame in a slow flickering-light sequence, so every object and the lamp fixture geometry must stay at exactly the same image coordinates. The fluorescent TUBE is switched OFF: dark muted gray-blue glass within the same fixture, no white emission and no halo. The room stays navy and all outside walls remain unchanged. Keep original flat2D cartoon colors and line style, and keep the rest of the image unchanged. Output the same full portrait exactly1:2 composition, not a crop or collage.",
+    "alpha": null
+  },
+  {
+    "id": "lamp-mobile-bright",
+    "file": "lamp-mobile-bright.png",
+    "runtimeFile": "/opening/v2/lamp-mobile-bright.webp",
+    "width": 887,
+    "height": 1774,
+    "bytes": 1569310,
+    "sha256": "a90ba02f8f98c352d8f10db38107cb46377e4bd71c1e37647b0e8d8d5d872c7f",
+    "generation": "built-in imagegen",
+    "reference": "M05-door-open.png",
+    "prompt": "Use case: lighting-weather. Edit target: supplied mobile illustrated doorway. Change ONLY the illumination of the existing horizontal fluorescent tube hanging inside the dark doorway. Preserve EXACT camera, image aspect ratio, doorframe, open door panel and handle, plant, framed pictures, banner, bunting, all shapes and all positions; no redesign, no additions, no writing. This is one aligned frame in a slow flickering-light sequence, so every object and the lamp fixture geometry must stay at exactly the same image coordinates. The fluorescent TUBE glows warmly and slightly brighter: ivory-white tube with a gentle pale-yellow local halo only near the lamp; the room stays navy, do NOT light the entire room or outside walls. Keep original flat2D cartoon colors and line style, and keep the rest of the image unchanged. Output the same full portrait exactly1:2 composition, not a crop or collage.",
+    "alpha": null
+  },
+  {
+    "id": "sky-cloud",
+    "file": "sky-cloud.png",
+    "runtimeFile": "/opening/v2/sky-cloud.webp",
+    "width": 2172,
+    "height": 724,
+    "bytes": 798868,
+    "sha256": "b04a69188b17e5a9df13d60072d7fe266aed95240c1a2e6a5020d28515779e78",
+    "generation": "built-in imagegen",
+    "reference": null,
+    "prompt": "Use case: illustration-story. Asset type: single transparent sprite for a gentle flat2D cartoon landscape. One SMALL WIDE FLUFFY WHITE CLOUD, aspect about3:1, with three or four softly rounded irregular lobes, solid off-white upper body and only a very pale powder-blue underside. Match the simple flat white clouds in a pastel cyan sky above rolling green hills. Clean shape, NO stroke or outlined border, NO dark edge, NO paper grain, NO cast shadow, NO halo, no text. Wide low silhouette with natural asymmetric lobes, complete cloud with10percent transparent padding. Opaque white cloud body, actual transparent alpha outside. No sky, ground, sun, birds, objects or checkerboard. This will be repeated at different small scales in an animated sky, not used as a dialogue bubble.",
+    "alpha": [
+      0,
+      255
+    ]
+  }
+]
