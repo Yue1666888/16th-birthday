@@ -94,20 +94,21 @@ export function InvitationHero({
               <span>{pattern}</span>
             )}
           </div>
-          <div className="invitation-mark-index" aria-hidden="true">
-            {patterns.map((item, itemIndex) => (
-              <span key={item} className={item === pattern ? 'active' : ''}>
-                {String(itemIndex + 1).padStart(2, '0')}
-              </span>
-            ))}
-          </div>
+          <p className="invitation-mark-motto">过去已去，未来已来.</p>
         </div>
       </div>
       <div className="invitation-welcome">
         <p className="invitation-motto">过去已去，未来已来</p>
-        <h1 id="invitation-heading">Dear SIPCer</h1>
-        <p className="invitation-welcome-back">Welcome Back！</p>
-        <div>
+        <div className="invitation-greeting">
+          <h1 id="invitation-heading">
+            Dear SIPCer
+            <span className="invitation-greeting-comma" aria-hidden="true">
+              ,
+            </span>
+          </h1>
+          <p className="invitation-welcome-back">Welcome Back！</p>
+        </div>
+        <div className="invitation-welcome-actions">
           <a
             className="visitor-button"
             href="#reply"

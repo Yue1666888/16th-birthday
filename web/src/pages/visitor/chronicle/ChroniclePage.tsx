@@ -14,9 +14,6 @@ export function ChroniclePage() {
       ) : (
         <ChronicleDesktopView canHover={canHover} />
       )}
-      <p className="chronicle-source">
-        历史节点依据《SIPC相关信息统计》的发展历史整理。
-      </p>
     </div>
   )
 }

@@ -9,7 +9,7 @@
   color: var(--v-text);
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
-  font-size: 14px;
+  font-size: 19px;
   line-height: 1.6;
   color-scheme: dark;
 }
@@ -89,7 +89,7 @@ body:has([data-visitor-modal]) .visitor-particles {
 }
 .brand-caption {
   display: block;
-  font-size: 8px;
+  font-size: 14px;
   font-weight: 500;
   letter-spacing: 1.8px;
   color: var(--v-muted);
@@ -105,13 +105,13 @@ body:has([data-visitor-modal]) .visitor-particles {
   align-items: center;
   gap: 13px;
   color: var(--v-muted);
-  font-size: 14px;
+  font-size: 19px;
   letter-spacing: 2px;
   transition: color 0.18s;
   white-space: nowrap;
 }
 .visitor-nav nav a > span {
-  font-size: 10px;
+  font-size: 15px;
   letter-spacing: 0;
   color: #7d909f;
 }
@@ -137,7 +137,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 12px;
+  font-size: 17px;
   color: var(--v-muted);
 }
 .visitor-main {
@@ -151,7 +151,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   padding: 10px clamp(24px, 5vw, 80px);
   background: #143039;
   color: #b6d7de;
-  font-size: 11px;
+  font-size: 16px;
   letter-spacing: 0.3px;
 }
 .visitor-preview-banner a {
@@ -168,7 +168,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   align-items: center;
   gap: 10px;
   color: #9dabb7;
-  font-size: 9px;
+  font-size: 14px;
   letter-spacing: 2px;
 }
 .live-dot {
@@ -197,7 +197,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   max-width: 55%;
 }
 .wall-kicker {
-  font-size: 10px;
+  font-size: 15px;
   letter-spacing: 4px;
   color: var(--v-accent);
   margin: 0 0 15px;
@@ -212,7 +212,7 @@ body:has([data-visitor-modal]) .visitor-particles {
 .wall-intro {
   margin: 0;
   color: var(--v-muted);
-  font-size: 12px;
+  font-size: 17px;
   letter-spacing: 1px;
 }
 .wall-wordmark {
@@ -241,13 +241,13 @@ body:has([data-visitor-modal]) .visitor-particles {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  font-size: 9px;
+  font-size: 14px;
   letter-spacing: 1.8px;
   color: #a7b4be;
 }
 .wall-heading-rule i {
   color: var(--v-accent);
-  font-size: 18px;
+  font-size: 23px;
   font-style: normal;
   padding-left: 20px;
 }
@@ -316,7 +316,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   padding: 1px 6px;
   background: #10141980;
   color: #e0ecee;
-  font-size: 9px;
+  font-size: 14px;
   letter-spacing: 2px;
 }
 .photo-count {
@@ -329,7 +329,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   padding: 4px 8px;
   color: #edf2f4;
   background: #101419c9;
-  font-size: 10px;
+  font-size: 15px;
   pointer-events: none;
 }
 .memory-open-indicator {
@@ -364,13 +364,13 @@ body:has([data-visitor-modal]) .visitor-particles {
 }
 .memory-caption h2 {
   margin: 0 0 5px;
-  font-size: 14px;
+  font-size: 19px;
   font-weight: 500;
   overflow-wrap: anywhere;
 }
 .memory-caption div > span {
   color: var(--v-muted);
-  font-size: 10px;
+  font-size: 15px;
 }
 .memory-caption i {
   color: #7d909f;
@@ -379,7 +379,7 @@ body:has([data-visitor-modal]) .visitor-particles {
 }
 .caption-plus {
   color: var(--v-accent);
-  font-size: 19px;
+  font-size: 24px;
   font-weight: 300;
 }
 .memory-text-excerpt {
@@ -396,7 +396,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   color: #8eaba3;
 }
 .memory-text-excerpt p {
-  font-size: 17px;
+  font-size: 22px;
   line-height: 2;
   color: #dce6dd;
   margin: 0;
@@ -408,7 +408,7 @@ body:has([data-visitor-modal]) .visitor-particles {
 }
 .memory-text-excerpt > span {
   color: #9aaca5;
-  font-size: 10px;
+  font-size: 15px;
   letter-spacing: 1px;
 }
 .honor-grid {
@@ -471,12 +471,12 @@ body:has([data-visitor-modal]) .visitor-particles {
 }
 .honor-index {
   grid-column: 1 / -1;
-  font-size: 9px;
+  font-size: 14px;
   color: var(--v-accent);
   letter-spacing: 2px;
 }
 .honor-caption h2 {
-  font-size: 17px;
+  font-size: 22px;
   font-weight: 500;
   margin: 0;
   overflow-wrap: anywhere;
@@ -488,7 +488,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   background: none;
   border: 0;
   padding: 3px 0;
-  font-size: 11px;
+  font-size: 16px;
   color: var(--v-muted) !important;
   white-space: nowrap;
 }
@@ -517,7 +517,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   justify-content: space-between;
   gap: 12px;
   color: var(--v-accent);
-  font-size: 9px;
+  font-size: 14px;
   letter-spacing: 1px;
 }
 .honor-people p {
@@ -527,7 +527,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   line-height: 1.9;
   max-height: 210px;
   overflow-y: auto;
-  font-size: 13px;
+  font-size: 18px;
   overscroll-behavior: contain;
 }
 .visitor-button {
@@ -540,7 +540,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   border: 1px solid #ffffff40;
   background: #182129;
   color: var(--v-text);
-  font-size: 12px;
+  font-size: 17px;
   letter-spacing: 1px;
   transition:
     border-color 0.2s,
@@ -567,7 +567,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   text-align: center;
   margin: 58px 0 70px;
   color: var(--v-muted);
-  font-size: 11px;
+  font-size: 16px;
   letter-spacing: 2px;
 }
 .wall-status {
@@ -581,7 +581,7 @@ body:has([data-visitor-modal]) .visitor-particles {
 .wall-status h2 {
   font-weight: 400;
   color: var(--v-text);
-  font-size: 22px;
+  font-size: 27px;
   letter-spacing: 3px;
 }
 .empty-mark {
@@ -610,13 +610,13 @@ body:has([data-visitor-modal]) .visitor-particles {
   justify-content: space-between;
   gap: 16px;
   color: #8a9ba9;
-  font-size: 9px;
+  font-size: 14px;
   letter-spacing: 1.7px;
   border-top: 1px solid var(--v-line);
 }
 .visitor-footer b {
   padding-left: 28px;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 300;
   color: var(--v-accent);
 }
@@ -626,7 +626,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   justify-content: center;
   padding: 24px;
   color: var(--v-muted);
-  font-size: 12px;
+  font-size: 17px;
   text-align: center;
   width: 100%;
   height: 100%;
@@ -649,13 +649,13 @@ body:has([data-visitor-modal]) .visitor-particles {
   justify-content: space-between;
   align-items: center;
   color: var(--v-accent);
-  font-size: 9px;
+  font-size: 14px;
   letter-spacing: 1.3px;
   gap: 20px;
 }
 .memory-desktop-detail h2,
 .memory-mobile-detail h2 {
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 500;
   line-height: 1.6;
   margin: 18px 0 10px;
@@ -665,7 +665,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   display: flex;
   align-items: center;
   gap: 9px;
-  font-size: 11px;
+  font-size: 16px;
   color: #c6d4de;
   margin: 8px 0 20px;
 }
@@ -675,7 +675,7 @@ body:has([data-visitor-modal]) .visitor-particles {
 .memory-fulltext {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  font-size: 13px;
+  font-size: 18px;
   line-height: 2;
   color: #d2dce3;
 }
@@ -686,7 +686,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   padding-right: 8px;
 }
 .detail-image-label {
-  font-size: 10px;
+  font-size: 15px;
   letter-spacing: 1px;
   color: var(--v-muted);
   display: flex;
@@ -714,11 +714,11 @@ body:has([data-visitor-modal]) .visitor-particles {
 }
 .detail-status {
   padding: 32px 0;
-  font-size: 12px;
+  font-size: 17px;
   color: var(--v-muted);
 }
 .hover-tip {
-  font-size: 9px;
+  font-size: 14px;
   margin: 18px 0 0;
   color: #92a7b7;
   letter-spacing: 1px;
@@ -785,7 +785,7 @@ body:has([data-visitor-modal]) .visitor-particles {
 }
 .visitor-gallery header h2 {
   margin: 0;
-  font-size: 13px;
+  font-size: 18px;
   font-weight: 400;
   overflow: hidden;
   white-space: nowrap;
@@ -793,7 +793,7 @@ body:has([data-visitor-modal]) .visitor-particles {
 }
 .visitor-gallery header > span {
   margin-left: auto;
-  font-size: 11px;
+  font-size: 16px;
   white-space: nowrap;
   color: var(--v-muted);
 }
@@ -824,7 +824,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   gap: 34px;
 }
 .visitor-gallery > footer > span {
-  font-size: 10px;
+  font-size: 15px;
   letter-spacing: 1px;
   color: var(--v-muted);
 }
@@ -883,7 +883,7 @@ body:has([data-visitor-modal]) .visitor-particles {
     width: 112px;
   }
   .brand-caption {
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 1px;
   }
   .visitor-nav nav {
@@ -891,7 +891,7 @@ body:has([data-visitor-modal]) .visitor-particles {
     gap: 12px;
   }
   .visitor-nav nav a {
-    font-size: 12px;
+    font-size: 17px;
     letter-spacing: 0;
     gap: 0;
   }
@@ -907,7 +907,7 @@ body:has([data-visitor-modal]) .visitor-particles {
     max-width: 482px;
     margin: auto;
     padding: 10px 16px;
-    font-size: 10px;
+    font-size: 15px;
   }
   .visitor-preview-banner a {
     margin-left: 5px;
@@ -917,7 +917,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   }
   .wall-eyebrow {
     letter-spacing: 1px;
-    font-size: 7px;
+    font-size: 13px;
     gap: 7px;
   }
   .wall-heading-main {
@@ -929,7 +929,7 @@ body:has([data-visitor-modal]) .visitor-particles {
   }
   .wall-kicker {
     letter-spacing: 2px;
-    font-size: 8px;
+    font-size: 14px;
     margin-bottom: 13px;
   }
   .wall-heading h1 {
@@ -938,7 +938,7 @@ body:has([data-visitor-modal]) .visitor-particles {
     margin-bottom: 13px;
   }
   .wall-intro {
-    font-size: 10px;
+    font-size: 15px;
     letter-spacing: 0.2px;
     max-width: 95%;
   }
@@ -953,12 +953,12 @@ body:has([data-visitor-modal]) .visitor-particles {
     letter-spacing: 0;
   }
   .wall-heading-rule {
-    font-size: 7px;
+    font-size: 13px;
     letter-spacing: 0.7px;
     padding: 14px 0;
   }
   .wall-heading-rule i {
-    font-size: 14px;
+    font-size: 19px;
     padding-left: 5px;
   }
   .memory-grid-mobile {
@@ -973,14 +973,14 @@ body:has([data-visitor-modal]) .visitor-particles {
   .card-sequence {
     top: 10px;
     left: 10px;
-    font-size: 9px;
+    font-size: 14px;
     padding: 2px 6px;
     letter-spacing: 1px;
   }
   .photo-count {
     bottom: 10px;
     right: 10px;
-    font-size: 10px;
+    font-size: 15px;
     padding: 4px 8px;
     gap: 4px;
   }
@@ -995,18 +995,18 @@ body:has([data-visitor-modal]) .visitor-particles {
     min-height: 65px;
   }
   .memory-caption h2 {
-    font-size: 14px;
+    font-size: 19px;
     line-height: 1.6;
     margin-bottom: 5px;
   }
   .memory-caption div > span {
-    font-size: 11px;
+    font-size: 16px;
   }
   .memory-caption i {
     display: none;
   }
   .caption-plus {
-    font-size: 13px;
+    font-size: 18px;
   }
   .memory-open-indicator {
     display: none;
@@ -1020,7 +1020,7 @@ body:has([data-visitor-modal]) .visitor-particles {
     flex-shrink: 0;
   }
   .memory-text-excerpt p {
-    font-size: 15px;
+    font-size: 20px;
     line-height: 1.8;
     -webkit-line-clamp: 4;
   }
@@ -1044,16 +1044,16 @@ body:has([data-visitor-modal]) .visitor-particles {
     gap: 8px;
   }
   .honor-caption h2 {
-    font-size: 14px;
+    font-size: 19px;
   }
   .honor-index {
-    font-size: 8px;
+    font-size: 14px;
   }
   .honor-people-trigger {
     grid-column: 1 / -1;
     min-height: 34px;
     justify-self: start;
-    font-size: 10px;
+    font-size: 15px;
   }
   .honor-people-inline {
     padding: 12px 15px;
@@ -1062,11 +1062,11 @@ body:has([data-visitor-modal]) .visitor-particles {
     animation: visitor-appear 0.16s both;
   }
   .honor-people p {
-    font-size: 12px;
+    font-size: 17px;
   }
   .wall-load-more {
     margin: 38px 0 45px;
-    font-size: 9px;
+    font-size: 14px;
     letter-spacing: 0.5px;
   }
   .wall-skeleton {
@@ -1077,20 +1077,20 @@ body:has([data-visitor-modal]) .visitor-particles {
   }
   .wall-status {
     padding: 50px 0 70px;
-    font-size: 12px;
+    font-size: 17px;
   }
   .wall-status h2 {
-    font-size: 18px;
+    font-size: 23px;
   }
   .visitor-footer {
     max-width: 450px;
     padding: 22px 16px 28px;
-    font-size: 7px;
+    font-size: 13px;
     letter-spacing: 0.8px;
   }
   .visitor-footer b {
     padding-left: 6px;
-    font-size: 15px;
+    font-size: 20px;
   }
   .visitor-gallery {
     padding-left: 16px;
@@ -1100,13 +1100,13 @@ body:has([data-visitor-modal]) .visitor-particles {
     gap: 14px;
   }
   .visitor-gallery header h2 {
-    font-size: 11px;
+    font-size: 16px;
   }
   .visitor-gallery > footer {
     gap: 15px;
   }
   .visitor-gallery > footer > span {
-    font-size: 9px;
+    font-size: 14px;
   }
 }
 @media (max-width: 359px) {
@@ -1114,16 +1114,16 @@ body:has([data-visitor-modal]) .visitor-particles {
     width: 84px;
   }
   .visitor-nav nav a {
-    font-size: 11px;
+    font-size: 16px;
   }
   .memory-grid-mobile {
     grid-template-columns: minmax(0, 1fr);
   }
   .memory-text-excerpt p {
-    font-size: 15px;
+    font-size: 20px;
   }
   .wall-heading h1 {
-    font-size: 24px;
+    font-size: 29px;
   }
   .visitor-nav nav {
     gap: 8px;
@@ -1157,19 +1157,19 @@ body:has([data-visitor-modal]) .visitor-particles {
   margin-bottom: 12px;
 }
 .memory-names-heading > div > span {
-  font-size: 8px;
+  font-size: 14px;
   letter-spacing: 2px;
   color: var(--v-accent);
 }
 .memory-names-heading h2 {
-  font-size: 16px;
+  font-size: 21px;
   font-weight: 500;
   letter-spacing: 3px;
   margin: 4px 0 0;
 }
 .memory-names-heading > p {
   color: var(--v-muted);
-  font-size: 10px;
+  font-size: 15px;
   margin: 0 0 2px;
   letter-spacing: 1px;
 }
@@ -1203,7 +1203,7 @@ body:has([data-visitor-modal]) .visitor-particles {
 .memory-names-error,
 .memory-names-stale {
   color: var(--v-muted);
-  font-size: 11px;
+  font-size: 16px;
   padding: 12px 0;
 }
 .memory-names-stale button {
@@ -1222,15 +1222,15 @@ body:has([data-visitor-modal]) .visitor-particles {
     align-items: center;
   }
   .memory-names-heading > div > span {
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 1px;
   }
   .memory-names-heading h2 {
-    font-size: 14px;
+    font-size: 19px;
     letter-spacing: 2px;
   }
   .memory-names-heading > p {
-    font-size: 8px;
+    font-size: 14px;
     letter-spacing: 0;
     max-width: 130px;
     text-align: right;
@@ -1242,5 +1242,125 @@ body:has([data-visitor-modal]) .visitor-particles {
   }
   .memory-name {
     letter-spacing: 1px;
+  }
+}
+
+/* Public reading scale and a two-row phone navigation. */
+.visitor-app {
+  font-size: 20px;
+}
+.visitor-app[data-view] {
+  padding-top: 96px;
+}
+.visitor-nav {
+  height: 96px;
+  gap: 24px;
+}
+.visitor-nav nav {
+  gap: clamp(20px, 2.8vw, 40px);
+}
+.visitor-nav nav a {
+  font-size: 19px;
+  letter-spacing: 1px;
+}
+.invitation-link {
+  font-size: 17px;
+  min-height: 44px;
+  white-space: nowrap;
+}
+.wall-intro {
+  font-size: 21px;
+  line-height: 1.9;
+}
+.wall-heading-rule {
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.memory-fulltext,
+.honor-people p {
+  font-size: 20px;
+  line-height: 1.85;
+}
+.memory-caption h2,
+.honor-caption h2 {
+  font-size: 24px;
+}
+.visitor-footer {
+  font-size: 15px;
+  line-height: 1.8;
+}
+@media (max-width: 1023px) {
+  .visitor-app[data-view] {
+    padding-top: calc(124px + env(safe-area-inset-top));
+  }
+  .visitor-nav {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto 44px;
+    height: calc(124px + env(safe-area-inset-top));
+    padding: calc(10px + env(safe-area-inset-top)) 18px 0;
+    gap: 6px 14px;
+  }
+  .visitor-brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .brand-logo {
+    width: 126px;
+  }
+  .brand-caption {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+  .visitor-nav .invitation-link {
+    display: flex;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    font-size: 16px;
+    gap: 7px;
+  }
+  .visitor-nav nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    margin: 0;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .visitor-nav nav a {
+    font-size: 17px;
+    gap: 0;
+    letter-spacing: 0;
+    min-height: 44px;
+  }
+  .visitor-nav nav a > span {
+    display: none;
+  }
+  .wall-heading-main {
+    min-height: 280px;
+  }
+  .wall-intro {
+    font-size: 18px;
+    line-height: 1.9;
+  }
+  .wall-heading-rule {
+    font-size: 14px;
+    letter-spacing: 0;
+  }
+  .visitor-footer {
+    align-items: start;
+    font-size: 13px;
+    letter-spacing: 0;
+  }
+  .visitor-footer span {
+    min-width: 0;
+  }
+  .visitor-footer b {
+    padding-left: 8px;
+  }
+  .memory-fulltext,
+  .honor-people p {
+    font-size: 18px;
   }
 }

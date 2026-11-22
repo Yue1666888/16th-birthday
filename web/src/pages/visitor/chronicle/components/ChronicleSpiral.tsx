@@ -139,7 +139,11 @@ export function ChronicleSpiral({
                   }}
                 >
                   <circle className="chronicle-node-hit" r="56" />
-                  <circle className="chronicle-node-halo" r="34" cy="-13" />
+                  <circle
+                    className="chronicle-node-halo"
+                    r={mobile ? 34 : 15}
+                    cy={mobile ? -13 : 0}
+                  />
                   <circle
                     className="chronicle-node-dot"
                     r={index === 0 ? 5 : 4}

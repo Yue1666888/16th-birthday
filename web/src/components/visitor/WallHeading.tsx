@@ -1,3 +1,4 @@
+import { PunctuatedText } from '@/components/common/PunctuatedText'
 import type { ReactNode } from 'react'
 interface Heading {
   index: string
@@ -61,12 +62,14 @@ export function WallHeading({
         <div>
           <p className="wall-kicker">{heading.kicker}</p>
           <h1 id="wall-title">
-            {heading.title}
+            <PunctuatedText text={heading.title} />
             {heading.title !== heading.label && (
               <span className="sr-only">{heading.label}</span>
             )}
           </h1>
-          <p className="wall-intro">{heading.intro}</p>
+          <p className="wall-intro">
+            <PunctuatedText text={heading.intro} />
+          </p>
         </div>
         <span
           className="wall-wordmark"

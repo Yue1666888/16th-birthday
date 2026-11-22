@@ -9,11 +9,11 @@
 }
 .chronicle-spiral-tools > div > span {
   color: var(--v-accent);
-  font-size: 10px;
+  font-size: 15px;
   letter-spacing: 3px;
 }
 .chronicle-spiral-tools p {
-  font-size: 11px;
+  font-size: 16px;
   color: var(--v-muted);
   margin: 7px 0 0;
   letter-spacing: 0.6px;
@@ -52,7 +52,7 @@
 }
 .chronicle-future-label {
   fill: #a3bdc780;
-  font-size: 12px;
+  font-size: 17px;
   letter-spacing: 6px;
   pointer-events: none;
 }
@@ -114,18 +114,18 @@
   justify-content: space-between;
   gap: 20px;
   color: var(--v-accent);
-  font-size: 12px;
+  font-size: 17px;
   letter-spacing: 1px;
 }
 .chronicle-detail-top i {
   color: #8da7b6;
-  font-size: 8px;
+  font-size: 14px;
   letter-spacing: 1px;
   font-style: normal;
   margin-left: 10px;
 }
 .chronicle-node-detail h2 {
-  font-size: 18px;
+  font-size: 23px;
   line-height: 1.6;
   font-weight: 500;
   margin: 17px 0 12px;
@@ -136,7 +136,7 @@
   list-style: none;
 }
 .chronicle-node-detail > ul > li {
-  font-size: 12px;
+  font-size: 17px;
   line-height: 1.9;
   color: #bfced8;
   overflow-wrap: anywhere;
@@ -152,7 +152,7 @@
 }
 .chronicle-highlights > span {
   padding: 3px 8px;
-  font-size: 10px;
+  font-size: 15px;
   letter-spacing: 1px;
   border: 1px solid #5ad9ed44;
   color: #8fd7e4;
@@ -160,7 +160,7 @@
 .chronicle-source {
   text-align: center;
   color: #8fa4b3;
-  font-size: 10px;
+  font-size: 15px;
   margin: 0 0 40px;
   letter-spacing: 0.4px;
 }
@@ -178,11 +178,11 @@
     align-items: start;
   }
   .chronicle-spiral-tools > div > span {
-    font-size: 8px;
+    font-size: 14px;
     letter-spacing: 2px;
   }
   .chronicle-spiral-tools p {
-    font-size: 9px;
+    font-size: 14px;
     letter-spacing: 0;
     max-width: 220px;
     line-height: 1.8;
@@ -210,17 +210,52 @@
     stroke-dasharray: 5 14;
   }
   .chronicle-future-label {
-    font-size: 16px;
+    font-size: 21px;
     letter-spacing: 3px;
   }
   .chronicle-source {
-    font-size: 9px;
+    font-size: 14px;
     margin-bottom: 30px;
   }
   .chronicle-node-detail {
     padding: 15px 18px 20px;
   }
   .chronicle-node-detail h2 {
+    font-size: 21px;
+  }
+}
+
+.chronicle-spiral-desktop .chronicle-node-halo {
+  fill: none;
+}
+.chronicle-spiral-desktop
+  .chronicle-spiral-node.is-selected
+  .chronicle-node-halo,
+.chronicle-spiral-desktop
+  .chronicle-spiral-node:focus-visible
+  .chronicle-node-halo {
+  fill: none;
+  stroke: #5ad9ed88;
+}
+.chronicle-node-detail > ul > li {
+  font-size: 19px;
+  line-height: 1.85;
+}
+.chronicle-spiral-tools p {
+  font-size: 18px;
+}
+.chronicle-spiral-tools > div > span {
+  font-size: 16px;
+}
+@media (max-width: 1023px) {
+  .chronicle-node-detail > ul > li {
+    font-size: 18px;
+  }
+  .chronicle-spiral-tools p {
     font-size: 16px;
+    max-width: 100%;
+  }
+  .chronicle-spiral-tools > div > span {
+    font-size: 15px;
   }
 }
