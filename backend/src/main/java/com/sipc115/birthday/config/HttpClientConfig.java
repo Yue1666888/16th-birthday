@@ -11,27 +11,27 @@ import java.time.Duration;
 
 @Configuration
 public class HttpClientConfig {
-    private RestClient client(String baseUrl) {
+    private RestClient client(String baseUrl, int readSeconds) {
         var http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
         var factory = new JdkClientHttpRequestFactory(http);
-        factory.setReadTimeout(Duration.ofSeconds(30));
+        factory.setReadTimeout(Duration.ofSeconds(readSeconds));
         return RestClient.builder().baseUrl(baseUrl).requestFactory(factory).build();
     }
 
     @Bean("fileRestClient")
     public RestClient fileClient(
             @Value("${FILE_API_BASE_URL:https://services.sipc115.com/file-api}") String url) {
-        return client(url);
+        return client(url, 45);
     }
 
     @Bean("mailRestClient")
     public RestClient mailClient(
             @Value("${MAIL_API_BASE_URL:https://services.sipc115.com/mail-api}") String url) {
-        return client(url);
+        return client(url, 30);
     }
 
     @Bean("keycloakRestClient")
     public RestClient keycloakClient(@Value("${KEYCLOAK_URL:https://sso.sipc115.com}") String url) {
-        return client(url);
+        return client(url, 30);
     }
 }

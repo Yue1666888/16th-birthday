@@ -17,9 +17,11 @@ import java.util.UUID;
 public class UploadOwnershipService {
     public static final String COOKIE_NAME = "birthday_upload_session";
     private final CurrentUserProvider users;
+    private final com.sipc115.birthday.web.filter.ClientAddressResolver addresses;
 
-    public UploadOwnershipService(CurrentUserProvider users) {
+    public UploadOwnershipService(CurrentUserProvider users, com.sipc115.birthday.web.filter.ClientAddressResolver addresses) {
         this.users = users;
+        this.addresses = addresses;
     }
 
     public UploadOwner current(HttpServletRequest request) {
@@ -41,15 +43,17 @@ public class UploadOwnershipService {
         var cookie =
                 ResponseCookie.from(COOKIE_NAME, token)
                         .httpOnly(true)
-                        .secure(request.isSecure())
+                        .secure(addresses.secure(request))
                         .sameSite("Lax")
                         .path("/api/v1")
                         .build();
+        request.setAttribute(COOKIE_NAME, token);
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         return new UploadOwner(null, RequestFingerprint.digest(token));
     }
 
     private String cookie(HttpServletRequest request) {
+        if (request.getAttribute(COOKIE_NAME) instanceof String minted) return minted;
         if (request.getCookies() != null) {
             for (var cookie : request.getCookies()) {
                 if (COOKIE_NAME.equals(cookie.getName())

@@ -10,20 +10,25 @@ spring:
       mode: never
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_HOST}:${DB_PORT:3308}/${DB_NAME:16th_birthday}?characterEncoding=UTF-8&connectionTimeZone=UTC&forceConnectionTimeZoneToSession=true&sslMode=${DB_SSL_MODE:REQUIRED}
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT:3308}/${DB_NAME:16th_birthday}?characterEncoding=UTF-8&connectionTimeZone=UTC&forceConnectionTimeZoneToSession=true&connectTimeout=5000&socketTimeout=15000&sslMode=${DB_SSL_MODE:REQUIRED}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:10}
+      connection-timeout: ${DB_POOL_WAIT_MS:5000}
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 11MB
 server:
+  forward-headers-strategy: none
   address: ${SERVER_ADDRESS:0.0.0.0}
   port: ${SERVER_PORT:16620}
 mybatis-plus:
   mapper-locations: classpath:/mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
+    default-statement-timeout: 10
   global-config:
     banner: false
     db-config:
@@ -45,3 +50,16 @@ app:
     origins: ${APP_CORS_ALLOWED_ORIGINS:http://127.0.0.1:5173,http://localhost:5173}
   limits:
     invitation-per-minute: ${RATE_LIMIT_REQUESTS_PER_MINUTE:10}
+    memory-per-minute: ${RATE_LIMIT_MEMORY_PER_MINUTE:5}
+    anonymous-upload-per-minute: ${RATE_LIMIT_UPLOADS_PER_MINUTE:20}
+    authenticated-upload-per-minute: ${RATE_LIMIT_MEMBER_UPLOADS_PER_MINUTE:60}
+    ip-per-minute: ${RATE_LIMIT_IP_PER_MINUTE:3000}
+
+  proxy:
+    trusted-proxies: ${APP_TRUSTED_PROXIES:}
+  upload:
+    max-concurrent: ${UPLOAD_MAX_CONCURRENT:8}
+    max-waiting: ${UPLOAD_MAX_WAITING:24}
+    wait-millis: ${UPLOAD_WAIT_MS:1500}
+  cache:
+    public-seconds: ${PUBLIC_CACHE_SECONDS:10}

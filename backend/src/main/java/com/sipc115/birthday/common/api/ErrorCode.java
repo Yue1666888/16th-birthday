@@ -1,6 +1,7 @@
 package com.sipc115.birthday.common.api;
 
 public enum ErrorCode {
+    UPLOAD_BUSY(503, "当前上传较多，请稍候重试"),
     MAIL_SELECTION_NOT_FOUND(404, "收件人选择不存在或不属于当前用户"),
     MAIL_SELECTION_EXPIRED(409, "收件人选择已过期，请重新筛选"),
     MAIL_PREVIEW_NOT_FOUND(404, "邮件预览不存在或不属于当前用户"),

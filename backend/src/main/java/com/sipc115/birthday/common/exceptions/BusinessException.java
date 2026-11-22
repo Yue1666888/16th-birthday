@@ -28,6 +28,12 @@ public class BusinessException extends RuntimeException {
         return error;
     }
 
+    public static BusinessException uploadBusy() {
+        BusinessException error = new BusinessException(ErrorCode.UPLOAD_BUSY);
+        error.retryAfterSeconds = 3;
+        return error;
+    }
+
     public int retryAfterSeconds() { return retryAfterSeconds; }
     public ErrorCode errorCode() { return errorCode; }
     public Map<String, String> fieldErrors() { return fieldErrors; }

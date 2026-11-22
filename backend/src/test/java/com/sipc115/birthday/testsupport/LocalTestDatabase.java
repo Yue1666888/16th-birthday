@@ -30,6 +30,8 @@ public final class LocalTestDatabase {
         registry.add("app.limits.memory-per-minute", () -> "1000");
         registry.add("app.limits.anonymous-upload-per-minute", () -> "1000");
         registry.add("app.limits.authenticated-upload-per-minute", () -> "1000");
+        registry.add("app.limits.ip-per-minute", () -> "100000");
+        registry.add("app.cache.public-seconds", () -> "0"); // Fixtures clear SQL tables directly between tests.
         registry.add("app.tasks.enabled", () -> "false");
     }
 }

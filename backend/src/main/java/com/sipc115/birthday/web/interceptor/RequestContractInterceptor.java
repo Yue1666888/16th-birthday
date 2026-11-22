@@ -18,29 +18,6 @@ import java.util.Map;
 
 @Component
 public class RequestContractInterceptor implements HandlerInterceptor {
-    private final RateLimitService rateLimit;
-    private final int invitationLimit;
-    private final com.sipc115.birthday.security.CurrentUserProvider users;
-    private final int memoryLimit;
-    private final int anonymousUploadLimit;
-    private final int authenticatedUploadLimit;
-
-    public RequestContractInterceptor(
-            RateLimitService rateLimit,
-            @Value("${app.limits.invitation-per-minute}") int invitationLimit,
-            com.sipc115.birthday.security.CurrentUserProvider users,
-            @Value("${app.limits.memory-per-minute:5}") int memoryLimit,
-            @Value("${app.limits.anonymous-upload-per-minute:20}") int anonymousUploadLimit,
-            @Value("${app.limits.authenticated-upload-per-minute:60}")
-                    int authenticatedUploadLimit) {
-        this.rateLimit = rateLimit;
-        this.invitationLimit = invitationLimit;
-        this.users = users;
-        this.memoryLimit = memoryLimit;
-        this.anonymousUploadLimit = anonymousUploadLimit;
-        this.authenticatedUploadLimit = authenticatedUploadLimit;
-    }
-
     @Override
     public boolean preHandle(
             HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -68,23 +45,6 @@ public class RequestContractInterceptor implements HandlerInterceptor {
                 throw new BusinessException(
                         ErrorCode.BAD_REQUEST, "分页参数格式不正确", Map.of(entry.getKey(), "请输入整数"));
             }
-        }
-        if ("POST".equals(request.getMethod())
-                && "/api/v1/invitations".equals(request.getRequestURI())) {
-            rateLimit.check("invitation:" + request.getRemoteAddr(), invitationLimit);
-        }
-        if ("POST".equals(request.getMethod())
-                && "/api/v1/memories".equals(request.getRequestURI())) {
-            rateLimit.check("memory:" + request.getRemoteAddr(), memoryLimit);
-        }
-        if ("POST".equals(request.getMethod())
-                && "/api/v1/media/images".equals(request.getRequestURI())) {
-            var user = users.optional();
-            String key =
-                    user == null
-                            ? "image-ip:" + request.getRemoteAddr()
-                            : "image-user:" + user.sub();
-            rateLimit.check(key, user == null ? anonymousUploadLimit : authenticatedUploadLimit);
         }
         if (("GET".equals(request.getMethod()) || "DELETE".equals(request.getMethod()))
                 && (request.getContentLengthLong() > 0
